@@ -1,7 +1,9 @@
 package com.booktory.booktoryserver.UsedBook.service;
 
+import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
+import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class UsedBookService {
+    private final UsedBookMapper usedBookMapper;
 
     @Value("${X-Naver-Client-Id}")
     private String client_id;
@@ -102,4 +105,7 @@ public class UsedBookService {
     }
 
 
+    public List<UsedBookPostEntity> getList() {
+        return usedBookMapper.getList();
+    }
 }

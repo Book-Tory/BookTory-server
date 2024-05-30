@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
+import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookService;
 import com.booktory.booktoryserver.common.CustomResponse;
@@ -39,6 +40,18 @@ public class UsedBookController {
             return CustomResponse.ok("조회 성공", bookInfo);
         } else {
             return CustomResponse.failure("조회 실패");
+        }
+    }
+
+    // 중고 서적 글 리스트 조회
+    @GetMapping("/list")
+    public CustomResponse getList () {
+        List<UsedBookPostEntity> list = usedBookService.getList();
+
+        if (list != null) {
+            return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);
+        } else {
+            return CustomResponse.failure("중고 서적 글 리스트 조회 실패");
         }
     }
 
