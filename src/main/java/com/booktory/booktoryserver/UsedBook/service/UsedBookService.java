@@ -1,6 +1,8 @@
 package com.booktory.booktoryserver.UsedBook.service;
 
+import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
+import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -115,5 +118,28 @@ public class UsedBookService {
 
     public int deletePostById(Long used_book_id) {
         return usedBookMapper.deletePostById(used_book_id);
+    }
+
+    @Transactional
+    public int updatePost(Long used_book_id, Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+        // 수정하려는 책이 DB에 있는지 먼저 확인
+        Long bookId = usedBookMapper.getBookId(d_isbn);
+
+        // 책 정보가 존재하지 않는다면
+        if (bookId == null) {
+            // 현재 책 정보 얻어오고
+            BookDTO book = getBookByIsbn(d_isbn);
+
+            // 책 정보 삽입
+            // bookId = usedBookMapper.createBookInfo(BookEntity.toEntity(book));
+            usedBookMapper.createBookInfo(BookEntity.toEntity(book));
+
+            bookId = usedBookMapper.getBookId(d_isbn);
+
+            log.info("bookId" + bookId);
+        }
+
+        // 그리고 내가 수정한 내용 적용
+        return usedBookMapper.updatePost(UsedBookPostEntity.toEntity(used_book_id, usedBookInfoDTO, bookId));
     }
 }

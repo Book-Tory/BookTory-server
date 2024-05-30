@@ -6,6 +6,7 @@
         <!-- Entity 설정 -->
         <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
+        <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <!-- Mapper 설정 -->
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
     </typeAliases>

@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
+import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookService;
 import com.booktory.booktoryserver.common.CustomResponse;
@@ -76,6 +77,18 @@ public class UsedBookController {
             return CustomResponse.ok("삭제되었습니다." , result);
         } else {
             return CustomResponse.failure("삭제 실패하였습니다.");
+        }
+    }
+
+    // 중고 서적 글 수정
+    @PutMapping("/{used_book_id}/{d_isbn}")
+    public CustomResponse updatePost (@PathVariable ("used_book_id") Long used_book_id, @PathVariable ("d_isbn") Long d_isbn, @RequestBody UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+        int result = usedBookService.updatePost(used_book_id, d_isbn, usedBookInfoDTO);
+
+        if (result > 0) {
+            return CustomResponse.ok("수정되었습니다.", result);
+        } else {
+            return CustomResponse.failure("수정에 실패하였습니다.");
         }
     }
 

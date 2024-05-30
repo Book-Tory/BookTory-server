@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.UsedBook.domain;
 
+import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -34,4 +35,14 @@ public class UsedBookPostEntity {
     private Date book_publication_date;
     private Long book_isbn;
 
+    public static UsedBookPostEntity toEntity(Long used_book_id, UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
+        return UsedBookPostEntity.builder()
+                .used_book_id(used_book_id)
+                .title(usedBookInfoDTO.getTitle())
+                .discount(usedBookInfoDTO.getDiscount())
+                .description(usedBookInfoDTO.getDescription())
+                .book_id(bookId)
+                .book_condition_id(usedBookInfoDTO.getBook_condition_id())
+                .build();
+    }
 }
