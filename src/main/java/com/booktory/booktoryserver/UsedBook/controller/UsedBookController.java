@@ -55,4 +55,16 @@ public class UsedBookController {
         }
     }
 
+    // 중고 서적 글 상세보기
+    @GetMapping("/{used_book_id}")
+    public CustomResponse getPostById (@PathVariable ("used_book_id") Long used_book_id) {
+        UsedBookPostEntity usedBookPost = usedBookService.getPostById(used_book_id);
+
+        if (usedBookPost != null) {
+            return CustomResponse.ok("조회 성공", usedBookPost);
+        } else {
+            return CustomResponse.failure("조회 실패");
+        }
+    }
+
 }

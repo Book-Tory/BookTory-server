@@ -108,4 +108,8 @@ public class UsedBookService {
     public List<UsedBookPostEntity> getList() {
         return usedBookMapper.getList();
     }
+
+    public UsedBookPostEntity getPostById(Long used_book_id) {
+        return usedBookMapper.getPostById(used_book_id);
+    }
 }

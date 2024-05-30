@@ -27,6 +27,36 @@
                JOIN
            book_condition bc ON ub.book_condition_id = bc.book_condition_id
                JOIN
-           book_information bi ON ub.book_id = bi.book_id;
+           book_information bi ON ub.book_id = bi.book_id
+       order by used_book_id
    </select>
+
+    <select id="getPostById" resultType="usedBook">
+        SELECT
+            ub.used_book_id,
+            ub.title,
+            ub.discount,
+            ub.description,
+            ub.created_at,
+            u.user_id,
+            u.user_nickname,
+            bc.book_condition_id,
+            bc.condition,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_price,
+            bi.book_publisher,
+            bi.book_publication_date,
+            bi.book_isbn
+        FROM
+            used_book ub
+                JOIN
+            users u ON ub.user_id = u.user_id
+                JOIN
+            book_condition bc ON ub.book_condition_id = bc.book_condition_id
+                JOIN
+            book_information bi ON ub.book_id = bi.book_id
+        where used_book_id = #{used_book_id}
+    </select>
 </mapper>

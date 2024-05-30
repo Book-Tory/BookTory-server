@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface UsedBookMapper {
     List<UsedBookPostEntity> getList();
+
+    UsedBookPostEntity getPostById(Long used_book_id);
 }
