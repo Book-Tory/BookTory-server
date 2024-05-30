@@ -135,11 +135,27 @@ public class UsedBookService {
             usedBookMapper.createBookInfo(BookEntity.toEntity(book));
 
             bookId = usedBookMapper.getBookId(d_isbn);
-
-            log.info("bookId" + bookId);
         }
 
         // 그리고 내가 수정한 내용 적용
         return usedBookMapper.updatePost(UsedBookPostEntity.toEntity(used_book_id, usedBookInfoDTO, bookId));
+    }
+
+    public int createPost(Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+        // 수정하려는 책이 DB에 있는지 먼저 확인
+        Long bookId = usedBookMapper.getBookId(d_isbn);
+
+        // 책 정보가 존재하지 않는다면
+        if (bookId == null) {
+            // 현재 책 정보 얻어오고
+            BookDTO book = getBookByIsbn(d_isbn);
+
+            // 책 정보 삽입
+            usedBookMapper.createBookInfo(BookEntity.toEntity(book));
+
+            bookId = usedBookMapper.getBookId(d_isbn);
+        }
+
+        return usedBookMapper.createPost(UsedBookPostEntity.toEntity(usedBookInfoDTO, bookId));
     }
 }

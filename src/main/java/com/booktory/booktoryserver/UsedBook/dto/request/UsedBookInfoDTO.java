@@ -17,6 +17,7 @@ public class UsedBookInfoDTO {
     private int discount;
     private String description;
     private Date created_at;
+    private Long user_id;
     private Long book_condition_id;
     private Long book_id;
 }

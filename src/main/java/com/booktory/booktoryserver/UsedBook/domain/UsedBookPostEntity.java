@@ -45,4 +45,15 @@ public class UsedBookPostEntity {
                 .book_condition_id(usedBookInfoDTO.getBook_condition_id())
                 .build();
     }
+
+    public static UsedBookPostEntity toEntity(UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
+        return UsedBookPostEntity.builder()
+                .title(usedBookInfoDTO.getTitle())
+                .discount(usedBookInfoDTO.getDiscount())
+                .description(usedBookInfoDTO.getDescription())
+                .book_id(bookId)
+                .user_id(usedBookInfoDTO.getUser_id())
+                .book_condition_id(usedBookInfoDTO.getBook_condition_id())
+                .build();
+    }
 }

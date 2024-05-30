@@ -19,4 +19,6 @@ public interface UsedBookMapper {
     void createBookInfo(BookEntity entity);
 
     int updatePost(UsedBookPostEntity entity);
+
+    int createPost(UsedBookPostEntity entity);
 }

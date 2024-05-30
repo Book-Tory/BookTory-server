@@ -92,4 +92,16 @@ public class UsedBookController {
         }
     }
 
+    // 중고 서적 글 등록
+    @PostMapping("/{d_isbn}")
+    public CustomResponse createPost (@PathVariable ("d_isbn") Long d_isbn, @RequestBody UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+        int result = usedBookService.createPost(d_isbn, usedBookInfoDTO);
+
+        if (result > 0) {
+            return CustomResponse.ok("등록되었습니다.", result);
+        } else {
+            return CustomResponse.failure("등록에 실패하였습니다.");
+        }
+    }
+
 }
