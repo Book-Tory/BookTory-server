@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <!-- Entity 설정 -->
+        <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
+        <!-- Mapper 설정 -->
+        <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
+    </typeAliases>
+</configuration>
