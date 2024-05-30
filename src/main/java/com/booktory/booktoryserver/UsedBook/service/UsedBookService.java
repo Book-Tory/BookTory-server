@@ -112,4 +112,8 @@ public class UsedBookService {
     public UsedBookPostEntity getPostById(Long used_book_id) {
         return usedBookMapper.getPostById(used_book_id);
     }
+
+    public int deletePostById(Long used_book_id) {
+        return usedBookMapper.deletePostById(used_book_id);
+    }
 }

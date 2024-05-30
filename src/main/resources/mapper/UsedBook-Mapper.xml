@@ -59,4 +59,8 @@
             book_information bi ON ub.book_id = bi.book_id
         where used_book_id = #{used_book_id}
     </select>
+
+    <delete id="deletePostById">
+        delete from used_book where used_book_id = #{used_book_id}
+    </delete>
 </mapper>

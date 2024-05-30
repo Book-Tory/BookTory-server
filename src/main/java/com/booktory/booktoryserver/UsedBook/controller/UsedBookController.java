@@ -67,4 +67,16 @@ public class UsedBookController {
         }
     }
 
+    // 중고 서적 글 삭제
+    @DeleteMapping("/{used_book_id}")
+    public CustomResponse deletePostById (@PathVariable ("used_book_id") Long used_book_id) {
+        int result = usedBookService.deletePostById(used_book_id);
+
+        if (result > 0) {
+            return CustomResponse.ok("삭제되었습니다." , result);
+        } else {
+            return CustomResponse.failure("삭제 실패하였습니다.");
+        }
+    }
+
 }
