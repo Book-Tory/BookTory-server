@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper">
+   <select id="getList" resultType="usedBook">
+       SELECT
+           ub.used_book_id,
+           ub.title,
+           ub.discount,
+           ub.description,
+           ub.created_at,
+           u.user_id,
+           u.user_nickname,
+           bc.book_condition_id,
+           bc.condition,
+           bi.book_id,
+           bi.book_name,
+           bi.book_author,
+           bi.book_price,
+           bi.book_publisher,
+           bi.book_publication_date,
+           bi.book_isbn
+       FROM
+           used_book ub
+               JOIN
+           users u ON ub.user_id = u.user_id
+               JOIN
+           book_condition bc ON ub.book_condition_id = bc.book_condition_id
+               JOIN
+           book_information bi ON ub.book_id = bi.book_id
+       order by used_book_id
+   </select>
+
+    <select id="getPostById" resultType="usedBook">
+        SELECT
+            ub.used_book_id,
+            ub.title,
+            ub.discount,
+            ub.description,
+            ub.created_at,
+            u.user_id,
+            u.user_nickname,
+            bc.book_condition_id,
+            bc.condition,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_price,
+            bi.book_publisher,
+            bi.book_publication_date,
+            bi.book_isbn
+        FROM
+            used_book ub
+                JOIN
+            users u ON ub.user_id = u.user_id
+                JOIN
+            book_condition bc ON ub.book_condition_id = bc.book_condition_id
+                JOIN
+            book_information bi ON ub.book_id = bi.book_id
+        where used_book_id = #{used_book_id}
+    </select>
+
+    <delete id="deletePostById">
+        delete from used_book where used_book_id = #{used_book_id}
+    </delete>
+
+    <select id="getBookId" resultType="Long">
+        select book_id
+        from book_information
+        where book_isbn = #{book_isbn}
+    </select>
+
+    <insert id="createBookInfo" parameterType="book">
+        insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
+        values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
+    </insert>
+
+    <update id="updatePost" parameterType="usedBook">
+        update used_book
+        set title = #{title}, discount = #{discount}, description = #{description}, book_id = #{book_id}, book_condition_id = #{book_condition_id}
+        where used_book_id = #{used_book_id}
+    </update>
+
+    <insert id="createPost" parameterType="usedBook">
+        insert into used_book
+            (title, discount, description, user_id, book_condition_id, book_id)
+        values
+            (#{title}, #{discount}, #{description}, #{user_id}, #{book_condition_id}, #{book_id})
+    </insert>
+</mapper>
