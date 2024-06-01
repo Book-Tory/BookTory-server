@@ -5,7 +5,9 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.products_shop.domain.Product;
 import com.booktory.booktoryserver.products_shop.domain.ProductImageFile;
+import com.booktory.booktoryserver.products_shop.domain.ProductsList;
 import com.booktory.booktoryserver.products_shop.dto.request.ProductRegisterDTO;
+import com.booktory.booktoryserver.products_shop.dto.response.ProductResponseDTO;
 import com.booktory.booktoryserver.products_shop.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +35,7 @@ public class ProductService {
     @Value("${spring.s3.bucket}")
     private String bucketName;
 
-    public List<String> register(ProductRegisterDTO productDTO) throws IOException {
+    public String register(ProductRegisterDTO productDTO) throws IOException {
 
         List<String> urls = new ArrayList<>();
 
@@ -50,7 +56,7 @@ public class ProductService {
                 String storeFilename = System.currentTimeMillis() + originalFilename;
 
                 ProductImageFile productImageFile = ProductImageFile.builder()
-                        .imageId(productId)
+                        .product_id(productId)
                         .originalImageName(originalFilename)
                         .storedImageName(storeFilename)
                         .build();
@@ -74,6 +80,28 @@ public class ProductService {
             }
         }
 
-        return null;
+        return "상품 등록되었습니다.";
     }
+
+
+    public List<ProductResponseDTO> findAllProducts() {
+        List<ProductsList> productsLists = productMapper.findAllProducts();
+
+        Map<Long, ProductsList> productsMap = new HashMap<>();
+        for (ProductsList product : productsLists) {
+            if (!productsMap.containsKey(product.getProduct_id())) {
+                product.setImageUrls(new ArrayList<>());
+                productsMap.put(product.getProduct_id(), product);
+            }
+            if (product.getStoredImageName() != null) {
+                String url = amazonS3Client.getUrl(bucketName, "profile/" + product.getStoredImageName()).toString();
+                productsMap.get(product.getProduct_id()).getImageUrls().add(url);
+            }
+        }
+
+        return productsMap.values().stream().map(product -> {
+            return ProductResponseDTO.toProductInfo(product, product.getImageUrls());
+        }).collect(Collectors.toList());
+    }
+
 }

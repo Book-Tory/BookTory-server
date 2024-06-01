@@ -13,7 +13,7 @@ public class ProductImageFile {
 
     private Long id;
 
-    private Long imageId; // 외래키
+    private Long product_id; // 외래키
 
     private String originalImageName; // 원본 파일 이름
 
