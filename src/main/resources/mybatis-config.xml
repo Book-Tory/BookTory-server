@@ -3,11 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <!-- Entity 설정 -->
         <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
-        <!-- Mapper 설정 -->
+        <typeAlias alias="product" type="com.booktory.booktoryserver.products_shop.domain.Product" />
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
     </typeAliases>
+
+    <typeHandlers>
+        <typeHandler javaType="com.booktory.booktoryserver.products_shop.constant.ProductStock"
+                     handler="com.booktory.booktoryserver.products_shop.handler.ProductStockTypeHandler"/>
+    </typeHandlers>
 </configuration>

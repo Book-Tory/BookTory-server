@@ -1,11 +1,8 @@
-
-
 spring:
-  #database
   datasource:
-    url: "jdbc:mariadb://223.130.155.227:3307/BookTory"
-    username: "booktory"
-    password: "0625!"
+    url: jdbc:mariadb://223.130.155.227:3307/BookTory
+    username: booktory
+    password: 0625!
     driver-class-name: org.mariadb.jdbc.Driver
 
   servlet:
@@ -19,9 +16,7 @@ spring:
     accessKey: cYjcuwyStmYkacVhmiCw
     secretKey: xFxYN8XbNaMzupWs6ilwzvbMW1epgyC6P0ne8tYl
 
-
-
-
 mybatis:
-  config-location: classpath:mybatis-config.xml  # MyBatis ?? ?? ??
-  mapper-locations: classpath:mapper/**/*.xml  # Mapper ?? ??
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.booktory.booktoryserver.products_shop.config
