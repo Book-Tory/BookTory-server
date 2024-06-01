@@ -19,5 +19,4 @@ public class ProductImageFile {
 
     private String storedImageName; // 서버 저장용 파일 이름
 
-
 }

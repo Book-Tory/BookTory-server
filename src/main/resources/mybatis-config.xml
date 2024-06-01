@@ -8,6 +8,7 @@
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <typeAlias alias="product" type="com.booktory.booktoryserver.products_shop.domain.Product" />
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
+        <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
     </typeAliases>
 
     <typeHandlers>

@@ -3,8 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.booktory.booktoryserver.products_shop.mapper.ProductMapper">
 
-    <insert id="register" parameterType="product">
+    <insert id="register" parameterType="product" useGeneratedKeys="true" keyProperty="product_id">
         INSERT INTO products (product_name, product_price, product_script, product_category, product_stock, product_image_check)
         VALUES (#{product_name}, #{product_price}, #{product_script}, #{product_category}, #{product_stock}, #{product_image_check})
+    </insert>
+
+    <insert id="saveFile" parameterType="productSaveFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product_image (originalImageName, storedImageName, imageId)
+        VALUES (#{originalImageName}, #{storedImageName}, #{imageId})
     </insert>
 </mapper>

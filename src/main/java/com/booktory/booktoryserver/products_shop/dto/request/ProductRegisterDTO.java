@@ -22,7 +22,7 @@ public class ProductRegisterDTO {
 
     private String product_script; // 상품 설명
 
-    private MultipartFile product_image; // 상품 이미지
+    private List<MultipartFile> product_image; // 상품 이미지
 
     private int productImageCheck; // 파일 첨부 0, 파일 첨부 1
 

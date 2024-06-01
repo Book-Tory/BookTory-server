@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/product_shop")
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/register")
-    public void insert(@ModelAttribute ProductRegisterDTO productDTO) {
+    public void insert(@ModelAttribute ProductRegisterDTO productDTO) throws IOException {
         log.info("productDTO : {}", productDTO);
 
         productService.register(productDTO);
