@@ -34,4 +34,17 @@ public class Product {
                 .product_image_check(productDTO.getProductImageCheck())
                 .build();
     }
+
+
+    public static Product toUpdateProduct(ProductRegisterDTO productDTO, Long productId){
+        return Product.builder()
+                .product_id(productId)
+                .product_name(productDTO.getProduct_name())
+                .product_price(productDTO.getProduct_price())
+                .product_script(productDTO.getProduct_script())
+                .product_stock(ProductStock.IN_STOCK) // 기본값 설정
+                .product_category("T-SHIRT") // 기본값 설정
+                .product_image_check(productDTO.getProductImageCheck())
+                .build();
+    }
 }

@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.products_shop.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.products_shop.domain.Product;
 import com.booktory.booktoryserver.products_shop.domain.ProductImageFile;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -120,7 +122,21 @@ public class ProductService {
 
     }
 
+    @Transactional
     public int deleteById(Long productId) {
+        List<ProductImageFile> productImageFiles = productMapper.findImagesByProductId(productId);
+
+        for(ProductImageFile productImageFile : productImageFiles){
+            String key = "profile/" + productImageFile.getStoredImageName();
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, key));
+        }
+
         return productMapper.deleteById(productId);
     }
+
+    public int updateById(Long productId, ProductRegisterDTO productDTO) {
+        Product product = Product.toUpdateProduct(productDTO, productId);
+        return productMapper.updateById(product);
+    }
+
 }

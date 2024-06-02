@@ -57,4 +57,11 @@ public class ProductController {
         }
     }
 
+
+    @PutMapping("/update/{product_id}")
+    public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductRegisterDTO productDTO){
+        int result = productService.updateById(product_id, productDTO);
+
+        return null;
+    }
 }
