@@ -51,4 +51,8 @@
             product_image i ON p.product_id = i.product_id
         WHERE p.product_id = #{p.product_id}
     </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM products WHERE product_id = #{product.id}
+    </delete>
 </mapper>

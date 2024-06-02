@@ -46,4 +46,15 @@ public class ProductController {
     }
 
 
+    @DeleteMapping("/{product_id}")
+    public CustomResponse deletePostById(@PathVariable("product_id") Long product_id){
+        int result = productService.deleteById(product_id);
+
+        if (result > 0) {
+            return CustomResponse.ok("삭제되었습니다.", result);
+        } else {
+            return CustomResponse.failure("삭제 실패하였습니다.");
+        }
+    }
+
 }
