@@ -34,7 +34,7 @@ public class ImageService {
         List<String> urls = new ArrayList<>();
 
         // 파일 없음
-        if(imageDTO.getImageFile().isEmpty()){
+        if(imageDTO.getImageFile() == null){
             imageDTO.setFileCheck(0);
             ImageEntity image = ImageEntity.toSaveImage(imageDTO);
             imageMapper.save(image);

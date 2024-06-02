@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.products_shop.mapper.ProductMapper">
+
+    <insert id="register" parameterType="product" useGeneratedKeys="true" keyProperty="product_id">
+        INSERT INTO products (product_name, product_price, product_script, product_category, product_stock, product_image_check)
+        VALUES (#{product_name}, #{product_price}, #{product_script}, #{product_category}, #{product_stock}, #{product_image_check})
+    </insert>
+
+    <insert id="saveFile" parameterType="productSaveFile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product_image (originalImageName, storedImageName, product_id)
+        VALUES (#{originalImageName}, #{storedImageName}, #{product_id})
+    </insert>
+
+    <select id="findAllProducts" resultType="productList">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_price,
+            p.product_script,
+            p.product_stock,
+            p.product_category,
+            p.product_image_check,
+            p.created_at,
+            p.updated_at,
+            i.originalImageName,
+            i.storedImageName
+        FROM
+            products p
+                LEFT JOIN
+            product_image i ON p.product_id = i.product_id
+    </select>
+
+    <select id="findById" resultType="productList" parameterType="long">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_price,
+            p.product_script,
+            p.product_stock,
+            p.product_category,
+            p.product_image_check,
+            p.created_at,
+            p.updated_at,
+            i.originalImageName,
+            i.storedImageName
+        FROM
+            products p
+                LEFT JOIN
+            product_image i ON p.product_id = i.product_id
+        WHERE p.product_id = #{p.product_id}
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM products WHERE product_id = #{product.id}
+    </delete>
+
+
+    <select id="findImagesByProductId" parameterType="long" resultType="productImageFile">
+        SELECT storedImageName FROM product_image WHERE product_id = #{product_id}
+    </select>
+
+
+</mapper>
