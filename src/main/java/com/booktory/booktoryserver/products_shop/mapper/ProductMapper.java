@@ -15,4 +15,6 @@ public interface ProductMapper {
     int saveFile(ProductImageFile productImageFile);
 
     List<ProductsList> findAllProducts();
+
+    List<ProductsList> findById(Long productId);
 }

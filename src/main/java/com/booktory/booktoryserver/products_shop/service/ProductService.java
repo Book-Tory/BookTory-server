@@ -104,4 +104,20 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
+    public ProductResponseDTO findById(Long productId) {
+
+        List<ProductsList> productsList  = productMapper.findById(productId);
+
+        if(productsList == null || productsList.isEmpty()) {
+            return null;
+        }
+
+        ProductsList firstProduct = productsList.get(0);
+
+        List<String> productImageUrls = productsList.stream().map(product -> amazonS3Client.getUrl(bucketName, "profile/" + product.getStoredImageName()).toString())
+                .collect(Collectors.toList());
+
+        return ProductResponseDTO.toProductInfo(firstProduct, productImageUrls);
+
+    }
 }

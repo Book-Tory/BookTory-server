@@ -36,4 +36,14 @@ public class ProductController {
 
         return CustomResponse.ok("전체 상품 정보", productResponseDTOList);
     }
+
+
+    @GetMapping("/detail/{product_id}")
+    public CustomResponse<ProductResponseDTO> productDetail(@PathVariable("product_id") Long product_id){
+        ProductResponseDTO productResponseDTO = productService.findById(product_id);
+
+        return CustomResponse.ok("상품 상세 정보", productResponseDTO);
+    }
+
+
 }
