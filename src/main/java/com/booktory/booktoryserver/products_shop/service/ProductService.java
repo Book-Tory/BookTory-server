@@ -135,6 +135,8 @@ public class ProductService {
     }
 
     public int updateById(Long productId, ProductRegisterDTO productDTO) {
+
+
         Product product = Product.toUpdateProduct(productDTO, productId);
         return productMapper.updateById(product);
     }

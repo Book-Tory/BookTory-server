@@ -1,12 +1,12 @@
 package com.booktory.booktoryserver.products_shop.dto.response;
 
         import com.booktory.booktoryserver.products_shop.constant.ProductStock;
-        import com.booktory.booktoryserver.products_shop.domain.Product;
         import com.booktory.booktoryserver.products_shop.domain.ProductsList;
         import lombok.*;
 
         import java.time.LocalDateTime;
         import java.util.List;
+        import java.util.Map;
 
 @Getter
 @Setter
