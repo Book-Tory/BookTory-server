@@ -57,6 +57,9 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/image/{}")
+
+
 
     @PutMapping("/update/{product_id}")
     public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductRegisterDTO productDTO){
