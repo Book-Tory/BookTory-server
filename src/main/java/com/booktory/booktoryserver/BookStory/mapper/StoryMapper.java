@@ -1,0 +1,11 @@
+package com.booktory.booktoryserver.BookStory.mapper;
+
+import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface StoryMapper {
+    List<StoryEntity> getAllStory();
+}
