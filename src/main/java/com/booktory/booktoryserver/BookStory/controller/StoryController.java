@@ -24,4 +24,12 @@ public class StoryController {
         System.out.println("storyDTO = " + storyDTO);
         storyService.createStory(storyDTO);
     }
+
+    @DeleteMapping("/{id}") //독후감(스토리) 게시물 id를 통한 삭제
+    public void deleteStory(@PathVariable Long id){
+        storyService.deleteStory(id);
+    }
+
+
+
 }
