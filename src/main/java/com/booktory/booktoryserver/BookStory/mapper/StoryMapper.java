@@ -8,4 +8,8 @@ import java.util.List;
 @Mapper
 public interface StoryMapper {
     List<StoryEntity> getAllStory();
+
+    void createStory(StoryEntity storyEntity);
+
+
 }

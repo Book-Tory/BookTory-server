@@ -8,6 +8,11 @@
         select * from mystory_board;
     </select>
 
+    <insert id = "createStory">
+        INSERT INTO mystory_board (mystory_type_id, mystory_name, mystory_content, user_id, book_id)
+        VALUES (#{mystory_type_id}, #{mystory_name}, #{mystory_content}, #{user_id}, #{book_id});
+    </insert>
+
 
 
 </mapper>
