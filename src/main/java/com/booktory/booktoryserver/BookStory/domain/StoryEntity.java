@@ -36,4 +36,11 @@ public class StoryEntity {
                 .bookId(storyEntity.getBook_id())
                 .build();
     }
+
+    //update에 필요한 id를 받아와서 설정해주는 메서드가 필요하다.
+    public void setStory_board_id(long story_board_id){
+        this.story_board_id = story_board_id;
+    }
+
+
 }

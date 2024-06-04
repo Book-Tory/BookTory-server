@@ -17,5 +17,10 @@
         DELETE FROM mystory_board WHERE story_board_id = #{story_board_id};
     </delete>
 
+    <update id="updateStory">
+        UPDATE mystory_board
+        SET mystory_name = #{mystory_name}, mystory_content = #{mystory_content},  user_id = #{user_id}, book_id = #{book_id}
+        WHERE story_board_id = #{story_board_id};
+    </update>
 
 </mapper>

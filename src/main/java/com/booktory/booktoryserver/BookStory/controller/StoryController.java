@@ -30,6 +30,10 @@ public class StoryController {
         storyService.deleteStory(id);
     }
 
-
+    @PutMapping("/{id}") //독후감(스토리) 게시물 id를 통한 업데이트
+    public void updateStory(@PathVariable Long id,@RequestBody StoryDTO storyDTO){
+        System.out.println("book_id = " + id);
+        storyService.updateStory(id, storyDTO);
+    }
 
 }

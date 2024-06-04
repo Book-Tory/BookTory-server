@@ -29,4 +29,17 @@ public class StoryService {
         storyMapper.deleteStory(id);
     }
 
+    public void updateStory(Long id, StoryDTO storyDTO) {
+        log.info("id : " + id);
+        log.info("storyDTO : " + storyDTO);
+        StoryEntity storyEntity = StoryDTO.toEntity(storyDTO);
+        //+ toEntity가 static으로 선언되었으므로 클래스명을 사용하여 호출하는 것이 맞다.
+        //StoryDTO클래스의 toEntity 메서드를 사용하여 Entity객체를 선언
+        //매개변수로 받은 DTO를 DB에 저장하기 위해 Entity객체로 변환
+
+        storyEntity.setStory_board_id(id);
+
+        storyMapper.updateStory(storyEntity);
+
+    }
 }
