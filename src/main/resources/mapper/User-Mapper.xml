@@ -8,4 +8,8 @@
         VALUES (#{user_email}, #{user_password}, #{user_nickname}, #{user_mobile}, #{user_gender}, #{user_birth}, #{user_address}, #{user_role})
     </insert>
 
+    <select id="findByEmail" resultType="user" parameterType="String">
+        SELECT * FROM users WHERE user_email = #{user_email}
+    </select>
+
 </mapper>

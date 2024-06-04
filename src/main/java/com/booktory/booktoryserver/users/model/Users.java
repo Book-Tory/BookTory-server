@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class Users {
 
     private Long user_id; // 사용자 고유 ID
 
@@ -38,8 +38,8 @@ public class User {
 
     private LocalDateTime update_at; // 계정 정보 마지막 수정 시간
 
-    public static User createUser(UserRegisterDTO userRegisterDTO) {
-        return User.builder()
+    public static Users createUser(UserRegisterDTO userRegisterDTO) {
+        return Users.builder()
                 .user_email(userRegisterDTO.getUser_email())
                 .user_password(userRegisterDTO.getUser_password())
                 .user_nickname(userRegisterDTO.getUser_nickname())

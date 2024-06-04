@@ -2,16 +2,26 @@ package com.booktory.booktoryserver.users.service;
 
 import com.booktory.booktoryserver.users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.users.mapper.UserMapper;
-import com.booktory.booktoryserver.users.model.User;
+import com.booktory.booktoryserver.users.model.Users;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserMapper userMapper;
 
@@ -19,10 +29,27 @@ public class UserService {
 
     public int register(UserRegisterDTO userDTO) {
 
-        log.info("userDTO : {}", userDTO);
         userDTO.setUser_password(passwordEncoder.encode(userDTO.getUser_password()));
-        User user = User.createUser(userDTO);
+        Users user = Users.createUser(userDTO);
 
         return userMapper.insertUser(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Username : " + username);
+
+        String userName = null;
+        String password = null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        Optional<Users> userOptional = userMapper.findByEmail(username);
+
+        Users user = userOptional.orElseThrow(() -> new UsernameNotFoundException(username));
+        userName = user.getUser_email();
+        password = user.getUser_password();
+        authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getUser_role().getKey()));
+
+        return new User(userName, password, authorities);
     }
 }
