@@ -1,6 +1,10 @@
 package com.booktory.booktoryserver.UsedBook.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
+import com.booktory.booktoryserver.UsedBook.domain.UsedBookImage;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
@@ -16,9 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +36,17 @@ import java.util.Map;
 public class UsedBookService {
     private final UsedBookMapper usedBookMapper;
 
+    private final AmazonS3 amazonS3;
+
+    @Value("${spring.s3.bucket}")
+    private String bucketName;
+
     @Value("${X-Naver-Client-Id}")
     private String client_id;
 
     @Value("${X-Naver-Client-Secret}")
     private String client_secret;
+
 
     private URI buildUri (String path, Map<String, Object> queryParams) {
         // 1. 기본 URI 설정
@@ -70,6 +83,7 @@ public class UsedBookService {
         return res;
     }
 
+    // 검색어에 대한 전체 조회
     public List<BookDTO> searchBooks(String query, int display) throws JsonProcessingException {
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("query", query);
@@ -89,7 +103,7 @@ public class UsedBookService {
     }
 
 
-
+    // 특정 isbn 값을 통한 책 상세조회
     public BookDTO getBookByIsbn(Long d_isbn) throws JsonProcessingException {
         Map<String, Object> queryParams = new HashMap<>();
 
@@ -108,18 +122,22 @@ public class UsedBookService {
     }
 
 
+    // 데이터베이스에 있는 중고서적 목록
     public List<UsedBookPostEntity> getList() {
         return usedBookMapper.getList();
     }
 
+    // 특정 중고서적 글 가져오기
     public UsedBookPostEntity getPostById(Long used_book_id) {
         return usedBookMapper.getPostById(used_book_id);
     }
 
+    // 중고서적 글 삭제
     public int deletePostById(Long used_book_id) {
         return usedBookMapper.deletePostById(used_book_id);
     }
 
+    // 중고서적 글 업데이트
     @Transactional
     public int updatePost(Long used_book_id, Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
         // 수정하려는 책이 DB에 있는지 먼저 확인
@@ -130,32 +148,87 @@ public class UsedBookService {
             // 현재 책 정보 얻어오고
             BookDTO book = getBookByIsbn(d_isbn);
 
-            // 책 정보 삽입
-            // bookId = usedBookMapper.createBookInfo(BookEntity.toEntity(book));
-            usedBookMapper.createBookInfo(BookEntity.toEntity(book));
+            BookEntity bookInfo = BookEntity.toEntity(book);
 
-            bookId = usedBookMapper.getBookId(d_isbn);
+            // 책 정보 삽입
+            usedBookMapper.createBookInfo(bookInfo);
+
+            bookId = bookInfo.getBook_id();
         }
 
         // 그리고 내가 수정한 내용 적용
-        return usedBookMapper.updatePost(UsedBookPostEntity.toEntity(used_book_id, usedBookInfoDTO, bookId));
+        return usedBookMapper.updatePost(UsedBookPostEntity.toUpdateEntity(used_book_id, usedBookInfoDTO, bookId));
     }
 
-    public int createPost(Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+    @Transactional
+    public String createPost(Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws IOException {
         // 수정하려는 책이 DB에 있는지 먼저 확인
         Long bookId = usedBookMapper.getBookId(d_isbn);
 
         // 책 정보가 존재하지 않는다면
         if (bookId == null) {
-            // 현재 책 정보 얻어오고
+            // isbn 값을 통해 현재 선택한 책 정보 얻어오고
             BookDTO book = getBookByIsbn(d_isbn);
 
-            // 책 정보 삽입
-            usedBookMapper.createBookInfo(BookEntity.toEntity(book));
+            BookEntity bookInfo = BookEntity.toEntity(book);
 
-            bookId = usedBookMapper.getBookId(d_isbn);
+            // 책 정보 삽입
+            usedBookMapper.createBookInfo(bookInfo);
+
+            bookId = bookInfo.getBook_id();
         }
 
-        return usedBookMapper.createPost(UsedBookPostEntity.toEntity(usedBookInfoDTO, bookId));
+        // 이미지 등록 처리
+        List<String> urls = new ArrayList<>();
+
+        log.info("test " + usedBookInfoDTO.getUsed_book_image());
+        // 중고서적 글에 등록한 이미지가 없으면
+        if (usedBookInfoDTO.getUsed_book_image() == null || usedBookInfoDTO.getUsed_book_image().isEmpty()) {
+            usedBookInfoDTO.setImage_check(0);
+
+            // 바로 글 등록
+            UsedBookPostEntity usedBookPost = UsedBookPostEntity.toCreateEntity(usedBookInfoDTO, bookId);
+            usedBookMapper.createPost(usedBookPost);
+        } else {
+            usedBookInfoDTO.setImage_check(1);
+            UsedBookPostEntity usedBookPost = UsedBookPostEntity.toCreateEntity(usedBookInfoDTO, bookId);
+
+            usedBookMapper.createPost(usedBookPost);
+
+            // 이미지가 있으면 일단 글 등록하고 그 id값을 가져옴
+            Long usedBookId = usedBookPost.getUsed_book_id();
+
+            // 이미지가 여러 장일 때
+            for (MultipartFile usedBookFile : usedBookInfoDTO.getUsed_book_image()) {
+                String originalFilename = usedBookFile.getOriginalFilename();
+                String storedFilename = System.currentTimeMillis() + originalFilename; // 중복에 대비한 고유한 파일명 생성
+
+                UsedBookImage usedBookImage = UsedBookImage.builder()
+                        .used_book_id(usedBookId)
+                        .original_image_name(originalFilename)
+                        .stored_image_name(storedFilename)
+                        .build();
+
+                // 파일 메타데이터 설정
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(usedBookFile.getSize());
+                objectMetadata.setContentType(usedBookFile.getContentType());
+
+                // 저장될 위치 + 파일명
+                String key = "profile" + "/" + storedFilename;
+
+                // 클라우드에 파일 저장
+                amazonS3.putObject(bucketName, key, usedBookFile.getInputStream(), objectMetadata);
+                amazonS3.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+
+                // 데이터베이스에 저장
+                usedBookMapper.saveFile(usedBookImage);
+
+                String url = amazonS3.getUrl(bucketName, key).toString();
+                urls.add(url);
+            }
+        }
+
+        return "중고서적이 등록되었습니다.";
     }
 }

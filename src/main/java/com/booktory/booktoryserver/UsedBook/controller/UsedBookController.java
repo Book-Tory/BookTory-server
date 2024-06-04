@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class UsedBookController {
     public CustomResponse searchBooks(@RequestParam ("query") String query, @RequestParam ("display") int display) throws JsonProcessingException {
         List<BookDTO> bookInfoList = usedBookService.searchBooks(query, display);
 
-        if (bookInfoList != null) {
+        if (!bookInfoList.isEmpty()) {
             return CustomResponse.ok("조회 완료", bookInfoList);
         } else {
             return CustomResponse.failure("조회 실패");
@@ -49,7 +50,7 @@ public class UsedBookController {
     public CustomResponse getList () {
         List<UsedBookPostEntity> list = usedBookService.getList();
 
-        if (list != null) {
+        if (!list.isEmpty()) {
             return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);
         } else {
             return CustomResponse.failure("중고 서적 글 리스트 조회 실패");
@@ -94,11 +95,11 @@ public class UsedBookController {
 
     // 중고 서적 글 등록
     @PostMapping("/{d_isbn}")
-    public CustomResponse createPost (@PathVariable ("d_isbn") Long d_isbn, @RequestBody UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
-        int result = usedBookService.createPost(d_isbn, usedBookInfoDTO);
+    public CustomResponse createPost (@PathVariable ("d_isbn") Long d_isbn, @ModelAttribute UsedBookInfoDTO usedBookInfoDTO) throws IOException {
+        String result = usedBookService.createPost(d_isbn, usedBookInfoDTO);
 
-        if (result > 0) {
-            return CustomResponse.ok("등록되었습니다.", result);
+        if (result != null) {
+            return CustomResponse.ok(result, null);
         } else {
             return CustomResponse.failure("등록에 실패하였습니다.");
         }
