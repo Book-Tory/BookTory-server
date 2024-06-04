@@ -19,6 +19,14 @@ public class StoryController {
         return storyService.getAllStory();
     }
 
+    @GetMapping("/{story_board_id}")
+    public StoryEntity getStoryById (@PathVariable("story_board_id") Long story_board_id){
+       return storyService.getStoryById(story_board_id);
+    }
+
+
+
+
     @PostMapping//독후감(스토리) 등록(작성)
     public void createStory(@RequestBody StoryDTO storyDTO){
         System.out.println("storyDTO = " + storyDTO);

@@ -19,8 +19,15 @@ public class StoryEntity {
     private LocalDateTime mystory_date;
     private LocalDateTime read_date;
     private int love_count;
+
     private Long user_id;
+    private String user_nickname;
+
     private Long book_id;
+    private String book_name;
+    private String book_author;
+    private String book_publisher;
+    private String book_isbn;
 
 
     //Entity를 DTO로 변환하는 정적 메서드

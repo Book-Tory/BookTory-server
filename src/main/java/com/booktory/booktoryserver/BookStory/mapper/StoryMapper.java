@@ -10,9 +10,12 @@ import java.util.List;
 public interface StoryMapper {
     List<StoryEntity> getAllStory();
 
+    StoryEntity getStoryById(Long story_board_id);
+
     void createStory(StoryEntity storyEntity);
 
     void deleteStory(@Param("story_board_id") long id);
 
     void updateStory(StoryEntity storyEntity);
+
 }

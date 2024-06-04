@@ -5,8 +5,55 @@
 <mapper namespace="com.booktory.booktoryserver.BookStory.mapper.StoryMapper">
 
     <select id = "getAllStory" resultType="story">
-        select * from mystory_board;
+        select
+            sb.story_board_id,
+            sb.mystory_name,
+            sb.mystory_content,
+            sb.mystory_date,
+            sb.read_date,
+            sb.love_count,
+            u.user_id,
+            u.user_nickname,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_publisher,
+            bi.book_isbn
+        from
+            mystory_board sb
+                JOIN
+            users u ON sb.user_id = u.user_id
+                JOIN
+            book_information bi ON sb.book_id = bi.book_id
+
     </select>
+
+
+    <select id = "getStoryById" resultType="story">
+        select
+            sb.story_board_id,
+            sb.mystory_name,
+            sb.mystory_content,
+            sb.mystory_date,
+            sb.read_date,
+            sb.love_count,
+            u.user_id,
+            u.user_nickname,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_publisher,
+            bi.book_isbn
+        from
+            mystory_board sb
+                JOIN
+            users u ON sb.user_id = u.user_id
+                JOIN
+            book_information bi ON sb.book_id = bi.book_id
+        where story_board_id = #{story_board_id}
+    </select>
+
+
 
     <insert id = "createStory">
         INSERT INTO mystory_board (mystory_type_id, mystory_name, mystory_content, user_id, book_id)

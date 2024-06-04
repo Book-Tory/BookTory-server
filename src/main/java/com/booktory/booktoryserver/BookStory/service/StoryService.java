@@ -42,4 +42,8 @@ public class StoryService {
         storyMapper.updateStory(storyEntity);
 
     }
+
+    public StoryEntity getStoryById(Long story_board_id) {
+        return storyMapper.getStoryById(story_board_id);
+    }
 }
