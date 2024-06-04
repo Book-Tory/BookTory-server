@@ -11,10 +11,17 @@
         <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
         <typeAlias alias="productList" type="com.booktory.booktoryserver.products_shop.domain.ProductsList" />
         <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
+        <typeAlias alias="user" type="com.booktory.booktoryserver.users.model.User" />
     </typeAliases>
 
     <typeHandlers>
         <typeHandler javaType="com.booktory.booktoryserver.products_shop.constant.ProductStock"
                      handler="com.booktory.booktoryserver.products_shop.handler.ProductStockTypeHandler"/>
+
+        <typeHandler javaType="com.booktory.booktoryserver.users.constant.Role"
+                     handler="com.booktory.booktoryserver.users.handler.RoleTypeHandler"/>
+
+        <typeHandler javaType="com.booktory.booktoryserver.users.constant.Gender"
+                     handler="com.booktory.booktoryserver.users.handler.GenderTypeHandler"/>
     </typeHandlers>
 </configuration>
