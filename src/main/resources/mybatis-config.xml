@@ -11,6 +11,7 @@
         <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
         <typeAlias alias="productList" type="com.booktory.booktoryserver.products_shop.domain.ProductsList" />
         <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
+        <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
     </typeAliases>
 
     <typeHandlers>
