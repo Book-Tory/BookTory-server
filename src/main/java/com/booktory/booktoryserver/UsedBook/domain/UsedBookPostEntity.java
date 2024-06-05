@@ -4,8 +4,11 @@ import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,13 @@ public class UsedBookPostEntity {
     private int discount;
     private String description;
     private Date created_at;
+
+    // 이미지
+    private Long used_book_image_id;
+    private String original_image_name;
+    private String stored_image_name;
+    private int image_check;
+    private List<Map<Long, String>> imageUrls; // 이미지 url이 담긴 리스트
 
     // 사용자
     private Long user_id;
@@ -35,7 +45,8 @@ public class UsedBookPostEntity {
     private Date book_publication_date;
     private Long book_isbn;
 
-    public static UsedBookPostEntity toEntity(Long used_book_id, UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
+    // 수정
+    public static UsedBookPostEntity toUpdateEntity(Long used_book_id, UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
         return UsedBookPostEntity.builder()
                 .used_book_id(used_book_id)
                 .title(usedBookInfoDTO.getTitle())
@@ -43,10 +54,12 @@ public class UsedBookPostEntity {
                 .description(usedBookInfoDTO.getDescription())
                 .book_id(bookId)
                 .book_condition_id(usedBookInfoDTO.getBook_condition_id())
+                .image_check(usedBookInfoDTO.getImage_check())
                 .build();
     }
 
-    public static UsedBookPostEntity toEntity(UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
+    // 생성
+    public static UsedBookPostEntity toCreateEntity(UsedBookInfoDTO usedBookInfoDTO, Long bookId) {
         return UsedBookPostEntity.builder()
                 .title(usedBookInfoDTO.getTitle())
                 .discount(usedBookInfoDTO.getDiscount())
@@ -54,6 +67,7 @@ public class UsedBookPostEntity {
                 .book_id(bookId)
                 .user_id(usedBookInfoDTO.getUser_id())
                 .book_condition_id(usedBookInfoDTO.getBook_condition_id())
+                .image_check(usedBookInfoDTO.getImage_check())
                 .build();
     }
 }
