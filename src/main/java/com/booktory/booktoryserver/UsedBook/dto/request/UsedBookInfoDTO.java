@@ -23,5 +23,6 @@ public class UsedBookInfoDTO {
     private Long book_id; // 책 정보 id
     private List<MultipartFile> used_book_image; // 판매자가 올리는 중고서적 이미지
     private int image_check; // 파일 첨부 0, 파일 첨부 1
-    private Arrays deleteImages;
+    private List<Long> delete_Images; // 삭제할 이미지 pk가 담긴 리스트
+    private List<MultipartFile> update_images; // 추가할 이미지
 }
