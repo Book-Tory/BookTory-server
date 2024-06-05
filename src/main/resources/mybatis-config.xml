@@ -6,22 +6,22 @@
         <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
-        <typeAlias alias="product" type="com.booktory.booktoryserver.products_shop.domain.Product" />
+        <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
-        <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
-        <typeAlias alias="productList" type="com.booktory.booktoryserver.products_shop.domain.ProductsList" />
-        <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
-        <typeAlias alias="user" type="com.booktory.booktoryserver.users.model.Users" />
+        <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
+        <typeAlias alias="productList" type="com.booktory.booktoryserver.Products_shop.domain.ProductsList" />
+        <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
+        <typeAlias alias="user" type="com.booktory.booktoryserver.Users.model.Users" />
     </typeAliases>
 
     <typeHandlers>
-        <typeHandler javaType="com.booktory.booktoryserver.products_shop.constant.ProductStock"
-                     handler="com.booktory.booktoryserver.products_shop.handler.ProductStockTypeHandler"/>
+        <typeHandler javaType="com.booktory.booktoryserver.Products_shop.constant.ProductStock"
+                     handler="com.booktory.booktoryserver.Products_shop.handler.ProductStockTypeHandler"/>
 
-        <typeHandler javaType="com.booktory.booktoryserver.users.constant.Role"
-                     handler="com.booktory.booktoryserver.users.handler.RoleTypeHandler"/>
+        <typeHandler javaType="com.booktory.booktoryserver.Users.constant.Role"
+                     handler="com.booktory.booktoryserver.Users.handler.RoleTypeHandler"/>
 
-        <typeHandler javaType="com.booktory.booktoryserver.users.constant.Gender"
-                     handler="com.booktory.booktoryserver.users.handler.GenderTypeHandler"/>
+        <typeHandler javaType="com.booktory.booktoryserver.Users.constant.Gender"
+                     handler="com.booktory.booktoryserver.Users.handler.GenderTypeHandler"/>
     </typeHandlers>
 </configuration>
