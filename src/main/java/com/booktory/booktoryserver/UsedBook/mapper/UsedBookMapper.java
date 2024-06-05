@@ -25,7 +25,7 @@ public interface UsedBookMapper {
 
     int saveFile(UsedBookImage usedBookImage);
 
-    List<UsedBookImage> getExistingImage(Long used_book_id);
+    List<UsedBookImage> getUsedBookImageById(Long used_book_id);
 
     void deleteImageById(Long used_book_id);
 

@@ -134,6 +134,13 @@ public class UsedBookService {
 
     // 중고서적 글 삭제
     public int deletePostById(Long used_book_id) {
+        List<UsedBookImage> usedBookImages = usedBookMapper.getUsedBookImageById(used_book_id);
+
+        for (UsedBookImage usedBookImage : usedBookImages) {
+            String key = "profile/" + usedBookImage.getStored_image_name();
+            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+        }
+
         return usedBookMapper.deletePostById(used_book_id);
     }
 
@@ -159,7 +166,7 @@ public class UsedBookService {
         List<String> urls = new ArrayList<>();
 
         // 기존에 등록된 이미지
-        List<UsedBookImage> existingImage = usedBookMapper.getExistingImage(used_book_id);
+        List<UsedBookImage> existingImage = usedBookMapper.getUsedBookImageById(used_book_id);
 
         // 수정할 이미지
         List<MultipartFile> updateImages = usedBookInfoDTO.getUpdate_images();

@@ -93,7 +93,7 @@
         values (#{used_book_id}, #{original_image_name}, #{stored_image_name})
     </insert>
 
-    <select id="getExistingImage" resultType="usedBookImage">
+    <select id="getUsedBookImageById" resultType="usedBookImage">
         select * from used_book_image where used_book_id = #{used_book_id}
     </select>
 
