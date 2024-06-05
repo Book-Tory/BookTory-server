@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.UsedBook.controller;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
+import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookService;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -48,7 +49,7 @@ public class UsedBookController {
     // 중고 서적 글 리스트 조회
     @GetMapping("/list")
     public CustomResponse getList () {
-        List<UsedBookPostEntity> list = usedBookService.getList();
+        List<UsedBookPostDTO> list = usedBookService.getList();
 
         if (!list.isEmpty()) {
             return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);
@@ -60,7 +61,7 @@ public class UsedBookController {
     // 중고 서적 글 상세보기
     @GetMapping("/{used_book_id}")
     public CustomResponse getPostById (@PathVariable ("used_book_id") Long used_book_id) {
-        UsedBookPostEntity usedBookPost = usedBookService.getPostById(used_book_id);
+        UsedBookPostDTO usedBookPost = usedBookService.getPostById(used_book_id);
 
         if (usedBookPost != null) {
             return CustomResponse.ok("조회 성공", usedBookPost);

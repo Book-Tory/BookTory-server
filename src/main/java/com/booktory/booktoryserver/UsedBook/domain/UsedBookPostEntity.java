@@ -4,8 +4,11 @@ import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +20,13 @@ public class UsedBookPostEntity {
     private int discount;
     private String description;
     private Date created_at;
+
+    // 이미지
+    private Long used_book_image_id;
+    private String original_image_name;
+    private String stored_image_name;
     private int image_check;
+    private List<Map<Long, String>> imageUrls; // 이미지 url이 담긴 리스트
 
     // 사용자
     private Long user_id;

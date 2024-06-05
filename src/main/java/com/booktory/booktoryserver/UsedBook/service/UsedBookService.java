@@ -10,6 +10,7 @@ import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
+import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
 import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
 import com.booktory.booktoryserver.products_shop.domain.ProductImageFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +47,6 @@ public class UsedBookService {
 
     @Value("${X-Naver-Client-Secret}")
     private String client_secret;
-
 
     private URI buildUri (String path, Map<String, Object> queryParams) {
         // 1. 기본 URI 설정
@@ -102,7 +102,6 @@ public class UsedBookService {
         return bookInfoList;
     }
 
-
     // 특정 isbn 값을 통한 책 상세조회
     public BookDTO getBookByIsbn(Long d_isbn) throws JsonProcessingException {
         Map<String, Object> queryParams = new HashMap<>();
@@ -121,15 +120,60 @@ public class UsedBookService {
         return bookInfo;
     }
 
-
     // 데이터베이스에 있는 중고서적 목록
-    public List<UsedBookPostEntity> getList() {
-        return usedBookMapper.getList();
+    public List<UsedBookPostDTO> getList() {
+        // 중고서적 list 가져오기
+        List<UsedBookPostEntity> usedBookPostList = usedBookMapper.getList();
+
+        Map<Long, UsedBookPostEntity> usedBookMap = new HashMap<>();
+
+        for (UsedBookPostEntity usedBookPost : usedBookPostList) {
+
+            if (!usedBookMap.containsKey(usedBookPost.getUsed_book_id())) {
+                usedBookPost.setImageUrls(new ArrayList<>());
+                usedBookMap.put(usedBookPost.getUsed_book_id(), usedBookPost);
+            }
+
+            // 이미지가 있으면
+            if (usedBookPost.getStored_image_name() != null) {
+                String url = amazonS3.getUrl(bucketName, "profile/" + usedBookPost.getStored_image_name()).toString();
+
+                Map<Long, String> imageMap = new HashMap<>();
+                imageMap.put(usedBookPost.getUsed_book_image_id(), url);
+
+                usedBookMap.get(usedBookPost.getUsed_book_id()).getImageUrls().add(imageMap);
+            }
+        }
+
+        return usedBookMap.values().stream().map(usedBook -> {
+            return UsedBookPostDTO.toDTO(usedBook, usedBook.getImageUrls());
+        }).collect(Collectors.toList());
     }
 
     // 특정 중고서적 글 가져오기
-    public UsedBookPostEntity getPostById(Long used_book_id) {
-        return usedBookMapper.getPostById(used_book_id);
+    public UsedBookPostDTO getPostById(Long used_book_id) {
+        List<UsedBookPostEntity> usedBookPost = usedBookMapper.getPostById(used_book_id);
+
+        if (usedBookPost == null || usedBookPost.isEmpty()) {
+            return null;
+        }
+
+        UsedBookPostEntity firstUsedBook = usedBookPost.get(0);
+
+        Map<Long, String> imageMap = new HashMap<>();
+
+        List<Map<Long, String>> imageUrls = new ArrayList<>();
+
+        for (UsedBookPostEntity usedBook : usedBookPost) {
+            if (usedBook.getStored_image_name() != null) {
+                String url = amazonS3.getUrl(bucketName, "profile/" + usedBook.getStored_image_name()).toString();
+                imageMap.put(usedBook.getUsed_book_image_id(), url);
+            }
+        }
+
+        imageUrls.add(imageMap);
+
+        return UsedBookPostDTO.toDTO(firstUsedBook, imageUrls);
     }
 
     // 중고서적 글 삭제

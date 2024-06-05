@@ -11,7 +11,7 @@ import java.util.List;
 public interface UsedBookMapper {
     List<UsedBookPostEntity> getList();
 
-    UsedBookPostEntity getPostById(Long used_book_id);
+    List<UsedBookPostEntity> getPostById(Long used_book_id);
 
     int deletePostById(Long used_book_id);
 
