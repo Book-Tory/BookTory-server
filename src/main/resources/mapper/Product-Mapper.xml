@@ -24,6 +24,7 @@
             p.product_image_check,
             p.created_at,
             p.updated_at,
+            i.image_id,
             i.originalImageName,
             i.storedImageName
         FROM
@@ -43,6 +44,7 @@
             p.product_image_check,
             p.created_at,
             p.updated_at,
+            i.image_id,
             i.originalImageName,
             i.storedImageName
         FROM
@@ -61,5 +63,12 @@
         SELECT storedImageName FROM product_image WHERE product_id = #{product_id}
     </select>
 
+    <select id="imageSearch" parameterType="long" resultType="productImageFile">
+        SELECT storedImageName FROM product_image WHERE image_id = #{iamge_id}
+    </select>
+
+    <delete id="deleteByImage" parameterType="long">
+        DELETE FROM product_image WHERE image_id = #{iamge_id};
+    </delete>
 
 </mapper>

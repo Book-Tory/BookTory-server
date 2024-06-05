@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.products_shop.controller;
 
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.booktory.booktoryserver.products_shop.dto.request.ProductRegisterDTO;
+import com.booktory.booktoryserver.products_shop.dto.request.ProductUpdateDTO;
 import com.booktory.booktoryserver.products_shop.dto.response.ProductResponseDTO;
 import com.booktory.booktoryserver.products_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -57,12 +58,19 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/image/{}")
+    @DeleteMapping("/image/{image_id}")
+    public CustomResponse imageDelete(@PathVariable("image_id") Long image_id){
+        int result = productService.deleteByImage(image_id);
 
-
+        if (result > 0) {
+            return CustomResponse.ok("삭제되었습니다.", result);
+        } else {
+            return CustomResponse.failure("삭제 실패하였습니다.");
+        }
+    }
 
     @PutMapping("/update/{product_id}")
-    public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductRegisterDTO productDTO){
+    public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductUpdateDTO productDTO){
         int result = productService.updateById(product_id, productDTO);
 
         return null;

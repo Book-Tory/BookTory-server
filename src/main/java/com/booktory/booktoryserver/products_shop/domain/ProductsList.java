@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 
 @Getter
@@ -25,6 +26,7 @@ public class ProductsList {
     private LocalDateTime updated_at; // 상품 수정일
     private String originalImageName; // 원본 파일 이름
     private String storedImageName; // 서버 저장용 파일 이름
-    private List<String> imageUrls; // 이미지 url
+    private Long image_id;
+    private List<Map<Long, String>> imageUrls; // 이미지 url
 
 }

@@ -24,10 +24,10 @@ public class ProductResponseDTO {
     private int product_image_check; // 파일 첨부 0, 파일 첨부 1
     private LocalDateTime created_at; // 상품 등록일
     private LocalDateTime updated_at; // 상품 수정일
-    private List<String> product_image_url;
+    private List<Map<Long, String>> product_image_url;
 
 
-    public static ProductResponseDTO toProductInfo(ProductsList product, List<String> urls){
+    public static ProductResponseDTO toProductInfo(ProductsList product, List<Map<Long, String>> urls){
         return ProductResponseDTO.builder()
                 .product_id(product.getProduct_id())
                 .product_name(product.getProduct_name())

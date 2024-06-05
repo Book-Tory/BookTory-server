@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.products_shop.domain;
 
 import com.booktory.booktoryserver.products_shop.constant.ProductStock;
 import com.booktory.booktoryserver.products_shop.dto.request.ProductRegisterDTO;
+import com.booktory.booktoryserver.products_shop.dto.request.ProductUpdateDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public class Product {
     }
 
 
-    public static Product toUpdateProduct(ProductRegisterDTO productDTO, Long productId){
+    public static Product toUpdateProduct(ProductUpdateDTO productDTO, Long productId){
         return Product.builder()
                 .product_id(productId)
                 .product_name(productDTO.getProduct_name())
