@@ -115,4 +115,8 @@
         delete from used_book_image where used_book_image_id = #{used_book_image_id}
     </delete>
 
+    <select id="getUsedBookImageByImageId" resultType="usedBookImage">
+        select * from used_book_image where used_book_image_id = #{used_book_image_id}
+    </select>
+
 </mapper>

@@ -209,39 +209,15 @@ public class UsedBookService {
 
         List<String> urls = new ArrayList<>();
 
-        // 기존에 등록된 이미지
-        List<UsedBookImage> existingImage = usedBookMapper.getUsedBookImageById(used_book_id);
-
         // 수정할 이미지
         List<MultipartFile> updateImages = usedBookInfoDTO.getUpdate_images();
-
-        // 삭제할 이미지 목록
-        List<Long> deleteImages = usedBookInfoDTO.getDelete_Images();
-
-        log.info("deleteImages {} " + deleteImages);
-        // 일단 삭제할 이미지가 있으면 삭제처리
-        if (deleteImages != null && !deleteImages.isEmpty()) {
-            log.info("여기로 오니 ? {} delete");
-            deleteImages.forEach(imageId -> {
-                existingImage.stream()
-                        .filter(existImage -> existImage.getUsed_book_image_id().equals(imageId))
-                        .forEach(existImage -> {
-                            String key = "profile/" + existImage.getStored_image_name();
-                            amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
-                            usedBookMapper.deleteImageByImageId(imageId);
-                        });
-            });
-
-            // 이때 기존에 존재하던 이미지를 다 삭제했다면?
-            if (existingImage == null || existingImage.isEmpty()) {
-                usedBookInfoDTO.setImage_check(0);
-            }
-        }
 
         // 그리고 추가할 이미지가 있으면 추가
         if (updateImages != null && !updateImages.isEmpty()) {
             usedBookInfoDTO.setImage_check(1);
+
             log.info("여기로 오니 ? {} update");
+
             // 그리고 추가
             for (MultipartFile updateImage : updateImages) {
                 String originalFilename = updateImage.getOriginalFilename();
@@ -271,6 +247,11 @@ public class UsedBookService {
                 String url = amazonS3.getUrl(bucketName, key).toString();
                 urls.add(url);
             }
+        }
+
+        List<UsedBookImage> imageList = usedBookMapper.getUsedBookImageById(used_book_id);
+        if (imageList == null || imageList.isEmpty()) {
+            usedBookInfoDTO.setImage_check(0);
         }
 
         // 그리고 내가 수정한 내용 적용
@@ -349,5 +330,16 @@ public class UsedBookService {
         }
 
         return "중고서적이 등록되었습니다.";
+    }
+
+    // 선택한 중고 서적 책 사진 삭제
+    public int deleteImageByImageId(Long used_book_image_id) {
+        UsedBookImage usedBookImage = usedBookMapper.getUsedBookImageByImageId(used_book_image_id);
+
+        // S3에서 삭제
+        String key = "profile/" + usedBookImage.getStored_image_name();
+        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+
+        return usedBookMapper.deleteImageByImageId(used_book_image_id);
     }
 }

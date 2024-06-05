@@ -106,4 +106,15 @@ public class UsedBookController {
         }
     }
 
+    @DeleteMapping("/image/{used_book_image_id}")
+    public CustomResponse deleteImageByImageId (@PathVariable ("used_book_image_id") Long used_book_image_id) {
+        int result = usedBookService.deleteImageByImageId(used_book_image_id);
+
+        if (result > 0) {
+            return CustomResponse.ok("선택한 이미지가 삭제되었습니다.", null);
+        } else {
+            return CustomResponse.failure("이미지 삭제에 실패하였습니다.");
+        }
+    }
+
 }

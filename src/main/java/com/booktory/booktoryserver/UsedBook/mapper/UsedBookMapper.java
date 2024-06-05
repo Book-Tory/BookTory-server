@@ -29,5 +29,7 @@ public interface UsedBookMapper {
 
     void deleteImageById(Long used_book_id);
 
-    void deleteImageByImageId(Long used_book_image_id);
+    int deleteImageByImageId(Long used_book_image_id);
+
+    UsedBookImage getUsedBookImageByImageId(Long used_book_image_id);
 }
