@@ -28,8 +28,6 @@ public class ProductUpdateDTO {
 
     private String product_category; // 상품 카테고리 FK ( T-SHIRT, ACCESSORY )
 
-    private List<String> product_image_url; // 상품 이미지 url
-
     private List<MultipartFile> product_image; // 상품 이미지
 
 }

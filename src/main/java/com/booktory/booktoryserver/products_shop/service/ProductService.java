@@ -145,6 +145,7 @@ public class ProductService {
         return productMapper.deleteById(productId);
     }
 
+    @Transactional
     public int deleteByImage(Long image_id) {
         ProductImageFile imageFile = productMapper.imageSearch(image_id);
         String key = "profile/" + imageFile.getStoredImageName();
@@ -152,12 +153,50 @@ public class ProductService {
         return productMapper.deleteByImage(image_id);
     }
 
-    public int updateById(Long productId, ProductUpdateDTO productDTO) {
+    @Transactional
+    public String updateById(Long productUpdateId, ProductUpdateDTO productDTO) throws IOException {
+        List<String> urls = new ArrayList<>();
 
-        Product product = Product.toUpdateProduct(productDTO, productId);
+        // 제품 정보 업데이트
+        Product product = Product.toUpdateProduct(productDTO, productUpdateId);
+        productMapper.updateByProduct(product);
 
+        // 이미지 파일 처리
+        if (productDTO.getProduct_image() != null && !productDTO.getProduct_image().isEmpty()) {
+            productDTO.setProductImageCheck(1);
 
-        return productMapper.updateById(product);
+            for (MultipartFile productFile : productDTO.getProduct_image()) {
+                String originalFilename = productFile.getOriginalFilename();
+                String storeFilename = System.currentTimeMillis() + "_" + originalFilename;
+
+                ProductImageFile productImageFile = ProductImageFile.builder()
+                        .product_id(productUpdateId)
+                        .originalImageName(originalFilename)
+                        .storedImageName(storeFilename)
+                        .build();
+
+                // 파일 메타데이터 설정
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(productFile.getSize());
+                objectMetadata.setContentType(productFile.getContentType());
+
+                // 저장될 위치 + 파일명
+                String key = "profile/" + storeFilename;
+
+                // 클라우드에 파일 저장
+                amazonS3Client.putObject(bucketName, key, productFile.getInputStream(), objectMetadata);
+                amazonS3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+
+                // 데이터베이스에 파일 정보 저장
+                productMapper.saveFile(productImageFile);
+
+                String url = amazonS3Client.getUrl(bucketName, key).toString();
+                urls.add(url);
+            }
+        } else {
+            productDTO.setProductImageCheck(0);
+        }
+
+        return "상품 업데이트되었습니다.";
     }
-
 }

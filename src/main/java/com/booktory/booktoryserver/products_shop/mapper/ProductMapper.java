@@ -20,7 +20,7 @@ public interface ProductMapper {
 
     int deleteById(Long productId);
 
-    int updateById(Product product);
+    int updateByProduct(Product product);
 
     List<ProductImageFile> findImagesByProductId(Long productId);
 

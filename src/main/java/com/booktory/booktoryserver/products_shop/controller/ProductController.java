@@ -22,7 +22,6 @@ public class ProductController {
 
     @PostMapping("/register")
     public CustomResponse<String> insert(@ModelAttribute ProductRegisterDTO productDTO) throws IOException {
-        log.info("productDTO : {}", productDTO);
 
         String result  = productService.register(productDTO);
 
@@ -70,9 +69,12 @@ public class ProductController {
     }
 
     @PutMapping("/update/{product_id}")
-    public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductUpdateDTO productDTO){
-        int result = productService.updateById(product_id, productDTO);
+    public CustomResponse updatePostById(@PathVariable("product_id") Long product_id, @ModelAttribute ProductUpdateDTO productDTO) throws IOException {
 
-        return null;
+        System.out.println("product_id : " + product_id);
+        System.out.println("ProductUpdateDTO : " + productDTO);
+
+        String result = productService.updateById(product_id, productDTO);
+        return CustomResponse.ok(result, null);
     }
 }

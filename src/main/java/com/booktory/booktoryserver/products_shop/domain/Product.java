@@ -37,9 +37,9 @@ public class Product {
     }
 
 
-    public static Product toUpdateProduct(ProductUpdateDTO productDTO, Long productId){
+    public static Product toUpdateProduct(ProductUpdateDTO productDTO, Long productUpdateId){
         return Product.builder()
-                .product_id(productId)
+                .product_id(productUpdateId)
                 .product_name(productDTO.getProduct_name())
                 .product_price(productDTO.getProduct_price())
                 .product_script(productDTO.getProduct_script())
