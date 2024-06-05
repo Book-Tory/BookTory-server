@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.UsedBook.dto.request;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -22,4 +23,5 @@ public class UsedBookInfoDTO {
     private Long book_id; // 책 정보 id
     private List<MultipartFile> used_book_image; // 판매자가 올리는 중고서적 이미지
     private int image_check; // 파일 첨부 0, 파일 첨부 1
+    private Arrays deleteImages;
 }

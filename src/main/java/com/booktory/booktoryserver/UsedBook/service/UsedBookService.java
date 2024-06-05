@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.UsedBook.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookImage;
@@ -10,6 +11,7 @@ import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
+import com.booktory.booktoryserver.products_shop.domain.ProductImageFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +27,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -139,7 +139,7 @@ public class UsedBookService {
 
     // 중고서적 글 업데이트
     @Transactional
-    public int updatePost(Long used_book_id, Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+    public int updatePost(Long used_book_id, Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws IOException {
         // 수정하려는 책이 DB에 있는지 먼저 확인
         Long bookId = usedBookMapper.getBookId(d_isbn);
 
@@ -154,6 +154,91 @@ public class UsedBookService {
             usedBookMapper.createBookInfo(bookInfo);
 
             bookId = bookInfo.getBook_id();
+        }
+
+        List<String> urls = new ArrayList<>();
+
+        // 기존에 등록된 이미지
+        List<UsedBookImage> existingImage = usedBookMapper.getExistingImage(used_book_id);
+
+        // 수정할 이미지
+        List<MultipartFile> updateImages = usedBookInfoDTO.getUsed_book_image();
+
+        // 수정할 이미지가 없을 때 (기존에 있는 것도 지운 상태임)
+        if (updateImages == null || updateImages.isEmpty()) {
+            usedBookInfoDTO.setImage_check(0);
+
+            // 이미지 다 삭제
+            for (UsedBookImage image : existingImage) {
+                String key = "profile/" + image.getStored_image_name();
+                amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+            }
+
+            // 디비에서도 이미지 삭제하기
+            usedBookMapper.deleteImageById(used_book_id);
+        } else {
+            // 수정할 이미지 있을 때
+            usedBookInfoDTO.setImage_check(1);
+
+            // 기존에 있었지만 수정할 이미지 리스트에 없는 이미지 삭제
+            // (즉, 기존에 있었던 이미지에서 지운 거 삭제하는거)
+            existingImage.stream()
+                    // updateImages에 있는 이미지를 기존 이미지 리스트와 비교
+                    .filter(existImage -> updateImages.stream()
+                            // updateImages 리스트에 있는 이미지 파일명이 기존 이미지 리스트에 있는지 확인
+                            // 만약 파일명이 없다면 noneMatch 조건에 만족 -> 기존에는 있었지만 수정할 이미지에 없는 이미지를 찾을 수 있음.
+
+                            // 근데? 만약 내가 기존에 사진 1 을 올렸었어 근데 파일명만 똑같은 다른 사진 1을 올리면 이건 오류임
+                            .noneMatch(updateImage -> Objects.equals(updateImage.getOriginalFilename(), existImage.getOriginal_image_name())))
+                    // 찾아진 해당 이미지(기존 이미지)에 대해 삭제 작업 수행
+                    .forEach(image -> {
+                        String key = "profile/" + image.getStored_image_name();
+                        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
+
+                        log.info("key {} " + key);
+                        usedBookMapper.deleteImageByImageId(image.getUsed_book_image_id());
+                    });
+
+            // 새롭게 추가된 이미지만 추가하기
+            List<MultipartFile> newImages = updateImages.stream()
+                    .filter(updateImage -> existingImage.stream()
+                            // 각 updateImage에 대해 existImage(이미 기존에 있던 이미지)랑 동일한 파일명을 가진 이미지가 있는지 확인
+                            // 사용자가 업데이트할 이미지가 이미 기존에 저장했던 이미지랑 중복되지 않으면 noneMatch 조건 통과
+                            .noneMatch(existImage -> Objects.equals(existImage.getOriginal_image_name(), updateImage.getOriginalFilename())))
+                    .collect(Collectors.toList()); // 필터링된 결과를 리스트로 모음
+
+
+            log.info("newImages {} " + newImages);
+
+            for (MultipartFile newImage : newImages) {
+                String originalFilename = newImage.getOriginalFilename();
+                String storedFilename = System.currentTimeMillis() + originalFilename;
+
+                UsedBookImage usedBookImage = UsedBookImage.builder()
+                        .used_book_id(used_book_id)
+                        .original_image_name(originalFilename)
+                        .stored_image_name(storedFilename)
+                        .build();
+
+                // 파일 메타데이터 설정
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(newImage.getSize());
+                objectMetadata.setContentType(newImage.getContentType());
+
+                // 저장될 위치 + 파일명
+                String key = "profile" + "/" + storedFilename;
+
+                // 클라우드에 파일 저장
+                amazonS3.putObject(bucketName, key, newImage.getInputStream(), objectMetadata);
+                amazonS3.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+
+                // 데이터베이스에 저장
+                usedBookMapper.saveFile(usedBookImage);
+
+                String url = amazonS3.getUrl(bucketName, key).toString();
+                urls.add(url);
+            }
+
         }
 
         // 그리고 내가 수정한 내용 적용
@@ -181,9 +266,11 @@ public class UsedBookService {
         // 이미지 등록 처리
         List<String> urls = new ArrayList<>();
 
-        log.info("test " + usedBookInfoDTO.getUsed_book_image());
+        // 등록할 이미지
+        List<MultipartFile> newImages = usedBookInfoDTO.getUsed_book_image();
+
         // 중고서적 글에 등록한 이미지가 없으면
-        if (usedBookInfoDTO.getUsed_book_image() == null || usedBookInfoDTO.getUsed_book_image().isEmpty()) {
+        if (newImages == null || newImages.isEmpty()) {
             usedBookInfoDTO.setImage_check(0);
 
             // 바로 글 등록
@@ -199,7 +286,7 @@ public class UsedBookService {
             Long usedBookId = usedBookPost.getUsed_book_id();
 
             // 이미지가 여러 장일 때
-            for (MultipartFile usedBookFile : usedBookInfoDTO.getUsed_book_image()) {
+            for (MultipartFile usedBookFile : newImages) {
                 String originalFilename = usedBookFile.getOriginalFilename();
                 String storedFilename = System.currentTimeMillis() + originalFilename; // 중복에 대비한 고유한 파일명 생성
 

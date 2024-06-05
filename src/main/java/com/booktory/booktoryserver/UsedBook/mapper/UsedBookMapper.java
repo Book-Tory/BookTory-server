@@ -24,4 +24,10 @@ public interface UsedBookMapper {
     int createPost(UsedBookPostEntity entity);
 
     int saveFile(UsedBookImage usedBookImage);
+
+    List<UsedBookImage> getExistingImage(Long used_book_id);
+
+    void deleteImageById(Long used_book_id);
+
+    void deleteImageByImageId(Long used_book_image_id);
 }

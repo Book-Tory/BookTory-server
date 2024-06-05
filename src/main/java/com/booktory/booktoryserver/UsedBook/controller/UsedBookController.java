@@ -83,7 +83,7 @@ public class UsedBookController {
 
     // 중고 서적 글 수정
     @PutMapping("/{used_book_id}/{d_isbn}")
-    public CustomResponse updatePost (@PathVariable ("used_book_id") Long used_book_id, @PathVariable ("d_isbn") Long d_isbn, @RequestBody UsedBookInfoDTO usedBookInfoDTO) throws JsonProcessingException {
+    public CustomResponse updatePost (@PathVariable ("used_book_id") Long used_book_id, @PathVariable ("d_isbn") Long d_isbn, @ModelAttribute UsedBookInfoDTO usedBookInfoDTO) throws IOException {
         int result = usedBookService.updatePost(used_book_id, d_isbn, usedBookInfoDTO);
 
         if (result > 0) {

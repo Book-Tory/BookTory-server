@@ -77,7 +77,7 @@
 
     <update id="updatePost" parameterType="usedBook">
         update used_book
-        set title = #{title}, discount = #{discount}, description = #{description}, book_id = #{book_id}, book_condition_id = #{book_condition_id}
+        set title = #{title}, discount = #{discount}, description = #{description}, book_id = #{book_id}, book_condition_id = #{book_condition_id}, image_check = #{image_check}
         where used_book_id = #{used_book_id}
     </update>
 
@@ -92,4 +92,17 @@
         insert into used_book_image (used_book_id , original_image_name, stored_image_name)
         values (#{used_book_id}, #{original_image_name}, #{stored_image_name})
     </insert>
+
+    <select id="getExistingImage" resultType="usedBookImage">
+        select * from used_book_image where used_book_id = #{used_book_id}
+    </select>
+
+    <delete id="deleteImageById" >
+        delete from used_book_image where used_book_id = #{used_book_id}
+    </delete>
+
+    <delete id="deleteImageByImageId" >
+        delete from used_book_image where used_book_image_id = #{used_book_image_id}
+    </delete>
+
 </mapper>
