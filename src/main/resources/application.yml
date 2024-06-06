@@ -20,3 +20,7 @@ mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.booktory.booktoryserver.products_shop.config
+
+logging:
+  level:
+    org.springframework.security.web.FilterChainProxy : debug

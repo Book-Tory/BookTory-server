@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.config;
 
+import com.booktory.booktoryserver.Users.filter.AuthoritiesLoggingAfterFilter;
 import com.booktory.booktoryserver.Users.filter.CsrfCookieFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -43,8 +44,9 @@ public class SecurityConfig {
                     }
                 }))
                 .csrf((csrf) -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/api/users/register/**")
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())).
-                addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                        .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                        .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
                 // .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((auth) -> {
                     auth
