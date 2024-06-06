@@ -37,7 +37,6 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Username : " + username);
 
         String userName = null;
         String password = null;
@@ -47,7 +46,6 @@ public class UserService implements UserDetailsService {
         Users user = userOptional.orElseThrow(() -> new UsernameNotFoundException(username));
         userName = user.getUser_email();
         password = user.getUser_password();
-        authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getUser_role().getKey()));
 
         return new User(userName, password, authorities);

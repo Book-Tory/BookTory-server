@@ -48,7 +48,13 @@ public class SecurityConfig {
                 // .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((auth) -> {
                     auth
+//                            .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")  // 권한별 접근
+//                            .requestMatchers("/shop").hasAuthority("VIEWACCOUNT")
+
+//                            .requestMatchers("/shop").hasRole("USER") // 역할별 접근
+//                            .requestMatchers("/shop").hasAnyRole("USER", "ADMIN")
 //                            .anyRequest().permitAll();
+
                             .requestMatchers("/api/users/test").authenticated()
                             .requestMatchers("/api/users/register/**").permitAll();
                 })
