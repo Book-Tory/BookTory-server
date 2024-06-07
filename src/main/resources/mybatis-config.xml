@@ -13,6 +13,8 @@
         <typeAlias alias="productList" type="com.booktory.booktoryserver.products_shop.domain.ProductsList" />
         <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.products_shop.domain.ProductImageFile" />
         <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
+        <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
+        <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
     </typeAliases>
 
     <typeHandlers>
