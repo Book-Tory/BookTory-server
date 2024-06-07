@@ -10,4 +10,8 @@ public interface ReviewMapper {
     int register(ProductReview productReview);
 
     List<ProductReview> getReviewByProductId(Long productId);
+
+    ProductReview findByReviewId(Long productReviewId);
+
+    int deleteByReviewId(Long productReviewId);
 }

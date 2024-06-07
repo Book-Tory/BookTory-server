@@ -10,4 +10,14 @@
     <select id="getReviewByProductId" parameterType="long">
         SELECT * FROM product_review WHERE product_id = #{product_id}
     </select>
+
+    <select id="findByReviewId" parameterType="long">
+        SELECT * FROM product_review WHERE product_review_id = #{product_review_id}
+    </select>
+
+
+    <delete id="deleteByReviewId" parameterType="long">
+        DELETE FROM product_review WHERE product_review_id = #{product_review_id}
+    </delete>
+
 </mapper>

@@ -16,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static com.booktory.booktoryserver.ProductReview.dto.response.ProductReviewResponseDTO.*;
 
 @Service
 @RequiredArgsConstructor
@@ -87,5 +86,25 @@ public class ReviewService {
                     return ProductReviewResponseDTO.toProductReviewInfo(productReview, url);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public int deleteByReviewId(Long reviewId) {
+
+        // 리뷰를 조회합니다.
+        ProductReview productReviewOptional = reviewMapper.findByReviewId(reviewId);
+
+
+        if (productReviewOptional != null) {
+            // S3에서 이미지를 삭제합니다.
+            if (!"0".equals(productReviewOptional.getReview_stored_image())) {
+                String key = "profile/" + productReviewOptional.getReview_stored_image();
+                amazonS3Client.deleteObject(bucketName, key);
+            }
+            // 리뷰를 삭제합니다.
+            return reviewMapper.deleteByReviewId(reviewId);
+        } else {
+            throw new IllegalArgumentException("리뷰를 찾을 수 없습니다.");
+        }
     }
 }
