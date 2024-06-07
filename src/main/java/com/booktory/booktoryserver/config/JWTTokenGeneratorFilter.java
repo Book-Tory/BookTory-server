@@ -33,7 +33,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                     .claim("username", authentication.getName()) // 사용자 이름 클레임 추가
                     .claim("authorities", populateAuthorities(authentication.getAuthorities())) // 사용자 권한 클레임 추가
                     .setIssuedAt(new Date()) // 토큰 발행 시간 설정
-                    .setExpiration(new Date((new Date()).getTime() + 30000000)) // 토큰 만료 시간 설정
+                    .setExpiration(new Date((new Date()).getTime() + 30000)) // 토큰 만료 시간 설정
                     .signWith(key) // 서명 키로 토큰 서명
                     .compact(); // 토큰 생성
 
@@ -45,7 +45,9 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getServletPath().equals("/user");
+        //        return !request.getServletPath().equals("/user");
+        // 즉, 항상 필터가 실행되도록 false를 반환합니다.
+        return false;
     }
 
     private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {

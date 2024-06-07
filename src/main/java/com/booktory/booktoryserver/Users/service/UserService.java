@@ -38,6 +38,8 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+        System.out.println("username : " + username);
+
         String userName = null;
         String password = null;
         List<GrantedAuthority> authorities = new ArrayList<>();

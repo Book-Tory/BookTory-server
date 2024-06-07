@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb://223.130.155.227:3307/BookTory
+    url: ENC(00ifvkkUhMc+xvcnZOmAbGJIQZ/OmYUfPOgfZ2Ts0nT59/7AmmiiPGVtpaD+y1ffAnNXfT8AG28=)
     username: booktory
-    password: 0625!
+    password: ENC(m+BDIqXgMcYN0UvbUNoo7A==)
     driver-class-name: org.mariadb.jdbc.Driver
 
   servlet:
@@ -24,3 +24,8 @@ mybatis:
 logging:
   level:
     org.springframework.security.web.FilterChainProxy : debug
+
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
