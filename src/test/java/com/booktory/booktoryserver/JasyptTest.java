@@ -7,7 +7,7 @@ public class JasyptTest {
 
     @Test
     public void jasyptTest() {
-        String value = "";
+        String value = "!0625";
         String result = jasyptEncoding(value);
         System.out.println("result : " + result);
     }

@@ -1,22 +1,16 @@
 package com.booktory.booktoryserver.Users.service;
 
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
+import com.booktory.booktoryserver.Users.dto.response.AuthResponse;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.Users;
+import com.booktory.booktoryserver.config.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +21,10 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtService jwtService;
+
     public int register(UserRegisterDTO userDTO) {
 
         userDTO.setUser_password(passwordEncoder.encode(userDTO.getUser_password()));
@@ -34,5 +32,14 @@ public class UserService {
 
         return userMapper.insertUser(user);
     }
+
+    public AuthResponse authenticate(Users user) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUser_email(), user.getUser_password())
+        );
+
+        return new AuthResponse(jwtService.generateToken(user));
+    }
+
 
 }

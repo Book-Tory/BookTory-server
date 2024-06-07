@@ -1,5 +1,7 @@
 package com.booktory.booktoryserver.Users.controller;
 
+import com.booktory.booktoryserver.Users.dto.request.AuthRequest;
+import com.booktory.booktoryserver.Users.model.Users;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.Users.service.UserService;
@@ -9,7 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users/auth")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -30,8 +32,18 @@ public class UserController {
         }
     };
 
-    @GetMapping("/test")
-    public String test() {
-        return "login successful";
+    @PostMapping("/login")
+    public CustomResponse authenticate(@RequestBody AuthRequest login) {
+
+        Users user = Users.builder()
+                .user_email(login.email())
+                .user_password(login.password())
+                .build();
+
+        try {
+            return CustomResponse.ok("로그인 성공", userService.authenticate(user));
+        } catch (Exception e) {
+            return CustomResponse.failure("로그인 실패: " + e.getMessage());
+        }
     }
 }

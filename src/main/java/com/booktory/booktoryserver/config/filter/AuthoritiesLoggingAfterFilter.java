@@ -1,4 +1,4 @@
-package com.booktory.booktoryserver.Users.filter;
+package com.booktory.booktoryserver.config.filter;
 
 import jakarta.servlet.*;
 import org.springframework.security.core.Authentication;
