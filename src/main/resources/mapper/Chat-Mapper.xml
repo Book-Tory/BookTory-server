@@ -5,4 +5,40 @@
     <insert id="createChatRoom" parameterType="chat">
         insert into chat (seller_id, buyer_id, used_book_id) values (#{seller_id}, #{buyer_id}, #{used_book_id})
     </insert>
+
+    <select id="getChatRoomList" resultType="chatList">
+        SELECT
+            c.chat_id,
+            #{user_id} AS user_id,
+            CASE
+                WHEN c.seller_id = #{user_id} THEN buyer.user_nickname
+                ELSE seller.user_nickname
+                END AS chat_partner_nickname,
+            CASE
+                WHEN c.seller_id = #{user_id} THEN buyer.user_img
+                ELSE seller.user_img
+                END AS chat_partner_img,
+            (
+                SELECT cm.content
+                FROM chat_message cm
+                WHERE cm.chat_id = c.chat_id
+                ORDER BY cm.message_created_at DESC
+                          LIMIT 1
+            ) AS last_message_content,
+        (
+            SELECT cm.message_created_at
+            FROM chat_message cm
+            WHERE cm.chat_id = c.chat_id
+            ORDER BY cm.message_created_at DESC
+            LIMIT 1
+        ) AS last_message_time
+        FROM chat c
+            LEFT JOIN users buyer ON c.buyer_id = buyer.user_id
+            LEFT JOIN users seller ON c.seller_id = seller.user_id
+        WHERE c.seller_id = #{user_id} OR c.buyer_id = #{user_id};
+    </select>
+
+
+
+
 </mapper>

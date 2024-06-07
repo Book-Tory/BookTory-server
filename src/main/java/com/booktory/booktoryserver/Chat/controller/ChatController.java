@@ -1,14 +1,14 @@
 package com.booktory.booktoryserver.Chat.controller;
 
+import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
 import com.booktory.booktoryserver.Chat.dto.Chat;
 import com.booktory.booktoryserver.Chat.service.ChatService;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -25,6 +25,18 @@ public class ChatController {
             return CustomResponse.ok("채팅방이 생성되었습니다.", null);
         } else {
             return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
+        }
+    }
+
+    // 내 채팅방 리스트 불러오기
+    @GetMapping("/rooms/{user_id}")
+    public CustomResponse getChatRoomList (@PathVariable ("user_id") Long user_id) {
+        List<ChatListEntity> chatList = chatService.getChatRoomList(user_id);
+
+        if (!chatList.isEmpty()) {
+            return CustomResponse.ok("채팅방 리스트 조회 성공", chatList);
+        } else {
+            return CustomResponse.failure("채팅방 리스트를 조회 실패하였습니다.");
         }
     }
 }
