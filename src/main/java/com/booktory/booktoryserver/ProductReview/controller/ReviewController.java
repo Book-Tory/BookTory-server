@@ -1,15 +1,14 @@
 package com.booktory.booktoryserver.ProductReview.controller;
 
 import com.booktory.booktoryserver.ProductReview.dto.request.ReviewRequestDTO;
+import com.booktory.booktoryserver.ProductReview.dto.response.ProductReviewResponseDTO;
 import com.booktory.booktoryserver.ProductReview.service.ReviewService;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/review")
@@ -29,6 +28,12 @@ public class ReviewController {
         } else {
             return CustomResponse.failure("리뷰 작성 실패하였습니다.");
         }
+    }
+
+    @GetMapping("product/{product_id}")
+    public CustomResponse getReviewByProductId(@PathVariable("product_id") Long product_id) {
+         List<ProductReviewResponseDTO> productReview = reviewService.getReviewByProductId(product_id);
+        return CustomResponse.ok("상품별 리뷰 조회 성공", productReview);
     }
 
 }

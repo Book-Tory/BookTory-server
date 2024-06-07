@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.ProductReview.domain.ProductReview;
 import com.booktory.booktoryserver.ProductReview.domain.UserData;
 import com.booktory.booktoryserver.ProductReview.dto.request.ReviewRequestDTO;
+import com.booktory.booktoryserver.ProductReview.dto.response.ProductReviewResponseDTO;
 import com.booktory.booktoryserver.ProductReview.mapper.ReviewMapper;
 import com.booktory.booktoryserver.ProductReview.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.booktory.booktoryserver.ProductReview.dto.response.ProductReviewResponseDTO.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +48,7 @@ public class ReviewService {
             reviewRequestDTO.setReview_stored_image("0");
             reviewRequestDTO.setReview_original_image("0");
 
-            ProductReview productReview = ProductReview.toReviewEntity(reviewRequestDTO, userData.getUser_id());
+            ProductReview productReview = ProductReview.toReviewEntity(reviewRequestDTO, userData.getUser_nickname());
 
             return reviewMapper.register(productReview);
 
@@ -55,7 +60,7 @@ public class ReviewService {
             reviewRequestDTO.setReview_original_image(originalFileName);
             reviewRequestDTO.setReview_stored_image(storeFileName);
 
-            ProductReview productReview = ProductReview.toReviewEntity(reviewRequestDTO, userData.getUser_id());
+            ProductReview productReview = ProductReview.toReviewEntity(reviewRequestDTO, userData.getUser_nickname());
 
             // 파일 메타데이터 설정
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -71,5 +76,16 @@ public class ReviewService {
 
             return reviewMapper.register(productReview);
         }
+    }
+
+    public List<ProductReviewResponseDTO> getReviewByProductId(Long productId) {
+        List<ProductReview> productReviewList = reviewMapper.getReviewByProductId(productId);
+
+        return productReviewList.stream()
+                .map(productReview -> {
+                    String url = amazonS3Client.getUrl(bucketName, "profile/" + productReview.getReview_stored_image()).toString();
+                    return ProductReviewResponseDTO.toProductReviewInfo(productReview, url);
+                })
+                .collect(Collectors.toList());
     }
 }

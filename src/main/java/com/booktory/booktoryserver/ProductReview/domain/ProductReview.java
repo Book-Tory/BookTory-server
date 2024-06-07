@@ -13,7 +13,7 @@ public class ProductReview {
 
     private Long product_review_id; // 리뷰 아이디
 
-    private Long user_id; // 유저 아이디
+    private String user_nickname; // 유저 아이디
 
     private Long product_id; // 상품 아이디
 
@@ -26,10 +26,11 @@ public class ProductReview {
     private String review_stored_image; // 서버 저장 이미지
 
 
-    public static ProductReview toReviewEntity(ReviewRequestDTO reviewRequestDTO, Long user_id){
+
+    public static ProductReview toReviewEntity(ReviewRequestDTO reviewRequestDTO, String user_nickname){
         return ProductReview.builder()
-                .user_id(user_id)
-                .product_id(18L)
+                .user_nickname(user_nickname)
+                .product_id(19L)
                 .review_content(reviewRequestDTO.getReview_content())
                 .review_file_check(reviewRequestDTO.getReview_file_check())
                 .review_original_image(reviewRequestDTO.getReview_original_image())

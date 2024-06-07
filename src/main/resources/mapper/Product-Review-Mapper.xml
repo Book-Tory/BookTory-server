@@ -3,7 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.booktory.booktoryserver.ProductReview.mapper.ReviewMapper">
     <insert id="register" parameterType="productReview">
-       INSERT INTO product_review (user_id, product_id, review_content, review_file_check, review_original_image, review_stored_image)
-       VALUES (#{user_id}, #{product_id}, #{review_content}, #{review_file_check}, #{review_original_image}, #{review_stored_image})
+       INSERT INTO product_review (user_nickname, product_id, review_content, review_file_check, review_original_image, review_stored_image)
+       VALUES (#{user_nickname}, #{product_id}, #{review_content}, #{review_file_check}, #{review_original_image}, #{review_stored_image})
     </insert>
+
+    <select id="getReviewByProductId" parameterType="long">
+        SELECT * FROM product_review WHERE product_id = #{product_id}
+    </select>
 </mapper>
