@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserMapper userMapper;
 
@@ -35,21 +35,4 @@ public class UserService implements UserDetailsService {
         return userMapper.insertUser(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        System.out.println("username : " + username);
-
-        String userName = null;
-        String password = null;
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        Optional<Users> userOptional = userMapper.findByEmail(username);
-
-        Users user = userOptional.orElseThrow(() -> new UsernameNotFoundException(username));
-        userName = user.getUser_email();
-        password = user.getUser_password();
-        authorities.add(new SimpleGrantedAuthority(user.getUser_role().getKey()));
-
-        return new User(userName, password, authorities);
-    }
 }
