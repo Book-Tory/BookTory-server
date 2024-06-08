@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.UsedBook.mapper.UsedBookWishMapper">
+    <insert id="addWish" parameterType="map">
+        insert into used_book_wish (user_id, used_book_id) values (#{user_id}, #{used_book_id})
+    </insert>
+
+    <select id="isWished" resultType="boolean">
+        select count(*) > 0 from used_book_wish where user_id = #{user_id} and used_book_id = #{used_book_id}
+    </select>
+
+    <delete id="removeWish">
+        delete from used_book_wish where user_id = #{user_id} and used_book_id = #{used_book_id}
+    </delete>
+</mapper>
