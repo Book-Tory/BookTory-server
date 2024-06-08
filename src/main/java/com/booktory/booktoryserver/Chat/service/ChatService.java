@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.Chat.service;
 import com.booktory.booktoryserver.Chat.domain.ChatEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
+import com.booktory.booktoryserver.Chat.domain.ChatMessageEntity;
 import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatMessageDTO;
@@ -44,5 +45,9 @@ public class ChatService {
                 .collect(Collectors.toList());
 
         return ChatHistoryDTO.toDTO(firstHistoryEntity, messages);
+    }
+
+    public int saveMessage(ChatMessageDTO chatMessage) {
+        return chatMapper.saveMessage(ChatMessageEntity.toEntity(chatMessage));
     }
 }

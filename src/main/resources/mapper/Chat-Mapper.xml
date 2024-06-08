@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.booktory.booktoryserver.Chat.mapper.ChatMapper">
     <insert id="createChatRoom" parameterType="chat">
-        insert into chat (seller_id, buyer_id, used_book_id) values (#{seller_id}, #{buyer_id}, #{used_book_id})
+        insert into chat (seller_id, buyer_id, used_book_id, room_id) values (#{seller_id}, #{buyer_id}, #{used_book_id}, #{room_id})
     </insert>
 
     <select id="getChatRoomList" resultType="chatList">
@@ -58,4 +58,10 @@
         WHERE c.chat_id = #{chat_id}
           AND (c.seller_id = #{user_id} OR c.buyer_id = #{user_id});
     </select>
+
+    <insert id="saveMessage" parameterType="chatMessage">
+        insert into chat_message
+        (content, chat_id, sender_id)
+        values (#{content}, #{chat_id}, #{sender_id});
+    </insert>
 </mapper>

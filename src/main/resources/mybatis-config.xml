@@ -7,6 +7,7 @@
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
         <typeAlias alias="usedBookImage" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookImage" />
         <typeAlias alias="chat" type="com.booktory.booktoryserver.Chat.domain.ChatEntity" />
+        <typeAlias alias="chatMessage" type="com.booktory.booktoryserver.Chat.domain.ChatMessageEntity" />
         <typeAlias alias="chatList" type="com.booktory.booktoryserver.Chat.domain.ChatListEntity" />
         <typeAlias alias="chatHistory" type="com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity" />
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
