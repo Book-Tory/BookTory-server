@@ -1,7 +1,6 @@
 package com.booktory.booktoryserver.Chat.domain;
 
 
-import com.booktory.booktoryserver.Chat.dto.Chat;
 import lombok.*;
 
 import java.util.Date;

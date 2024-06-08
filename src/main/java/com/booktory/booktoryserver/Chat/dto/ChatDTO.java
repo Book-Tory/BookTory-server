@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Chat {
+public class ChatDTO {
     private Long chat_id; // 채팅방 id (PK)
     private Long seller_id; // 판매자 id
     private Long buyer_id; // 구매자 id

@@ -1,7 +1,7 @@
 package com.booktory.booktoryserver.Chat.domain;
 
 
-import com.booktory.booktoryserver.Chat.dto.Chat;
+import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -18,7 +18,7 @@ public class ChatEntity {
     private Long used_book_id; // 중고서적 id
     private Date chat_created_at; // 채팅방 만들어진 날짜
 
-    public static ChatEntity toEntity(Chat chat) {
+    public static ChatEntity toEntity(ChatDTO chat) {
         return ChatEntity.builder()
                 .seller_id(chat.getSeller_id())
                 .buyer_id(chat.getBuyer_id())
