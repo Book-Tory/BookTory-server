@@ -9,13 +9,16 @@ import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatMessageDTO;
 import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChatService {
     private final ChatMapper chatMapper;
     public int createChatRoom(ChatDTO chat) {
@@ -49,5 +52,19 @@ public class ChatService {
 
     public int saveMessage(ChatMessageDTO chatMessage) {
         return chatMapper.saveMessage(ChatMessageEntity.toEntity(chatMessage));
+    }
+
+    public ChatEntity isExistChatRoom(String room_id) {
+        return chatMapper.isExistChatRoom(room_id);
+    }
+
+    // roomId 생성
+    public String createRoomId(ChatDTO chat) {
+        String[] emails = {chat.getSeller_email(), chat.getBuyer_email()};
+        Arrays.sort(emails);
+        String roomId = String.join("_", emails) + "_" + chat.getUsed_book_id();
+
+        log.info("roomId {} " + roomId);
+        return roomId;
     }
 }

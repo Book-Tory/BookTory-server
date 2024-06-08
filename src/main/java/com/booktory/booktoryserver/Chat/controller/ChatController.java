@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.Chat.controller;
 
+import com.booktory.booktoryserver.Chat.domain.ChatEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
 import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
@@ -22,28 +23,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatController {
     private final ChatService chatService;
+
     // 채팅방 생성
     @PostMapping("/room")
     public CustomResponse createChatRoom(@RequestBody ChatDTO chat) {
-        String roomId = createRoomId(chat);
-        chat.setRoom_id(roomId);
-        int result = chatService.createChatRoom(chat);
+        String roomId = chatService.createRoomId(chat);
 
-        if (result > 0) {
-            return CustomResponse.ok("채팅방이 생성되었습니다.", null);
+        // 이미 같은 상품에 같은 판매자, 구매자의 채팅방이 존재하는지 확인
+        ChatEntity chatEntity = chatService.isExistChatRoom(roomId);
+
+        if (chatEntity == null) {
+            chat.setRoom_id(roomId);
+            int result = chatService.createChatRoom(chat); // 채팅방 생성
+
+            if (result > 0) {
+                return CustomResponse.ok("채팅방이 생성되었습니다.", null);
+            } else {
+                return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
+            }
         } else {
-            return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
+            return CustomResponse.ok("이미 존재하는 채팅방이 있음", null);
         }
-    }
-
-    // roomId 생성
-    private String createRoomId(ChatDTO chat) {
-        String[] emails = {chat.getSeller_email(), chat.getBuyer_email()};
-        Arrays.sort(emails);
-        String roomId = String.join("_", emails) + "_" + chat.getUsed_book_id();
-
-        log.info("roomId {} " + roomId);
-        return roomId;
     }
 
     // 내 채팅방 리스트 불러오기

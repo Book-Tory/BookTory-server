@@ -64,4 +64,8 @@
         (content, chat_id, sender_id)
         values (#{content}, #{chat_id}, #{sender_id});
     </insert>
+
+    <select id="isExistChatRoom" resultType="chat">
+        select * from chat where room_id = #{room_id}
+    </select>
 </mapper>

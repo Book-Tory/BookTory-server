@@ -17,4 +17,6 @@ public interface ChatMapper {
     List<ChatHistoryEntity> getChatHistory(Long chat_id, Long user_id);
 
     int saveMessage(ChatMessageEntity chatMessageEntity);
+
+    ChatEntity isExistChatRoom(String room_id);
 }
