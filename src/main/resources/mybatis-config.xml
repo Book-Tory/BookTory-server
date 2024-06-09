@@ -21,6 +21,7 @@
         <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
 
         <typeAlias alias="productCart" type="com.booktory.booktoryserver.ProductCart.model.ProductCart"/>
+        <typeAlias alias="productCartList" type="com.booktory.booktoryserver.ProductCart.model.ProductCartList"/>
     </typeAliases>
 
     <typeHandlers>

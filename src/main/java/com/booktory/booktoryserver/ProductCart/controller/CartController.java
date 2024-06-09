@@ -1,15 +1,14 @@
 package com.booktory.booktoryserver.ProductCart.controller;
 
+import com.booktory.booktoryserver.ProductCart.dto.response.ProductCartResponseDTO;
 import com.booktory.booktoryserver.ProductCart.service.ProductCartService;
 import com.booktory.booktoryserver.Users.service.CustomUserDetails;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product/cart")
@@ -32,4 +31,14 @@ public class CartController {
             return CustomResponse.failure("장바구니 추가에 실패하였습니다.");
         }
     }
+
+
+    @GetMapping("/list")
+    public CustomResponse cartList(@AuthenticationPrincipal CustomUserDetails userDetails){
+        String username = userDetails.getUsername();
+
+        List<ProductCartResponseDTO> list = productCartService.cartList(username);
+        return CustomResponse.ok("장바구니 리스트 조회 성공", list);
+    }
+
 }

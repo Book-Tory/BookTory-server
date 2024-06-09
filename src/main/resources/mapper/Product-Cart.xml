@@ -8,4 +8,18 @@
     </insert>
 
 
+    <select id="selectCartProductsByUserId" resultType="productCartList">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_price,
+            p.product_script
+        FROM
+            product_cart pc
+                JOIN
+            products p ON pc.product_id = p.product_id
+        WHERE
+            pc.user_id = #{userId}
+    </select>
+
 </mapper>
