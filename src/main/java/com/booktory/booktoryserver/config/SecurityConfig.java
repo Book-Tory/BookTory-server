@@ -1,7 +1,5 @@
 package com.booktory.booktoryserver.config;
 
-import com.booktory.booktoryserver.config.filter.AuthoritiesLoggingAfterFilter;
-import com.booktory.booktoryserver.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +7,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -18,29 +18,31 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-
-    private final AuthenticationProvider authenticationProvider;
-
-    private final JwtAuthenticationFilter jwtAuthFilter;
-
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
+        http
+                .csrf((csrf) -> csrf.disable());
 
         http
-                .csrf((csrf) -> csrf.disable())
-                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
-                .authorizeHttpRequests((auth) -> {
-                    auth
-                            .requestMatchers("/api/users/auth/**").permitAll()
-                            .anyRequest().authenticated();
+                .formLogin((formLogin) -> formLogin.disable());
 
-                })
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .httpBasic((httpBasic) -> httpBasic.disable());
+
+        http
+                .authorizeHttpRequests((auth) -> auth
+                        .requestMatchers("/login", "/", "/api/users/auth/register").permitAll()
+                        .requestMatchers("/test").hasRole("USER")
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated());
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

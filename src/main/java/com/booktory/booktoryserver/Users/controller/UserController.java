@@ -1,6 +1,5 @@
 package com.booktory.booktoryserver.Users.controller;
 
-import com.booktory.booktoryserver.Users.dto.request.AuthRequest;
 import com.booktory.booktoryserver.Users.model.Users;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
@@ -20,6 +19,7 @@ public class UserController {
     @PostMapping("/register")
     public CustomResponse<String> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO, BindingResult bindingResult) {
 
+
         if(bindingResult.hasErrors()){
             return CustomResponse.failure(bindingResult.getAllErrors().get(0).getDefaultMessage());
         } else {
@@ -32,18 +32,18 @@ public class UserController {
         }
     };
 
-    @PostMapping("/login")
-    public CustomResponse authenticate(@RequestBody AuthRequest login) {
-
-        Users user = Users.builder()
-                .user_email(login.email())
-                .user_password(login.password())
-                .build();
-
-        try {
-            return CustomResponse.ok("로그인 성공", userService.authenticate(user));
-        } catch (Exception e) {
-            return CustomResponse.failure("로그인 실패: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/login")
+//    public CustomResponse authenticate(@RequestBody AuthRequest login) {
+//
+//        Users user = Users.builder()
+//                .user_email(login.email())
+//                .user_password(login.password())
+//                .build();
+//
+//        try {
+//            return CustomResponse.ok("로그인 성공", userService.authenticate(user));
+//        } catch (Exception e) {
+//            return CustomResponse.failure("로그인 실패: " + e.getMessage());
+//        }
+//    }
 }

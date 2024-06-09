@@ -17,7 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Users implements UserDetails {
+public class Users {
 
     private Long user_id; // 사용자 고유 ID
 
@@ -52,40 +52,5 @@ public class Users implements UserDetails {
                 .user_address(userRegisterDTO.getUser_address())
                 .user_role(Role.USER)
                 .build();
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return user_password;
-    }
-
-    @Override
-    public String getUsername() {
-        return user_email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }
