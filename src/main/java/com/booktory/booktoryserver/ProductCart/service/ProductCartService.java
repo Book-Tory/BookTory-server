@@ -50,4 +50,9 @@ public class ProductCartService {
 
         return productCarts.stream().map(ProductCartResponseDTO::toProductCartResponseD).collect(Collectors.toList());
     }
+
+    public int deleteCart(Long cartId) {
+
+        return productCartMapper.deleteCart(cartId);
+    }
 }

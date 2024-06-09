@@ -13,4 +13,6 @@ public interface ProductCartMapper {
     int cartSave(ProductCart productCart);
 
     List<ProductCartList> selectCartProductsByUserId(Long userId);
+
+    int deleteCart(Long cartId);
 }

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCartList {
+
+    private Long cart_id;
+
     private Long product_id;
 
     private String product_name;

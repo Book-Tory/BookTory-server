@@ -10,6 +10,7 @@
 
     <select id="selectCartProductsByUserId" resultType="productCartList">
         SELECT
+            pc.cart_id,
             p.product_id,
             p.product_name,
             p.product_price,
@@ -21,5 +22,9 @@
         WHERE
             pc.user_id = #{userId}
     </select>
+
+    <delete id="deleteCart" parameterType="long">
+        DELETE FROM product_cart WHERE cart_id = #{cartId}
+    </delete>
 
 </mapper>

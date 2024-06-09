@@ -41,4 +41,17 @@ public class CartController {
         return CustomResponse.ok("장바구니 리스트 조회 성공", list);
     }
 
+
+    @DeleteMapping("/{cart_id}")
+    public CustomResponse deleteCart(@PathVariable("cart_id") Long cart_id){
+        System.out.println("deleteCart" + cart_id);
+        int result = productCartService.deleteCart(cart_id);
+
+        if(result > 0){
+            return CustomResponse.ok("장바구니 삭제 성공", null);
+        } else {
+            return CustomResponse.failure("장바구니 삭제 실패하였습니다.");
+        }
+    }
+
 }
