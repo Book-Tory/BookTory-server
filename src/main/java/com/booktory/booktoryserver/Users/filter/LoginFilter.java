@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.Users.filter;
 
+import com.booktory.booktoryserver.Users.service.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
+    private final JWTUtil jwtUtil;
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -32,7 +35,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-        System.out.println("로그인 성공");
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        String username = customUserDetails.getUsername();
+
+        Collection<? extends GrantedAuthority> authorities = customUserDetails.getAuthorities();
+        Iterator<? extends  GrantedAuthority> iterator = authorities.iterator();
+
+        String role = iterator.next().getAuthority();
+        String token = jwtUtil.createToken(username, role, 60*60*10L);
+
+        response.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
