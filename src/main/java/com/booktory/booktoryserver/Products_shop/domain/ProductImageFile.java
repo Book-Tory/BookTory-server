@@ -1,17 +1,15 @@
 package com.booktory.booktoryserver.Products_shop.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ProductImageFile {
 
-    private Long id;
+    private Long image_id;
 
     private Long product_id; // 외래키
 

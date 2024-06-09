@@ -5,13 +5,20 @@
     <typeAliases>
         <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
+        <typeAlias alias="usedBookImage" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookImage" />
+        <typeAlias alias="wish" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishEntity" />
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
+
         <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
         <typeAlias alias="productList" type="com.booktory.booktoryserver.Products_shop.domain.ProductsList" />
         <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
         <typeAlias alias="user" type="com.booktory.booktoryserver.Users.model.UserEntity" />
+
+        <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
+        <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
+        <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
     </typeAliases>
 
     <typeHandlers>

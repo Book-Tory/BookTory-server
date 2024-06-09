@@ -8,8 +8,10 @@ import com.booktory.booktoryserver.Products_shop.domain.Product;
 import com.booktory.booktoryserver.Products_shop.domain.ProductImageFile;
 import com.booktory.booktoryserver.Products_shop.domain.ProductsList;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductRegisterDTO;
+import com.booktory.booktoryserver.Products_shop.dto.request.ProductUpdateDTO;
 import com.booktory.booktoryserver.Products_shop.dto.response.ProductResponseDTO;
 import com.booktory.booktoryserver.Products_shop.mapper.ProductMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -85,41 +87,51 @@ public class ProductService {
     }
 
 
+
     public List<ProductResponseDTO> findAllProducts() {
         List<ProductsList> productsLists = productMapper.findAllProducts();
 
         Map<Long, ProductsList> productsMap = new HashMap<>();
         for (ProductsList product : productsLists) {
+
             if (!productsMap.containsKey(product.getProduct_id())) {
                 product.setImageUrls(new ArrayList<>());
                 productsMap.put(product.getProduct_id(), product);
             }
             if (product.getStoredImageName() != null) {
                 String url = amazonS3Client.getUrl(bucketName, "profile/" + product.getStoredImageName()).toString();
-                productsMap.get(product.getProduct_id()).getImageUrls().add(url);
+                Map<Long, String> imageMap = new HashMap<>();
+                imageMap.put(product.getImage_id(), url);
+                productsMap.get(product.getProduct_id()).getImageUrls().add(imageMap);
             }
         }
 
-        return productsMap.values().stream().map(product -> {
-            return ProductResponseDTO.toProductInfo(product, product.getImageUrls());
-        }).collect(Collectors.toList());
+        return productsMap.values().stream()
+                .map(product -> ProductResponseDTO.toProductInfo(product, product.getImageUrls()))
+                .collect(Collectors.toList());
     }
 
+
     public ProductResponseDTO findById(Long productId) {
+        List<ProductsList> productsList = productMapper.findById(productId);
 
-        List<ProductsList> productsList  = productMapper.findById(productId);
-
-        if(productsList == null || productsList.isEmpty()) {
+        if (productsList == null || productsList.isEmpty()) {
             return null;
         }
 
         ProductsList firstProduct = productsList.get(0);
 
-        List<String> productImageUrls = productsList.stream().map(product -> amazonS3Client.getUrl(bucketName, "profile/" + product.getStoredImageName()).toString())
+        // List<Map<Long, String>>를 생성하여 이미지 ID와 URL을 매핑
+        List<Map<Long, String>> imageUrlMap = productsList.stream()
+                .map(product -> {
+                    Map<Long, String> map = new HashMap<>();
+                    map.put(product.getImage_id(), amazonS3Client.getUrl(bucketName, "profile/" + product.getStoredImageName()).toString());
+                    return map;
+                })
                 .collect(Collectors.toList());
 
-        return ProductResponseDTO.toProductInfo(firstProduct, productImageUrls);
-
+        // ProductResponseDTO로 변환하여 반환
+        return ProductResponseDTO.toProductInfo(firstProduct, imageUrlMap);
     }
 
     @Transactional
@@ -134,9 +146,58 @@ public class ProductService {
         return productMapper.deleteById(productId);
     }
 
-    public int updateById(Long productId, ProductRegisterDTO productDTO) {
-        Product product = Product.toUpdateProduct(productDTO, productId);
-        return productMapper.updateById(product);
+    @Transactional
+    public int deleteByImage(Long image_id) {
+        ProductImageFile imageFile = productMapper.imageSearch(image_id);
+        String key = "profile/" + imageFile.getStoredImageName();
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, key));
+        return productMapper.deleteByImage(image_id);
     }
 
+    @Transactional
+    public String updateById(Long productUpdateId, ProductUpdateDTO productDTO) throws IOException {
+        List<String> urls = new ArrayList<>();
+
+        // 제품 정보 업데이트
+        Product product = Product.toUpdateProduct(productDTO, productUpdateId);
+        productMapper.updateByProduct(product);
+
+        // 이미지 파일 처리
+        if (productDTO.getProduct_image() != null && !productDTO.getProduct_image().isEmpty()) {
+            productDTO.setProductImageCheck(1);
+
+            for (MultipartFile productFile : productDTO.getProduct_image()) {
+                String originalFilename = productFile.getOriginalFilename();
+                String storeFilename = System.currentTimeMillis() + "_" + originalFilename;
+
+                ProductImageFile productImageFile = ProductImageFile.builder()
+                        .product_id(productUpdateId)
+                        .originalImageName(originalFilename)
+                        .storedImageName(storeFilename)
+                        .build();
+
+                // 파일 메타데이터 설정
+                ObjectMetadata objectMetadata = new ObjectMetadata();
+                objectMetadata.setContentLength(productFile.getSize());
+                objectMetadata.setContentType(productFile.getContentType());
+
+                // 저장될 위치 + 파일명
+                String key = "profile/" + storeFilename;
+
+                // 클라우드에 파일 저장
+                amazonS3Client.putObject(bucketName, key, productFile.getInputStream(), objectMetadata);
+                amazonS3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
+
+                // 데이터베이스에 파일 정보 저장
+                productMapper.saveFile(productImageFile);
+
+                String url = amazonS3Client.getUrl(bucketName, key).toString();
+                urls.add(url);
+            }
+        } else {
+            productDTO.setProductImageCheck(0);
+        }
+
+        return "상품 업데이트되었습니다.";
+    }
 }
