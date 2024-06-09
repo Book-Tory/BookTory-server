@@ -12,7 +12,7 @@ import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
 import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
-import com.booktory.booktoryserver.products_shop.domain.ProductImageFile;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

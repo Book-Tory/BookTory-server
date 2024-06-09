@@ -8,7 +8,7 @@ import com.booktory.booktoryserver.ProductReview.domain.UserData;
 import com.booktory.booktoryserver.ProductReview.dto.request.ReviewRequestDTO;
 import com.booktory.booktoryserver.ProductReview.dto.response.ProductReviewResponseDTO;
 import com.booktory.booktoryserver.ProductReview.mapper.ReviewMapper;
-import com.booktory.booktoryserver.ProductReview.mapper.UserMapper;
+import com.booktory.booktoryserver.ProductReview.mapper.UserMappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     // 임시 유저 조회 ( bsc7386@naver.com )
-    private final UserMapper userMapper;
+    private final UserMappers userMapper;
 
     private final AmazonS3 amazonS3Client;
 
