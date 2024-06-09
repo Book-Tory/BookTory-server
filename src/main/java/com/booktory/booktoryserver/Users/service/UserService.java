@@ -2,9 +2,12 @@ package com.booktory.booktoryserver.Users.service;
 
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
-import com.booktory.booktoryserver.Users.model.Users;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserMapper userMapper;
 
@@ -21,9 +24,7 @@ public class UserService {
 
     public int register(UserRegisterDTO userRegisterDTO) {
 
-
-        Optional<Users> existsUser = userMapper.findByEmail(userRegisterDTO.getUser_email());
-
+        Optional<UserEntity> existsUser = userMapper.findByEmail(userRegisterDTO.getUser_email());
 
         if (existsUser.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
@@ -31,10 +32,21 @@ public class UserService {
 
         userRegisterDTO.setUser_password(passwordEncoder.encode(userRegisterDTO.getUser_password()));
 
-        Users user = Users.createUser(userRegisterDTO);
+        UserEntity user = UserEntity.createUser(userRegisterDTO);
 
         return userMapper.insertUser(user);
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        UserEntity userData = userMapper.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다."));
+
+        if(userData != null) {
+            return new CustomUserDetails(userData);
+        }
+
+        return null;
+    }
 }

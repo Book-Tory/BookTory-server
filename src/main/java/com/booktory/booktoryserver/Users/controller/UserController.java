@@ -1,6 +1,5 @@
 package com.booktory.booktoryserver.Users.controller;
 
-import com.booktory.booktoryserver.Users.model.Users;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.Users.service.UserService;

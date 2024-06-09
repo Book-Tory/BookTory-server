@@ -7,17 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Users {
+public class UserEntity {
 
     private Long user_id; // 사용자 고유 ID
 
@@ -41,8 +38,8 @@ public class Users {
 
     private LocalDateTime update_at; // 계정 정보 마지막 수정 시간
 
-    public static Users createUser(UserRegisterDTO userRegisterDTO) {
-        return Users.builder()
+    public static UserEntity createUser(UserRegisterDTO userRegisterDTO) {
+        return UserEntity.builder()
                 .user_email(userRegisterDTO.getUser_email())
                 .user_password(userRegisterDTO.getUser_password())
                 .user_nickname(userRegisterDTO.getUser_nickname())
