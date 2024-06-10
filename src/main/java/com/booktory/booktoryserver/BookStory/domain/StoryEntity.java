@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class StoryEntity {
+    //독후감 정보
     private Long story_board_id;
     private Long mystory_type_id;
     private String mystory_name;
@@ -20,9 +21,11 @@ public class StoryEntity {
     private LocalDateTime read_date;
     private int love_count;
 
+    //독후감 등록 사용자
     private Long user_id;
     private String user_nickname;
 
+    //책 정보
     private Long book_id;
     private String book_name;
     private String book_author;

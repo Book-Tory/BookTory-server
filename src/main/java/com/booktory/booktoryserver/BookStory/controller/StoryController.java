@@ -1,8 +1,12 @@
 package com.booktory.booktoryserver.BookStory.controller;
 
+import com.booktory.booktoryserver.BookStory.domain.BookEntity;
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
+import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
 import com.booktory.booktoryserver.BookStory.service.StoryService;
+import com.booktory.booktoryserver.common.CustomResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,5 +47,24 @@ public class StoryController {
         System.out.println("book_id = " + id);
         storyService.updateStory(id, storyDTO);
     }
+
+
+
+    //입력한 값에 따른 책 전체 조회
+    //네이버 API에서 제공한다는 파라미터를 추가
+    @GetMapping("/books")
+    public CustomResponse searchBooks(@RequestParam ("query") String query, @RequestParam ("display") int display, @RequestParam ("start") int startposition ,@RequestParam ("sort") String searchhresult) throws JsonProcessingException{
+        List<BookDTO> bookInfoList = storyService.searchBooks(query, display, startposition , searchhresult);
+        //다음 매개변수들을 가진 'searchBooks' 함수를 'bookInfoList'라는 이름의 Entity객체로 만든다.
+
+        if(!bookInfoList.isEmpty()){
+            return CustomResponse.ok("조회 성공", bookInfoList);
+        }else{
+            return CustomResponse.failure("조회 실패");
+        }
+    }
+
+
+
 
 }
