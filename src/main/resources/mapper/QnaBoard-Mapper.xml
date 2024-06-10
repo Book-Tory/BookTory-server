@@ -4,8 +4,8 @@
 <mapper namespace="com.booktory.booktoryserver.QnABoard.mapper.QnaBoardMapper">
 
     <insert id="insertQnaBoard" parameterType="qnaBoard">
-        INSERT INTO qna_board (qna_title, qna_password, qna_author, qna_content, created_at, is_lock)
-        VALUES (#{qna_title}, #{qna_password}, #{qna_author}, #{qnaContent}, #{createdAt}, #{isLock})
+        INSERT INTO qna_board (qna_title, qna_password, qna_author, qna_content, created_at, is_lock, lock_status)
+        VALUES (#{qna_title}, #{qna_password}, #{qna_author}, #{qna_content}, #{created_at}, #{is_lock}, #{lock_status})
     </insert>
 
     <select id="findAllQna" resultType="qnaBoard">

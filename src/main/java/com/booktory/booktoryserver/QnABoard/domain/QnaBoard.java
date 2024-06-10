@@ -25,6 +25,8 @@ public class QnaBoard {
 
     private LocalDateTime created_at;
 
+    private String lock_status;
+
     private Boolean is_lock;
 
     public static QnaBoard covertToDTO(QnaRequestDTO qnaRequestDTO){
@@ -34,7 +36,8 @@ public class QnaBoard {
                .qna_author(qnaRequestDTO.getQnaAuthor())
                .qna_content(qnaRequestDTO.getQnaContent())
                .created_at(LocalDateTime.now())
-               .is_lock(false)
+                .lock_status(qnaRequestDTO.getLockStatus())
+               .is_lock(qnaRequestDTO.getIsLocked())
                .build();
     }
 }

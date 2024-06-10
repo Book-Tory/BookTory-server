@@ -19,5 +19,7 @@ public class QnaRequestDTO {
 
     private String qnaContent;
 
-    private Boolean isLocked;
+    private String lockStatus; // Public, Anonymous
+
+    private Boolean isLocked;  // Anonymous == true, Public == false
 }
