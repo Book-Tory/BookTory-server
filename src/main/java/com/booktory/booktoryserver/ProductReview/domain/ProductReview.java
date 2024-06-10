@@ -1,7 +1,6 @@
 package com.booktory.booktoryserver.ProductReview.domain;
 
 import com.booktory.booktoryserver.ProductReview.dto.request.ReviewRequestDTO;
-import com.booktory.booktoryserver.products_shop.dto.request.ProductRegisterDTO;
 import lombok.*;
 
 @Getter

@@ -5,6 +5,7 @@ spring:
     password: 0625!
     driver-class-name: org.mariadb.jdbc.Driver
 
+
   servlet:
     multipart:
       enabled: true
@@ -16,7 +17,21 @@ spring:
     accessKey: cYjcuwyStmYkacVhmiCw
     secretKey: xFxYN8XbNaMzupWs6ilwzvbMW1epgyC6P0ne8tYl
 
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+
+
 mybatis:
   config-location: classpath:mybatis-config.xml
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.booktory.booktoryserver.products_shop.config
+
+# security debug
+#logging:
+#  level:
+#    org.springframework.security.web.FilterChainProxy : debug
+
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
