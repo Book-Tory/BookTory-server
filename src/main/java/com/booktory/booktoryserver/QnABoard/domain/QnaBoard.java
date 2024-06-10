@@ -13,28 +13,28 @@ import java.time.LocalDateTime;
 @ToString
 public class QnaBoard {
 
-    private Long qnaId;
+    private Long qna_id;
 
-    private String qnaTitle;
+    private String qna_title;
 
-    private String qnaPassword;
+    private String qna_password;
 
-    private String qnaAuthor;
+    private String qna_author;
 
-    private String qnaContent;
+    private String qna_content;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
-    private Boolean isLock;
+    private Boolean is_lock;
 
     public static QnaBoard covertToDTO(QnaRequestDTO qnaRequestDTO){
         return QnaBoard.builder()
-               .qnaTitle(qnaRequestDTO.getQnaTitle())
-               .qnaPassword(qnaRequestDTO.getQnaPassword())
-               .qnaAuthor(qnaRequestDTO.getQnaAuthor())
-               .qnaContent(qnaRequestDTO.getQnaContent())
-               .createdAt(LocalDateTime.now())
-               .isLock(false)
+               .qna_title(qnaRequestDTO.getQnaTitle())
+               .qna_password(qnaRequestDTO.getQnaPassword())
+               .qna_author(qnaRequestDTO.getQnaAuthor())
+               .qna_content(qnaRequestDTO.getQnaContent())
+               .created_at(LocalDateTime.now())
+               .is_lock(false)
                .build();
     }
 }
