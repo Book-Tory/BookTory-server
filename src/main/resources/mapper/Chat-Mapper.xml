@@ -9,13 +9,13 @@
     <select id="getChatRoomList" resultType="chatList">
         SELECT
             c.chat_id,
-            #{user_id} AS user_id,
+            #{username} AS user_email,
             CASE
-                WHEN c.seller_id = #{user_id} THEN buyer.user_nickname
+                WHEN c.seller_id = user.id THEN buyer.user_nickname
                 ELSE seller.user_nickname
                 END AS chat_partner_nickname,
             CASE
-                WHEN c.seller_id = #{user_id} THEN buyer.user_img
+                WHEN c.seller_id = user.id THEN buyer.user_img
                 ELSE seller.user_img
                 END AS chat_partner_img,
             (
@@ -23,29 +23,36 @@
                 FROM chat_message cm
                 WHERE cm.chat_id = c.chat_id
                 ORDER BY cm.message_created_at DESC
-                          LIMIT 1
+                           LIMIT 1
             ) AS last_message_content,
-            (
-                SELECT cm.message_created_at
-                FROM chat_message cm
-                WHERE cm.chat_id = c.chat_id
-                ORDER BY cm.message_created_at DESC
-                LIMIT 1
-            ) AS last_message_time
+        (
+            SELECT cm.message_created_at
+            FROM chat_message cm
+            WHERE cm.chat_id = c.chat_id
+            ORDER BY cm.message_created_at DESC
+            LIMIT 1
+        ) AS last_message_time
         FROM chat c
             LEFT JOIN users buyer ON c.buyer_id = buyer.user_id
             LEFT JOIN users seller ON c.seller_id = seller.user_id
-        WHERE c.seller_id = #{user_id} OR c.buyer_id = #{user_id};
+            JOIN (
+            SELECT user_id AS id
+            FROM users
+            WHERE user_email = #{username}
+            ) user ON (c.seller_id = user.id OR c.buyer_id = user.id)
+        WHERE c.seller_id = user.id OR c.buyer_id = user.id;
     </select>
 
     <select id="getChatHistory" resultType="chatHistory">
         SELECT
             c.chat_id,
             CASE
-                WHEN c.seller_id = #{user_id} THEN buyer.user_nickname
+                WHEN c.seller_id = user.id THEN buyer.user_nickname
                 ELSE seller.user_nickname
                 END AS chat_partner_nickname,
             cm.sender_id,
+            sender.user_nickname AS sender_nickname,
+            sender.user_email AS sender_email,
             ub.title,
             ub.discount,
             cm.content AS message_content,
@@ -55,9 +62,16 @@
                  JOIN used_book ub ON c.used_book_id = ub.used_book_id
                  LEFT JOIN users buyer ON c.buyer_id = buyer.user_id
                  LEFT JOIN users seller ON c.seller_id = seller.user_id
+                 LEFT JOIN users sender ON cm.sender_id = sender.user_id
+                 JOIN (
+            SELECT user_id AS id
+            FROM users
+            WHERE user_email = #{username}
+        ) user ON (c.seller_id = user.id OR c.buyer_id = user.id)
         WHERE c.chat_id = #{chat_id}
-          AND (c.seller_id = #{user_id} OR c.buyer_id = #{user_id});
+          AND (c.seller_id = user.id OR c.buyer_id = user.id);
     </select>
+
 
     <insert id="saveMessage" parameterType="chatMessage">
         insert into chat_message
