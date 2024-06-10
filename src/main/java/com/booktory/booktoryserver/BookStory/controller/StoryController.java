@@ -19,11 +19,11 @@ public class StoryController {
         return storyService.getAllStory();
     }
 
+
     @GetMapping("/{story_board_id}")
     public StoryEntity getStoryById (@PathVariable("story_board_id") Long story_board_id){
-       return storyService.getStoryById(story_board_id);
+        return storyService.getStoryById(story_board_id);
     }
-
 
 
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.QnABoard.mapper.QnaBoardMapper">
+
+    <insert id="insertQnaBoard" parameterType="qnaBoard">
+#         INSERT INTO product_review (user_nickname, product_id, review_content, review_file_check, review_original_image, review_stored_image)
+#         VALUES (#{user_nickname}, #{product_id}, #{review_content}, #{review_file_check}, #{review_original_image}, #{review_stored_image})
+    </insert>
+
+</mapper>

@@ -19,6 +19,8 @@
         <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
         <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
         <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
+
+        <typeAlias alias="qnaBoard" type="com.booktory.booktoryserver.QnABoard.domain.QnaBoard"/>
     </typeAliases>
 
     <typeHandlers>
