@@ -12,4 +12,6 @@ public interface QnaBoardMapper {
     List<QnaBoard> findAllQna();
 
     int updateQnaBoard(QnaBoard qnaBoard);
+
+    QnaBoard findByQnaId(Long qnaId);
 }

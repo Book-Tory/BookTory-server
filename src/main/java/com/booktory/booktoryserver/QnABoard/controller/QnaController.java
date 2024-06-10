@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.QnABoard.controller;
 
 
+import com.booktory.booktoryserver.QnABoard.dto.request.QnaDetailRequestDTO;
 import com.booktory.booktoryserver.QnABoard.dto.request.QnaRequestDTO;
 import com.booktory.booktoryserver.QnABoard.dto.response.QnaResponseDTO;
 import com.booktory.booktoryserver.QnABoard.service.QnaService;
@@ -72,6 +73,14 @@ public class QnaController {
         } else {
             return CustomResponse.failure("문의 게시글 수정 실패");
         }
+    }
+
+    @PostMapping("/detail")
+    public CustomResponse getQna(@RequestBody QnaDetailRequestDTO qnaRequestDTO) {
+
+        QnaResponseDTO qnaResponseDTO = qnaService.findByQnaId(qnaRequestDTO.getQnaId(), qnaRequestDTO.getQnaPassword());
+
+        return CustomResponse.ok("문의 게시글 조회 성공", qnaResponseDTO);
     }
 
 }

@@ -15,10 +15,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QnaService {
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final QnaBoardMapper qnaBoardMapper;
     public int createQna(QnaRequestDTO qnaRequestDTO) {
+
+        qnaRequestDTO.setQnaPassword(passwordEncoder.encode(qnaRequestDTO.getQnaPassword()));
 
         QnaBoard qnaBoard = QnaBoard.covertToDTO(qnaRequestDTO);
 
@@ -34,8 +36,22 @@ public class QnaService {
 
     public int updateQna(QnaRequestDTO qnaRequestDTO) {
 
+        qnaRequestDTO.setQnaPassword(passwordEncoder.encode(qnaRequestDTO.getQnaPassword()));
+
         QnaBoard qnaBoard = QnaBoard.covertToDTO(qnaRequestDTO);
 
         return qnaBoardMapper.updateQnaBoard(qnaBoard);
     }
+
+    public QnaResponseDTO findByQnaId(Long qnaId, String rawPassword) {
+        QnaBoard qnaBoard = qnaBoardMapper.findByQnaId(qnaId);
+        if (qnaBoard == null) {
+            throw new IllegalArgumentException("Invalid Qna ID");
+        }
+        if (qnaBoard.getIs_lock() && (rawPassword == null || rawPassword.isEmpty() || !passwordEncoder.matches(rawPassword, qnaBoard.getQna_password()))) {
+            throw new IllegalArgumentException("Invalid Password");
+        }
+        return QnaResponseDTO.toQnaResponse(qnaBoard);
+    }
+
 }

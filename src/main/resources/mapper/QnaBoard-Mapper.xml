@@ -12,7 +12,12 @@
         SELECT * FROM qna_board;
     </select>
 
+    <select id="findByQnaId" parameterType="long" resultType="qnaBoard">
+        SELECT * FROM qna_board WHERE qna_id = #{qnaId};
+    </select>
+
     <update id="updateQnaBoard" parameterType="qnaBoard">
         UPDATE qna_board SET qna_title = #{qna_title}, qna_password = #{qna_password}, qna_author = #{qna_author}, qna_content = #{qna_content}, created_at = #{created_at}, is_lock = #{is_lock}, lock_status = #{lock_status} WHERE qna_id = #{qna_id}
     </update>
+
 </mapper>
