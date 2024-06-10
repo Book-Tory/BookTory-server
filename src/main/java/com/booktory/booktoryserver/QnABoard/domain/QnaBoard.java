@@ -31,6 +31,7 @@ public class QnaBoard {
 
     public static QnaBoard covertToDTO(QnaRequestDTO qnaRequestDTO){
         return QnaBoard.builder()
+                .qna_id(qnaRequestDTO.getQnaId())
                .qna_title(qnaRequestDTO.getQnaTitle())
                .qna_password(qnaRequestDTO.getQnaPassword())
                .qna_author(qnaRequestDTO.getQnaAuthor())

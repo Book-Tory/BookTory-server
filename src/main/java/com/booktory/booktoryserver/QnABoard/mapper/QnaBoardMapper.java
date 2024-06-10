@@ -10,4 +10,6 @@ public interface QnaBoardMapper {
     int insertQnaBoard(QnaBoard qnaBoard);
 
     List<QnaBoard> findAllQna();
+
+    int updateQnaBoard(QnaBoard qnaBoard);
 }

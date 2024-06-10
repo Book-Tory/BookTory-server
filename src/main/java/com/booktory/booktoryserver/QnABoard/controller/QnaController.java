@@ -50,5 +50,28 @@ public class QnaController {
         return CustomResponse.ok("문의 게시글 전체 조회 성공", qnaList);
     }
 
+    @PutMapping("/{qnaId}")
+    public CustomResponse updateQna(@PathVariable("qnaId") Long qnaId, @RequestBody QnaRequestDTO qnaRequestDTO) {
+        qnaRequestDTO.setQnaId(qnaId);
+
+        int result = 0;
+
+        if ("Anonymous".equals(qnaRequestDTO.getLockStatus()) && qnaRequestDTO.getQnaPassword() != null && !qnaRequestDTO.getQnaPassword().isEmpty()) {
+            qnaRequestDTO.setIsLocked(true);
+        } else if ("Public".equals(qnaRequestDTO.getLockStatus()) && (qnaRequestDTO.getQnaPassword() == null || qnaRequestDTO.getQnaPassword().isEmpty())) {
+            qnaRequestDTO.setIsLocked(false);
+        } else {
+            return CustomResponse.failure("유효하지 않은 요청입니다. 공개 게시글에는 비밀번호가 없어야 하고, 익명 게시글에는 비밀번호가 필요합니다.");
+        }
+
+        result = qnaService.updateQna(qnaRequestDTO);
+
+
+        if(result > 0) {
+            return CustomResponse.ok("문의 게시글 수정 완료", null);
+        } else {
+            return CustomResponse.failure("문의 게시글 수정 실패");
+        }
+    }
 
 }

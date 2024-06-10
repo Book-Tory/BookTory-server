@@ -31,4 +31,11 @@ public class QnaService {
 
         return qnaBoards.stream().map(QnaResponseDTO::toQnaResponse).collect(Collectors.toList());
     }
+
+    public int updateQna(QnaRequestDTO qnaRequestDTO) {
+
+        QnaBoard qnaBoard = QnaBoard.covertToDTO(qnaRequestDTO);
+
+        return qnaBoardMapper.updateQnaBoard(qnaBoard);
+    }
 }
