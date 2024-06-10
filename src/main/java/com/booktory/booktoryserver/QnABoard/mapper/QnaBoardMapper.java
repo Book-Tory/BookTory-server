@@ -14,4 +14,8 @@ public interface QnaBoardMapper {
     int updateQnaBoard(QnaBoard qnaBoard);
 
     QnaBoard findByQnaId(Long qnaId);
+
+    int softDeleteQnaBoard(Long qnaId);
+
+    void moveToDeleteTable(Long qnaId);
 }

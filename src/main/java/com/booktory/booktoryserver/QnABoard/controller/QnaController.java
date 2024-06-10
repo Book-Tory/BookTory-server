@@ -83,4 +83,16 @@ public class QnaController {
         return CustomResponse.ok("문의 게시글 조회 성공", qnaResponseDTO);
     }
 
+    @DeleteMapping("/{qnaId}")
+    public CustomResponse deleteQnaBoard(@PathVariable Long qnaId) {
+        int result = qnaService.deleteQnaBoard(qnaId);
+
+        if(result > 0) {
+            return CustomResponse.ok("문의 게시글 삭제 완료", null);
+        } else {
+            return CustomResponse.failure("문의 게시글 삭제 실패");
+        }
+
+    }
+
 }

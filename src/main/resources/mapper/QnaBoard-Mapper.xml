@@ -20,4 +20,15 @@
         UPDATE qna_board SET qna_title = #{qna_title}, qna_password = #{qna_password}, qna_author = #{qna_author}, qna_content = #{qna_content}, created_at = #{created_at}, is_lock = #{is_lock}, lock_status = #{lock_status} WHERE qna_id = #{qna_id}
     </update>
 
+    <insert id="moveToDeleteTable">
+        INSERT INTO delete_qna_board (qna_id,qna_title, qna_password, qna_author, qna_content, created_at, is_lock, lock_status)
+        SELECT qna_id, qna_title, qna_password, qna_author, qna_content, created_at, is_lock, lock_status
+        FROM qna_board
+        WHERE qna_id = #{qnaId};
+    </insert>
+
+    <delete id="softDeleteQnaBoard">
+        DELETE FROM qna_board WHERE qna_id = #{qnaId}
+    </delete>
+
 </mapper>

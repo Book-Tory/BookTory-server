@@ -7,6 +7,7 @@ import com.booktory.booktoryserver.QnABoard.mapper.QnaBoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,6 +53,13 @@ public class QnaService {
             throw new IllegalArgumentException("Invalid Password");
         }
         return QnaResponseDTO.toQnaResponse(qnaBoard);
+    }
+
+    @Transactional
+    public int deleteQnaBoard(Long qnaId) {
+        qnaBoardMapper.moveToDeleteTable(qnaId);
+        int result = qnaBoardMapper.softDeleteQnaBoard(qnaId);
+        return result;
     }
 
 }
