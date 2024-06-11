@@ -64,7 +64,16 @@ public class StoryController {
         }
     }
 
+    //isbn값에 따른 책 상세 조회
+    @GetMapping("/book/{d_isbn}")
+    public CustomResponse getBookByIsbn(@PathVariable ("d_isbn") Long d_isbn) throws JsonProcessingException {
+        BookDTO bookInfo = storyService.getBookByIsbn(d_isbn);
 
-
+        if (bookInfo != null) {
+            return CustomResponse.ok("조회 성공", bookInfo);
+        } else {
+            return CustomResponse.failure("조회 실패");
+        }
+    }
 
 }

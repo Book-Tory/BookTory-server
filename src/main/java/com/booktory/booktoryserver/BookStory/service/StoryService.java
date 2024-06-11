@@ -98,6 +98,7 @@ public class StoryService {
 
     }
 
+    //isbn 값에 따른 책 상세조회
     public BookDTO getBookByIsbn(Long d_isbn) throws JsonProcessingException {
         Map<String, Object> queryParams = new HashMap<>();
 
