@@ -58,6 +58,7 @@ public class StoryService {
 
     
     //요청 헤더 설정
+    //헤더에는 Client-id와 Client-Secret이 꼭 들어가야 합니다.
     private ResponseEntity<String> sendRequest(URI uri){
         RequestEntity<Void> req = RequestEntity
                 .get(uri)
@@ -89,7 +90,7 @@ public class StoryService {
         //uri를 담아 sendRequest함수로 응답받은 결과값을 ResponseEntity형태로 변수에 저장
 
         ObjectMapper mapper = new ObjectMapper();
-        //JSON객체를 Java객체로 변환
+        //JSON객체를 Java객체로 변환하는 클래스이다.
         NaverSearchBookResponseDTO naverSearchBookResponseDTO = mapper.readValue(res.getBody(), NaverSearchBookResponseDTO.class );
         //왜 JsonProcessingException을 해야 readvalue함수가 동작하는지 자세히 모르겠다.
         List<BookDTO> bookInfoList = naverSearchBookResponseDTO.getItems();
@@ -110,17 +111,33 @@ public class StoryService {
 
         ObjectMapper mapper = new ObjectMapper();
         NaverSearchBookResponseDTO naverSearchBookResponseDTO = mapper.readValue(res.getBody(), NaverSearchBookResponseDTO.class);
-        BookDTO bookInfo = naverSearchBookResponseDTO.getItems().get(0);
+        BookDTO bookInfo =  naverSearchBookResponseDTO.getItems().get(0);
 
+        return bookInfo;
+    }
+
+    public BookDTO getBookByName(String bookName) throws JsonProcessingException{
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("query", bookName);
+        queryParams.put("display", 1); //한권의 책만 응답 받기 위해 설정
+        //query와 display값만 받아도 상관없다.
+
+        URI uri = buildUri("/v1/search/book.json", queryParams);
+        ResponseEntity<String> res = sendRequest(uri);
+
+        ObjectMapper mapper = new ObjectMapper();
+        NaverSearchBookResponseDTO naverSearchBookResponseDTO = mapper.readValue(res.getBody(), NaverSearchBookResponseDTO.class);
+        BookDTO bookInfo =  naverSearchBookResponseDTO.getItems().get(0);
+
+        //return naverSearchBookResponseDTO.getItems().isEmpty() ? null : naverSearchBookResponseDTO.getItems().get(0);
+        //items에 값이 없으면 null을 반환하고 있으면 반환해라!
         return bookInfo;
     }
 
 
 
 
-
-
-    //
+    //------------------------------------------------------
     public List<StoryEntity> getAllStory() {
         return storyMapper.getAllStory();
     }
@@ -151,6 +168,7 @@ public class StoryService {
     public StoryEntity getStoryById(Long story_board_id) {
         return storyMapper.getStoryById(story_board_id);
     }
+
 
 
 }

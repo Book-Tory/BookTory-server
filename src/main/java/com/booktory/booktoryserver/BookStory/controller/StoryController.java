@@ -8,6 +8,7 @@ import com.booktory.booktoryserver.BookStory.service.StoryService;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +16,21 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/stories")
 @RequiredArgsConstructor
+@Slf4j
 public class StoryController {
     private final StoryService storyService;
 
     @GetMapping("/mystories")//독후감(스토리) 전체 조회
-    public List<StoryEntity> getAllStory(){
-        return storyService.getAllStory();
+    public CustomResponse getAllStory(){
+        List<StoryEntity> stories = storyService.getAllStory();
+
+        if(!stories.isEmpty()){
+            return CustomResponse.ok("독후감(스토리) 전체 조회 성공", stories);
+        }else{
+            return CustomResponse.failure("독후감(스토리) 전체 조회 실패");
+        }
     }
+
 
     @GetMapping("/{story_board_id}")
     public StoryEntity getStoryById (@PathVariable("story_board_id") Long story_board_id){
@@ -75,5 +84,17 @@ public class StoryController {
             return CustomResponse.failure("조회 실패");
         }
     }
+
+    //필요한지는 모르겠지만 이름을 통한 책 상세보기 요청
+    public CustomResponse getBookByname(@RequestParam("/book/book_name") String bookName) throws JsonProcessingException {
+        BookDTO bookInfo = storyService.getBookByName(bookName);
+
+        if(bookInfo != null){
+            return CustomResponse.ok("조회 성공", bookInfo);
+        }else{
+            return CustomResponse.failure("조회 실패");
+        }
+    }
+
 
 }
