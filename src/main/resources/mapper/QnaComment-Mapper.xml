@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.QnAComment.mapper.QnaCommentMapper">
+
+    <insert id="insertQnaComment" parameterType="qnaComment">
+        INSERT INTO qna_comment (comment_author, comment_content, created_at, qna_id)  VALUES (#{comment_author},#{comment_content}, #{created_at}, #{qna_id})
+    </insert>
+
+</mapper>
