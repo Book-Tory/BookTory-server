@@ -33,4 +33,18 @@ public class QnaCommentController {
 
     }
 
+
+    @DeleteMapping("/{qnaCommentId}")
+    public CustomResponse deleteComment(@PathVariable("qnaCommentId") Long qnaCommentId){
+        int result = qnaCommentService.deleteQnaComment(qnaCommentId);
+
+        if(result > 0) {
+            return CustomResponse.ok("댓글 삭제 완료", null);
+        } else {
+            return CustomResponse.failure("댓글 삭제 실패");
+        }
+    }
+
+
+
 }

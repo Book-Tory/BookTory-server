@@ -7,6 +7,7 @@ import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,5 +32,12 @@ public class QnaCommentService {
         QnaComment qnaComment = QnaComment.toQnaComment(qnaCommentDTO,username, qnaId);
 
         return commentMapper.insertQnaComment(qnaComment);
+    }
+
+    @Transactional
+    public int deleteQnaComment(Long qnaCommentId) {
+        commentMapper.moveToDeletetComment(qnaCommentId);
+        int result = commentMapper.softDeleteQnaComment(qnaCommentId);
+        return result;
     }
 }

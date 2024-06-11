@@ -7,4 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface QnaCommentMapper {
     int insertQnaComment(QnaComment qnaComment);
 
+    void moveToDeletetComment(Long qnaCommentId);
+
+    int softDeleteQnaComment(Long qnaCommentId);
 }

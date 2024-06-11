@@ -7,4 +7,16 @@
         INSERT INTO qna_comment (comment_author, comment_content, created_at, qna_id)  VALUES (#{comment_author},#{comment_content}, #{created_at}, #{qna_id})
     </insert>
 
+    <insert id="moveToDeletetComment">
+        INSERT INTO delete_qna_comment (qna_comment_id, comment_author, created_at, comment_content, qna_id)
+        SELECT qna_comment_id, comment_author, created_at, comment_content, qna_id
+        FROM qna_comment
+        WHERE qna_comment_id = #{qnaCommentId}
+    </insert>
+
+
+    <delete id="softDeleteQnaComment">
+        DELETE FROM qna_comment WHERE qna_comment_id = #{qnaCommentId}
+    </delete>
+
 </mapper>
