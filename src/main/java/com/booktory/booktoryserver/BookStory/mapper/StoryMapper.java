@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.BookStory.mapper;
 
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
+import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,4 +19,7 @@ public interface StoryMapper {
 
     void updateStory(StoryEntity storyEntity);
 
+    Long getBookId(Long dIsbn);
+
+    void saveBookInfo(BookEntity bookInfo);
 }

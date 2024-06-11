@@ -1,12 +1,12 @@
 package com.booktory.booktoryserver.BookStory.service;
 
 import com.amazonaws.Response;
-import com.booktory.booktoryserver.BookStory.domain.BookEntity;
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.NaverSearchBookResponseDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
 import com.booktory.booktoryserver.BookStory.mapper.StoryMapper;
+import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -166,8 +168,36 @@ public class StoryService {
     }
 
     public StoryEntity getStoryById(Long story_board_id) {
+
         return storyMapper.getStoryById(story_board_id);
     }
+
+
+
+
+
+    //isbn 값을 통한 책 검색 후, 정보 저장
+    @Transactional
+//    일관된 상태를 유지하여 책 정보가 모두 저장되어야 하며, 저장하는 도중에 오류가 발생하여 DB에 일부만 저장되는 경우
+//    데이터의 무결성을 해치는 것을 막기 위한 어노테이션
+    public String saveBookinfo(Long d_isbn) throws IOException{
+        //수정하려는 책이 DB에 있는지 먼저 확인
+        Long bookId = storyMapper.getBookId(d_isbn);
+
+        if(bookId == null){
+            BookDTO bookDTO = getBookByIsbn(d_isbn);
+            //DTO를 Entity로 변환
+            BookEntity bookInfo = BookDTO.toEntity(bookDTO);
+
+            storyMapper.saveBookInfo(bookInfo);
+
+            bookId = bookInfo.getBook_id();
+        }
+        return "책 정보가 저장되었습니다.";
+    }
+
+
+
 
 
 

@@ -18,6 +18,7 @@ import java.util.Date;
 
 public class BookDTO {
     //응답되고 요청되는 데이터의 형태
+    //독후감의 대상이 되는 책 정보
     private String title; //책 제목
     private String link; //네이버 도서 정보 URL
     private String image; //섬네일 이미지의 URL
