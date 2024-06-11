@@ -28,24 +28,10 @@ public class ChatController {
 
     // 채팅방 생성
     @PostMapping("/room")
-    public CustomResponse createChatRoom(@RequestBody ChatDTO chat) {
-        String roomId = chatService.createRoomId(chat);
+    public CustomResponse createChatRoom(@AuthenticationPrincipal UserDetails user, @RequestBody ChatDTO chat) {
+        chat.setBuyer_email(user.getUsername()); // 현재 로그인한 내 이메일은 구매자 이메일로
 
-        // 이미 같은 상품에 같은 판매자, 구매자의 채팅방이 존재하는지 확인
-        ChatEntity chatEntity = chatService.isExistChatRoom(roomId);
-
-        if (chatEntity == null) {
-            chat.setRoom_id(roomId);
-            int result = chatService.createChatRoom(chat); // 채팅방 생성
-
-            if (result > 0) {
-                return CustomResponse.ok("채팅방이 생성되었습니다.", null);
-            } else {
-                return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
-            }
-        } else {
-            return CustomResponse.ok("이미 존재하는 채팅방이 있음", null);
-        }
+        return chatService.createChatRoom(chat);
     }
 
     // 내 채팅방 리스트 불러오기

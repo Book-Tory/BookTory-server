@@ -19,4 +19,8 @@ public interface ChatMapper {
     int saveMessage(ChatMessageEntity chatMessageEntity);
 
     ChatEntity isExistChatRoom(String room_id);
+
+    String findEmailById(Long sellerId);
+
+    Long findIdByEmail(String buyerEmail);
 }

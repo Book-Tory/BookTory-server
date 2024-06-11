@@ -82,4 +82,12 @@
     <select id="isExistChatRoom" resultType="chat">
         select * from chat where room_id = #{room_id}
     </select>
+
+    <select id="findEmailById" resultType="String">
+        select user_email from users where user_id = #{sellerId}
+    </select>
+
+    <select id="findIdByEmail" resultType="Long">
+        select user_id from users where user_email = #{buyerEmail}
+    </select>
 </mapper>
