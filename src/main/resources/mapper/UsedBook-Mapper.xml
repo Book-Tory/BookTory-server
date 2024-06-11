@@ -119,4 +119,7 @@
         select * from used_book_image where used_book_image_id = #{used_book_image_id}
     </select>
 
+    <select id="findIdByEmail" resultType="Long">
+        select user_id from users where user_email = #{username}
+    </select>
 </mapper>

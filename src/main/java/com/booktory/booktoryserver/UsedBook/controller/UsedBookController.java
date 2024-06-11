@@ -9,6 +9,8 @@ import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -96,8 +98,10 @@ public class UsedBookController {
 
     // 중고 서적 글 등록
     @PostMapping("/{d_isbn}")
-    public CustomResponse createPost (@PathVariable ("d_isbn") Long d_isbn, @ModelAttribute UsedBookInfoDTO usedBookInfoDTO) throws IOException {
-        String result = usedBookService.createPost(d_isbn, usedBookInfoDTO);
+    public CustomResponse createPost (@PathVariable ("d_isbn") Long d_isbn, @ModelAttribute UsedBookInfoDTO usedBookInfoDTO, @AuthenticationPrincipal UserDetails user) throws IOException {
+        String username = user.getUsername();
+
+        String result = usedBookService.createPost(d_isbn, usedBookInfoDTO, username);
 
         if (result != null) {
             return CustomResponse.ok(result, null);

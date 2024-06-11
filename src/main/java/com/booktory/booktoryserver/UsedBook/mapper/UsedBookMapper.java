@@ -32,4 +32,6 @@ public interface UsedBookMapper {
     int deleteImageByImageId(Long used_book_image_id);
 
     UsedBookImage getUsedBookImageByImageId(Long used_book_image_id);
+
+    Long findIdByEmail(String username);
 }
