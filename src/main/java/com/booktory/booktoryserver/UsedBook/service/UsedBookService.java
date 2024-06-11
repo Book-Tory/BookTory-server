@@ -259,9 +259,12 @@ public class UsedBookService {
     }
 
     @Transactional
-    public String createPost(Long d_isbn, UsedBookInfoDTO usedBookInfoDTO) throws IOException {
+    public String createPost(Long d_isbn, UsedBookInfoDTO usedBookInfoDTO, String username) throws IOException {
         // 수정하려는 책이 DB에 있는지 먼저 확인
         Long bookId = usedBookMapper.getBookId(d_isbn);
+
+        Long userId = usedBookMapper.findIdByEmail(username);
+        usedBookInfoDTO.setUser_id(userId);
 
         // 책 정보가 존재하지 않는다면
         if (bookId == null) {
