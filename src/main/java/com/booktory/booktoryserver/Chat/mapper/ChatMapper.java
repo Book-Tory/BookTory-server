@@ -12,11 +12,15 @@ import java.util.List;
 public interface ChatMapper {
     int createChatRoom(ChatEntity chatEntity);
 
-    List<ChatListEntity> getChatRoomList(String username);
+    List<ChatListEntity> getChatRoomList(Long user_id);
 
-    List<ChatHistoryEntity> getChatHistory(Long chat_id, String username);
+    List<ChatHistoryEntity> getChatHistory(Long chat_id, Long user_id);
 
     int saveMessage(ChatMessageEntity chatMessageEntity);
 
     ChatEntity isExistChatRoom(String room_id);
+
+    String findEmailById(Long sellerId);
+
+    Long findIdByEmail(String buyerEmail);
 }

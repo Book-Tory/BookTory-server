@@ -8,6 +8,7 @@ import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatMessageDTO;
 import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
+import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,17 +22,42 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ChatService {
     private final ChatMapper chatMapper;
-    public int createChatRoom(ChatDTO chat) {
-        ChatEntity chatEntity = ChatEntity.toEntity(chat);
-        return chatMapper.createChatRoom(chatEntity);
+    public CustomResponse createChatRoom(ChatDTO chat) {
+        String sellerEmail = chatMapper.findEmailById(chat.getSeller_id());
+
+        chat.setSeller_email(sellerEmail);
+        chat.setBuyer_id(chatMapper.findIdByEmail(chat.getBuyer_email()));
+
+        String roomId = createRoomId(chat);
+
+        // 이미 같은 상품에 같은 판매자, 구매자의 채팅방이 존재하는지 확인
+        ChatEntity existChatRoom = chatMapper.isExistChatRoom(roomId);
+
+        if (existChatRoom == null) {
+            chat.setRoom_id(roomId);
+            ChatEntity chatEntity = ChatEntity.toEntity(chat);
+            int result = chatMapper.createChatRoom(chatEntity); // 채팅방 생성
+
+            if (result > 0) {
+                return CustomResponse.ok("채팅방이 생성되었습니다.", null);
+            } else {
+                return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
+            }
+        } else {
+            return CustomResponse.ok("이미 존재하는 채팅방이 있음", null);
+        }
     }
 
     public List<ChatListEntity> getChatRoomList(String username) {
-        return chatMapper.getChatRoomList(username);
+        Long user_id = chatMapper.findIdByEmail(username);
+
+        return chatMapper.getChatRoomList(user_id);
     }
 
     public ChatHistoryDTO getChatHistory(Long chat_id, String username) {
-        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, username);
+        Long user_id = chatMapper.findIdByEmail(username);
+
+        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, user_id);
 
         if (chatHistory.isEmpty()) {
             return null;

@@ -22,7 +22,7 @@ public class ChatMessageEntity {
 
     public static ChatMessageEntity toEntity(ChatMessageDTO chatMessage) {
         return ChatMessageEntity.builder()
-//                .chat_id(chatMessage.getChat_id())
+                .chat_id(chatMessage.getChat_id())
                 .content(chatMessage.getMessage_content())
                 .sender_id(chatMessage.getSender_id())
                 .build();
