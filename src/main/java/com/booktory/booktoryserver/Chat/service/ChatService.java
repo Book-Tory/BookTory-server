@@ -26,12 +26,12 @@ public class ChatService {
         return chatMapper.createChatRoom(chatEntity);
     }
 
-    public List<ChatListEntity> getChatRoomList(Long user_id) {
-        return chatMapper.getChatRoomList(user_id);
+    public List<ChatListEntity> getChatRoomList(String username) {
+        return chatMapper.getChatRoomList(username);
     }
 
-    public ChatHistoryDTO getChatHistory(Long chat_id, Long user_id) {
-        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, user_id);
+    public ChatHistoryDTO getChatHistory(Long chat_id, String username) {
+        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, username);
 
         if (chatHistory.isEmpty()) {
             return null;
@@ -42,6 +42,8 @@ public class ChatService {
         List<ChatMessageDTO> messages = chatHistory.stream()
                 .map(entity -> ChatMessageDTO.builder()
                         .sender_id(entity.getSender_id())
+                        .sender_nickname(entity.getSender_nickname())
+                        .sender_email(entity.getSender_email())
                         .message_content(entity.getMessage_content())
                         .message_created_at(entity.getMessage_created_at())
                         .build())

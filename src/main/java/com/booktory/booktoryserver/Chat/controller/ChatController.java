@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -47,9 +49,11 @@ public class ChatController {
     }
 
     // 내 채팅방 리스트 불러오기
-    @GetMapping("/rooms/{user_id}")
-    public CustomResponse getChatRoomList (@PathVariable ("user_id") Long user_id) {
-        List<ChatListEntity> chatList = chatService.getChatRoomList(user_id);
+    @GetMapping("/rooms")
+    public CustomResponse getChatRoomList (@AuthenticationPrincipal UserDetails user) {
+        String username = user.getUsername();
+
+        List<ChatListEntity> chatList = chatService.getChatRoomList(username);
 
         if (!chatList.isEmpty()) {
             return CustomResponse.ok("채팅방 리스트 조회 성공", chatList);
@@ -59,9 +63,11 @@ public class ChatController {
     }
 
     // 특정 채팅방 내용 불러오기
-    @GetMapping("/room/{chat_id}/{user_id}")
-    public CustomResponse getChatHistory (@PathVariable ("chat_id") Long chat_id, @PathVariable ("user_id") Long user_id) {
-        ChatHistoryDTO chatHistory = chatService.getChatHistory(chat_id, user_id);
+    @GetMapping("/room/{chat_id}")
+    public CustomResponse getChatHistory (@PathVariable ("chat_id") Long chat_id, @AuthenticationPrincipal UserDetails user) {
+        String username = user.getUsername();
+
+        ChatHistoryDTO chatHistory = chatService.getChatHistory(chat_id, username);
 
         if (chatHistory != null) {
             return CustomResponse.ok("채팅 내역 조회 성공", chatHistory);

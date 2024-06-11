@@ -13,6 +13,8 @@ public class ChatHistoryEntity {
     private Long chat_id; // 선택한 채팅방 id
     private String chat_partner_nickname; // 상대방 닉네임
     private Long sender_id;
+    private String sender_nickname;
+    private String sender_email;
 //    private String stored_image_name;
 //    private String used_book_image_url; 로 변환
     private String title; // 글 제목
