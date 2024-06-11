@@ -49,11 +49,15 @@ public class ChatService {
     }
 
     public List<ChatListEntity> getChatRoomList(String username) {
-        return chatMapper.getChatRoomList(username);
+        Long user_id = chatMapper.findIdByEmail(username);
+
+        return chatMapper.getChatRoomList(user_id);
     }
 
     public ChatHistoryDTO getChatHistory(Long chat_id, String username) {
-        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, username);
+        Long user_id = chatMapper.findIdByEmail(username);
+
+        List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, user_id);
 
         if (chatHistory.isEmpty()) {
             return null;
