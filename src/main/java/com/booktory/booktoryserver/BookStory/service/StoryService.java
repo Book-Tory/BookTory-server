@@ -118,6 +118,8 @@ public class StoryService {
         return bookInfo;
     }
 
+
+    //책 제목에 따른 책 상세조회
     public BookDTO getBookByName(String bookName) throws JsonProcessingException{
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("query", bookName);
@@ -125,9 +127,12 @@ public class StoryService {
         //query와 display값만 받아도 상관없다.
 
         URI uri = buildUri("/v1/search/book.json", queryParams);
+        //API응답 요청
         ResponseEntity<String> res = sendRequest(uri);
 
+        //mapper로 감싼다.
         ObjectMapper mapper = new ObjectMapper();
+        //NavaerSearchBookResponseDTO로 변환
         NaverSearchBookResponseDTO naverSearchBookResponseDTO = mapper.readValue(res.getBody(), NaverSearchBookResponseDTO.class);
         BookDTO bookInfo =  naverSearchBookResponseDTO.getItems().get(0);
 
@@ -176,7 +181,7 @@ public class StoryService {
 
 
 
-    //isbn 값을 통한 책 검색 후, 정보 저장
+    //isbn 값을 통한 책 검색 후, 책 정보 DB에 저장
     @Transactional
 //    일관된 상태를 유지하여 책 정보가 모두 저장되어야 하며, 저장하는 도중에 오류가 발생하여 DB에 일부만 저장되는 경우
 //    데이터의 무결성을 해치는 것을 막기 위한 어노테이션
@@ -197,6 +202,36 @@ public class StoryService {
     }
 
 
+    //책 제목을 통한 책 검색 후, 책 정보 DB에 저장
+    @Transactional
+    public String createStoryWithBook(String bookName, StoryDTO storyDTO) throws IOException{
+        BookDTO bookDTO = getBookByName(bookName);
+        //bookDTO 객체에 bookName이라는 필드가 없어도 되는가,
+        //있는데 getBookByName이라는 함수를 사용하려면 매개변수를 booktitle로 해야하는가
+
+        //
+        if(bookDTO == null){
+            return "책 정보를 찾을 수 없습니다.";
+        }
+
+        Long bookId = storyMapper.getBookId(bookDTO.getIsbn());
+
+        if(bookId == null){
+            //책 정보가 DB에 없다면 저장
+            BookEntity bookEntity = BookDTO.toEntity(bookDTO);
+            storyMapper.saveBookInfo(bookEntity);
+            bookId = bookEntity.getBook_id();
+            //저장후 id값을 bookId필드에 저장하는건데 필요 없을 것 같다.
+            System.out.println("bookId : " + bookId);
+        }
+
+        // 독후감 저장
+        StoryEntity storyEntity = StoryDTO.toEntity(storyDTO);
+        storyEntity.setBook_id(bookId);
+        storyMapper.createStory(storyEntity);
+
+        return "독후감이 저장되었습니다.";
+    }
 
 
 
