@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.Users.mapper.RefreshMapper">
+    <insert id="save" parameterType="refreshToken">
+        INSERT INTO refresh_tokens ( username, refresh, expiration)
+        VALUES (#{username}, #{refresh}, #{expiration})
+    </insert>
+
+    <delete id="deleteByRefresh" parameterType="String">
+        DELETE FROM refresh_tokens where refresh = #{refresh}
+    </delete>
+
+    <select id="existsByRefresh" parameterType="String" resultType="Boolean">
+        SELECT * FROM refresh_tokens where refresh = #{refresh}
+    </select>
+</mapper>
