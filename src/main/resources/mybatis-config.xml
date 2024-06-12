@@ -30,6 +30,8 @@
 
         <typeAlias alias="qnaBoard" type="com.booktory.booktoryserver.QnABoard.domain.QnaBoard"/>
         <typeAlias alias="qnaComment" type="com.booktory.booktoryserver.QnAComment.model.QnaComment"/>
+
+        <typeAlias alias="refreshToken" type="com.booktory.booktoryserver.Users.model.RefreshEntity"/>
     </typeAliases>
 
     <typeHandlers>

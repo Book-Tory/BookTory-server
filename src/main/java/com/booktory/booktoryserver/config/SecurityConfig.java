@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.config;
 import com.booktory.booktoryserver.Users.filter.JWTFilter;
 import com.booktory.booktoryserver.Users.filter.JWTUtil;
 import com.booktory.booktoryserver.Users.filter.LoginFilter;
+import com.booktory.booktoryserver.Users.mapper.RefreshMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
     private final JWTUtil jwtUtil;
+
+    private final RefreshMapper refreshMapper;
 
 
     @Bean
@@ -66,14 +69,14 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/api/users/auth/register").permitAll()
+                        .requestMatchers("/login", "/", "/api/users/auth/register", "/reissue").permitAll()
                         .requestMatchers("/test").hasRole("USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshMapper), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
