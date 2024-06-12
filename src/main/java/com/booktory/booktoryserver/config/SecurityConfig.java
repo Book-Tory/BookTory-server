@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -58,8 +59,8 @@ public class SecurityConfig {
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
-                        config.setExposedHeaders(Collections.singletonList("access"));
-                        config.setExposedHeaders(Collections.singletonList("refresh"));
+                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
+                        config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
                         config.setMaxAge(3600L); //1시간
                         return config;
                     }
