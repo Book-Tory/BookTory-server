@@ -77,7 +77,7 @@
         where book_isbn = #{book_isbn}
     </select>
 
-    <insert id="saveBookInfo" parameterType="bookDTO" keyProperty="book_id" useGeneratedKeys="true">
+    <insert id="saveBookInfo" parameterType="book" keyProperty="book_id" useGeneratedKeys="true">
         insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
         values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
     </insert>
