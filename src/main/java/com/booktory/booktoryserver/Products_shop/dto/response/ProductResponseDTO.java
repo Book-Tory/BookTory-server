@@ -33,7 +33,7 @@ public class ProductResponseDTO {
                 .product_name(product.getProduct_name())
                 .product_price(product.getProduct_price())
                 .product_script(product.getProduct_script())
-                .product_stock(ProductStock.valueOf(product.getProduct_stock()))
+                .product_stock(ProductStock.fromString(product.getProduct_stock()))
                 .product_category(product.getProduct_category())
                 .product_image_check(product.getProduct_image_check())
                 .created_at(product.getCreated_at())

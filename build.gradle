@@ -26,6 +26,7 @@ dependencies {
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.730'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     // security
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -41,9 +42,15 @@ dependencies {
 
     // Jasypt
     implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.5'
+
+    implementation 'org.springframework.data:spring-data-commons'
 }
 
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jar {
+    enabled = false
 }
