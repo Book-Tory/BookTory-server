@@ -83,8 +83,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);  // https 통신 일때
         cookie.setPath("/");
-        cookie.setDomain("localhost"); // 프론트엔드 도메인 설정
+        cookie.setDomain("localhost");
         cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "None");
 
         return cookie;
     }
