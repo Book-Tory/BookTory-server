@@ -83,7 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 //        cookie.setMaxAge(24*60*60);
 //        //cookie.setSecure(true);  // https 통신 일때
 //        cookie.setPath("/");
-//        cookie.setDomain("localhost");
+//        cookie.setDomain("localhost");  // 52.78.9.158 이거는 토큰발급됨
 //        cookie.setHttpOnly(true);
 //        cookie.setAttribute("SameSite", "None");
 //
