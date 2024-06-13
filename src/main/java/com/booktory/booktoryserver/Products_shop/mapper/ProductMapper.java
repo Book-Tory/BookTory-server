@@ -4,7 +4,6 @@ import com.booktory.booktoryserver.Products_shop.domain.Product;
 import com.booktory.booktoryserver.Products_shop.domain.ProductImageFile;
 import com.booktory.booktoryserver.Products_shop.domain.ProductsList;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO;
-import com.booktory.booktoryserver.Products_shop.dto.request.RequestList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
