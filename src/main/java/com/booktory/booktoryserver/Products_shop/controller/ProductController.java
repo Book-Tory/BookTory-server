@@ -34,7 +34,7 @@ public class ProductController {
 
 
     @PostMapping("/list")
-    public CustomResponse productsAll(@RequestBody ProductFilterDTO productFilterDTO, @PageableDefault(size = 5)Pageable pageable){
+    public CustomResponse productsAll(@RequestBody ProductFilterDTO productFilterDTO, @PageableDefault(size = 10)Pageable pageable){
 
         Page<ProductResponseDTO> productResponseDTOList = productService.findAllProducts(productFilterDTO, pageable);
 
