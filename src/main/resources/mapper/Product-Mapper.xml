@@ -44,7 +44,7 @@
     </select>
 
 
-    <select id="listCnt" parameterType="com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO" resultType="int">
+    <select id="listCnt" parameterType="productFilter" resultType="int">
         SELECT COUNT(*) FROM products
         <where>
             <if test="productName != null and productName != ''">
