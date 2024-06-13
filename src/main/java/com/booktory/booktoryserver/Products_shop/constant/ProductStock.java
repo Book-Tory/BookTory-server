@@ -16,4 +16,17 @@ public enum ProductStock {
     DISCONTINUED("DISCONTINUED"); // 단종
 
     private final String key;
+
+
+    public static ProductStock fromString(String value) {
+        if (value == null) {
+            return null;
+        }
+        for (ProductStock stock : ProductStock.values()) {
+            if (stock.key.equals(value)) {
+                return stock;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum type " + value);
+    }
 }

@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.Products_shop.controller;
 
+import com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductUpdateDTO;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductRegisterDTO;
@@ -7,6 +8,9 @@ import com.booktory.booktoryserver.Products_shop.dto.response.ProductResponseDTO
 import com.booktory.booktoryserver.Products_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,10 +33,10 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products")
-    public CustomResponse<List<ProductResponseDTO>> productsAll(){
+    @PostMapping("/list")
+    public CustomResponse productsAll(@RequestBody ProductFilterDTO productFilterDTO, @PageableDefault(size = 5)Pageable pageable){
 
-        List<ProductResponseDTO> productResponseDTOList = productService.findAllProducts();
+        Page<ProductResponseDTO> productResponseDTOList = productService.findAllProducts(productFilterDTO, pageable);
 
         return CustomResponse.ok("전체 상품 정보", productResponseDTOList);
     }
