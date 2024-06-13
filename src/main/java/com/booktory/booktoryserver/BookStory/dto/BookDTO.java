@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.BookStory.dto;
 
-import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
+
+import com.booktory.booktoryserver.BookStory.domain.BookEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class BookDTO {
     private String publisher; //출판사
     private Long isbn; //ISBN
     private String description; //네이버 도서의 책 소개
-    private Date pubdate; //출간일
+    private DateTime pubdate; //출간일
 
 
     //BookDTO를 BookEntity로 만드는 메서드
