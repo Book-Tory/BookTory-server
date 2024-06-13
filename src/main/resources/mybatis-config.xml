@@ -30,10 +30,14 @@
         <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
         <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
 
+        <typeAlias alias="productCart" type="com.booktory.booktoryserver.ProductCart.model.ProductCart"/>
+        <typeAlias alias="productCartList" type="com.booktory.booktoryserver.ProductCart.model.ProductCartList"/>
+
         <typeAlias alias="qnaBoard" type="com.booktory.booktoryserver.QnABoard.domain.QnaBoard"/>
         <typeAlias alias="qnaComment" type="com.booktory.booktoryserver.QnAComment.model.QnaComment"/>
 
         <typeAlias alias="refreshToken" type="com.booktory.booktoryserver.Users.model.RefreshEntity"/>
+
     </typeAliases>
 
     <typeHandlers>
