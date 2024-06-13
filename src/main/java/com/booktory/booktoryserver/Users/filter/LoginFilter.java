@@ -73,22 +73,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //응답 설정
         response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        response.setHeader("refresh", refresh);
         response.setStatus(HttpStatus.OK.value());
     }
 
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);  // https 통신 일때
-        cookie.setPath("/");
-        cookie.setDomain("localhost");
-        cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite", "None");
-
-        return cookie;
-    }
+//    private Cookie createCookie(String key, String value) {
+//
+//        Cookie cookie = new Cookie(key, value);
+//        cookie.setMaxAge(24*60*60);
+//        //cookie.setSecure(true);  // https 통신 일때
+//        cookie.setPath("/");
+//        cookie.setDomain("localhost");
+//        cookie.setHttpOnly(true);
+//        cookie.setAttribute("SameSite", "None");
+//
+//        return cookie;
+//    }
 
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs){
