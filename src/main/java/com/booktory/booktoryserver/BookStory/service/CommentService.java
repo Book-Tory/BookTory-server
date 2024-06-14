@@ -43,6 +43,7 @@ public class CommentService {
         return commentMapper.updateComment(commentEntity) > 0;
     }
 
+
 //    //댓글 id를 통한 상세조회
 //    public CommentViewDTO getCommentById(Long comment_id) {
 //        CommentEntity comment = commentMapper.getCommentById(comment_id);

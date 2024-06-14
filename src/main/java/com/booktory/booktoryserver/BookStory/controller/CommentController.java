@@ -62,13 +62,13 @@ public class CommentController {
         }
     }
 
-    @GetMapping("/comments/{comment_id}")
-    public CustomResponse getCommentById(@PathVariable Long comment_id) {
-        CommentViewDTO comment = commentService.getCommentById(comment_id);
-        if(comment != null) {
-            return CustomResponse.ok("댓글 조회 성공", comment);
-        } else {
-            return CustomResponse.failure("댓글 조회 실패");
-        }
-    }
+//    @GetMapping("/comments/{comment_id}")
+//    public CustomResponse getCommentById(@PathVariable Long comment_id) {
+//        CommentViewDTO comment = commentService.getCommentById(comment_id);
+//        if(comment != null) {
+//            return CustomResponse.ok("댓글 조회 성공", comment);
+//        } else {
+//            return CustomResponse.failure("댓글 조회 실패");
+//        }
+//    }
 }

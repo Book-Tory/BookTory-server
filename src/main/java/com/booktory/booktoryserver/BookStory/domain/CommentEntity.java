@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import java.time.LocalDateTime;
 
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
