@@ -57,4 +57,4 @@ jobs:
     - name: Docker run
       run: |
         sudo docker stop book-tory && sudo docker rm book-tory && sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
-        sudo docker run -d -p 8282:8080 --name book-tory --restart always ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
+        sudo docker run -d -p 80:8080 --name book-tory --restart always ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
