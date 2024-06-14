@@ -51,12 +51,12 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable());
 
         http
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://http://52.78.9.158:5173", "http://52.78.9.158:80"));
-                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80"));
+                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
                         config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
