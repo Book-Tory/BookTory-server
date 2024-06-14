@@ -56,5 +56,7 @@ jobs:
     # 8080 -> 80 포트로 수행하도록 지정
     - name: Docker run
       run: |
-        sudo docker stop book-tory && sudo docker rm book-tory && sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
+        sudo docker stop book-tory || true
+        sudo docker rm book-tory || true
+        sudo docker rmi -f ${{ secrets.DOCKER_USERNAME }}/book-tory:latest || true
         sudo docker run -d -p 8082:8080 --name book-tory --restart always ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
