@@ -32,6 +32,8 @@ public class CommentViewDTO {
                 .modifiedDate(commentEntity.getModifiedDate())
                 .userId(commentEntity.getComment_author_user_id())
                 .boardId(commentEntity.getStory_board_id())
+                .authorProfileImage(commentEntity.getAuthor_profile_image()) // 추가
+                .authorNickname(commentEntity.getAuthor_nickname()) // 추가
                 .build();
     }
 }

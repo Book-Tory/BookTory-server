@@ -24,4 +24,6 @@ public class CommentEntity {
     private Long comment_author_user_id; //작성자
     private Long story_board_id; //독후감 게시물
 
+    private String author_profile_image; // 작성자 프로필 이미지
+    private String author_nickname; // 작성자 닉네임
 }

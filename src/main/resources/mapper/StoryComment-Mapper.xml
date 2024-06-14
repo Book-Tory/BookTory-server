@@ -9,7 +9,9 @@
             sc.comment_content,
             sc.createDate,
             sc.modifiedDate,
-            sc.story_board_id
+            sc.story_board_id,
+            u.user_img As author_profile_image,
+            u.user_nickname AS author_nickname
 
         FROM
             mystory_comment sc
