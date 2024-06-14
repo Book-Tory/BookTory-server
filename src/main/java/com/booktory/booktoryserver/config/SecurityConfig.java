@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -51,22 +52,24 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable());
 
         http
-                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80"));
-                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                        config.setAllowCredentials(true);
-                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
-                        config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
-                        config.setMaxAge(3600L); // 1시간
-                        return config;
-                    }
-                }));
+                .cors((cors) -> cors.configurationSource(corsConfigurationSource()));
 
-        http
-                .cors((cors) -> cors.disable());
+//        http
+//                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+//                    @Override
+//                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//                        CorsConfiguration config = new CorsConfiguration();
+//                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80",  "http://52.78.9.158"));
+//                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//                        config.setAllowCredentials(true);
+//                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
+//                        config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
+//                        config.setMaxAge(3600L); // 1시간
+//                        return config;
+//                    }
+//                }));
+
+
 
         http
                 .formLogin((formLogin) -> formLogin.disable());
@@ -95,6 +98,21 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80", "http://52.78.9.158"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
+        configuration.setMaxAge(3600L); // 1시간
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
