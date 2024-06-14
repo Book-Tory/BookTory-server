@@ -50,21 +50,23 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable());
 
-        http
-                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                        CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80"));
-                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                        config.setAllowCredentials(true);
-                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
-                        config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
-                        config.setMaxAge(3600L); // 1시간
-                        return config;
-                    }
-                }));
+//        http
+//                .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
+//                    @Override
+//                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//                        CorsConfiguration config = new CorsConfiguration();
+//                        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://52.78.9.158:5173", "http://52.78.9.158:80"));
+//                        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//                        config.setAllowCredentials(true);
+//                        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));
+//                        config.setExposedHeaders(Arrays.asList("Authorization", "access", "refresh"));
+//                        config.setMaxAge(3600L); // 1시간
+//                        return config;
+//                    }
+//                }));
 
+        http
+                .cors((cors) -> cors.disable());
 
         http
                 .formLogin((formLogin) -> formLogin.disable());
