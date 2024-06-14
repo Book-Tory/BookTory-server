@@ -20,7 +20,8 @@ import java.util.List;
 public class StoryController {
     private final StoryService storyService;
 
-    @GetMapping("/mystories")//독후감(스토리) 전체 조회
+    //독후감(스토리) 전체 조회
+    @GetMapping("/mystories")
     public CustomResponse getAllStory(){
         List<StoryEntity> stories = storyService.getAllStory();
 
@@ -32,30 +33,37 @@ public class StoryController {
     }
 
 
+    //독후감 상세보기
     @GetMapping("/{story_board_id}")
     public StoryEntity getStoryById (@PathVariable("story_board_id") Long story_board_id){
         return storyService.getStoryById(story_board_id);
     }
 
 
-
-    @PostMapping//독후감(스토리) 등록(작성)
+    //독후감(스토리) 등록(작성)
+    @PostMapping
     public void createStory(@RequestBody StoryDTO storyDTO){
         System.out.println("storyDTO = " + storyDTO);
         storyService.createStory(storyDTO);
     }
 
-    @DeleteMapping("/{id}") //독후감(스토리) 게시물 id를 통한 삭제
+    //독후감(스토리) 게시물 id를 통한 삭제
+    @DeleteMapping("/{id}")
     public void deleteStory(@PathVariable Long id){
         storyService.deleteStory(id);
     }
 
-    @PutMapping("/{id}") //독후감(스토리) 게시물 id를 통한 업데이트
+
+    //독후감(스토리) 게시물 id를 통한 업데이트
+    @PutMapping("/{id}")
     public void updateStory(@PathVariable Long id,@RequestBody StoryDTO storyDTO){
         System.out.println("book_id = " + id);
         storyService.updateStory(id, storyDTO);
     }
 
+
+
+//----------------------------------------------------------------------------------
 
 
     //입력한 값에 따른 책 전체 조회

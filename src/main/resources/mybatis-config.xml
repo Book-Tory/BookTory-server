@@ -27,6 +27,8 @@
 
 
         <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
+        <typeAlias alias="storyComment" type="com.booktory.booktoryserver.BookStory.domain.CommentEntity"/>
+
         <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
         <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
 

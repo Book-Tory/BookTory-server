@@ -1,13 +1,12 @@
 package com.booktory.booktoryserver.BookStory.service;
 
 import com.amazonaws.Response;
+import com.booktory.booktoryserver.BookStory.domain.BookEntity;
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.NaverSearchBookResponseDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
 import com.booktory.booktoryserver.BookStory.mapper.StoryMapper;
-import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
-import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
