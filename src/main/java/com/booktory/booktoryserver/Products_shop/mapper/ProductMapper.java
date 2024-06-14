@@ -3,7 +3,10 @@ package com.booktory.booktoryserver.Products_shop.mapper;
 import com.booktory.booktoryserver.Products_shop.domain.Product;
 import com.booktory.booktoryserver.Products_shop.domain.ProductImageFile;
 import com.booktory.booktoryserver.Products_shop.domain.ProductsList;
+import com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,7 +16,8 @@ public interface ProductMapper {
 
     int saveFile(ProductImageFile productImageFile);
 
-    List<ProductsList> findAllProducts();
+    List<ProductsList> findAllProducts(ProductFilterDTO requestList);
+    int listCnt(ProductFilterDTO productFilterDTO);
 
     List<ProductsList> findById(Long productId);
 

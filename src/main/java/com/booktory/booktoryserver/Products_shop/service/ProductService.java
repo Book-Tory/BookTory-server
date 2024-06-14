@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.Products_shop.domain.Product;
 import com.booktory.booktoryserver.Products_shop.domain.ProductImageFile;
 import com.booktory.booktoryserver.Products_shop.domain.ProductsList;
+import com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductRegisterDTO;
 import com.booktory.booktoryserver.Products_shop.dto.request.ProductUpdateDTO;
 import com.booktory.booktoryserver.Products_shop.dto.response.ProductResponseDTO;
@@ -15,6 +16,9 @@ import com.booktory.booktoryserver.Products_shop.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -88,12 +92,15 @@ public class ProductService {
 
 
 
-    public List<ProductResponseDTO> findAllProducts() {
-        List<ProductsList> productsLists = productMapper.findAllProducts();
+    public Page<ProductResponseDTO> findAllProducts(ProductFilterDTO productFilterDTO, Pageable pageable) {
+
+
+        List<ProductsList> productsLists = productMapper.findAllProducts(productFilterDTO);
+
 
         Map<Long, ProductsList> productsMap = new HashMap<>();
-        for (ProductsList product : productsLists) {
 
+        for (ProductsList product : productsLists) {
             if (!productsMap.containsKey(product.getProduct_id())) {
                 product.setImageUrls(new ArrayList<>());
                 productsMap.put(product.getProduct_id(), product);
@@ -106,9 +113,17 @@ public class ProductService {
             }
         }
 
-        return productsMap.values().stream()
+        int total = productMapper.listCnt(productFilterDTO);
+
+        // 페이지 처리를 합니다.
+        List<ProductResponseDTO> content = productsMap.values().stream()
+                .skip(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .map(product -> ProductResponseDTO.toProductInfo(product, product.getImageUrls()))
                 .collect(Collectors.toList());
+
+
+        return new PageImpl<>(content, pageable, total);
     }
 
 

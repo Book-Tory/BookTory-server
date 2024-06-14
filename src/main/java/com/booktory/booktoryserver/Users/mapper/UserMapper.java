@@ -10,4 +10,5 @@ public interface UserMapper {
     int insertUser(UserEntity user);
 
     Optional<UserEntity> findByEmail(String email);
+
 }
