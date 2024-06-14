@@ -19,4 +19,20 @@
             sc.story_board_id = #{story_board_id}
     </select>
 
+    <insert id="createComment" parameterType="storyComment">
+        INSERT INTO mystory_comment (comment_content, createDate, modifiedDate, story_board_id, comment_author_user_id)
+        VALUES (#{comment_content}, NOW(), NOW(), #{story_board_id}, #{comment_author_user_id})
+    </insert>
+
+    <delete id="deleteComment" parameterType="long">
+        DELETE FROM mystory_comment WHERE comment_id = #{comment_id}
+    </delete>
+
+    <update id="updateComment" parameterType="storyComment">
+        UPDATE mystory_comment
+        SET comment_content = #{comment_content}, modifiedDate = NOW()
+        WHERE comment_id = #{comment_id}
+    </update>
+
+
 </mapper>
