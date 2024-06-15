@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
+      
+        <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
+        <typeAlias alias="usedBookImage" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookImage" />
+      
+        <typeAlias alias="chat" type="com.booktory.booktoryserver.Chat.domain.ChatEntity" />
+        <typeAlias alias="chatMessage" type="com.booktory.booktoryserver.Chat.domain.ChatMessageEntity" />
+        <typeAlias alias="chatList" type="com.booktory.booktoryserver.Chat.domain.ChatListEntity" />
+        <typeAlias alias="chatHistory" type="com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity" />
+      
+        <typeAlias alias="wish" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishEntity" />
+      
+        <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
+        <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
+        <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
+
+        <typeAlias alias="productSaveFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
+        <typeAlias alias="productList" type="com.booktory.booktoryserver.Products_shop.domain.ProductsList" />
+        <typeAlias alias="productImageFile" type="com.booktory.booktoryserver.Products_shop.domain.ProductImageFile" />
+        <typeAlias alias="user" type="com.booktory.booktoryserver.Users.model.UserEntity" />
+        <typeAlias alias="productFilter" type="com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO" />
+
+
+        <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
+        <typeAlias alias="storyComment" type="com.booktory.booktoryserver.BookStory.domain.CommentEntity"/>
+
+        <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
+        <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>
+
+        <typeAlias alias="productCart" type="com.booktory.booktoryserver.ProductCart.model.ProductCart"/>
+        <typeAlias alias="productCartList" type="com.booktory.booktoryserver.ProductCart.model.ProductCartList"/>
+
+        <typeAlias alias="qnaBoard" type="com.booktory.booktoryserver.QnABoard.domain.QnaBoard"/>
+        <typeAlias alias="qnaComment" type="com.booktory.booktoryserver.QnAComment.model.QnaComment"/>
+
+        <typeAlias alias="refreshToken" type="com.booktory.booktoryserver.Users.model.RefreshEntity"/>
+
+    </typeAliases>
+
+    <typeHandlers>
+        <typeHandler javaType="com.booktory.booktoryserver.Products_shop.constant.ProductStock"
+                     handler="com.booktory.booktoryserver.Products_shop.handler.ProductStockTypeHandler"/>
+
+        <typeHandler javaType="com.booktory.booktoryserver.Users.constant.Role"
+                     handler="com.booktory.booktoryserver.Users.handler.RoleTypeHandler"/>
+
+        <typeHandler javaType="com.booktory.booktoryserver.Users.constant.Gender"
+                     handler="com.booktory.booktoryserver.Users.handler.GenderTypeHandler"/>
+    </typeHandlers>
+</configuration>

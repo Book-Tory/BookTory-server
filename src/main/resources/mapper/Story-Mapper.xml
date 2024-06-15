@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booktory.booktoryserver.BookStory.mapper.StoryMapper">
+
+    <select id = "getAllStory" resultType="story">
+        select
+            sb.story_board_id,
+            sb.mystory_name,
+            sb.mystory_content,
+            sb.mystory_date,
+            sb.read_date,
+            sb.love_count,
+            u.user_id,
+            u.user_nickname,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_publisher,
+            bi.book_isbn
+        from
+            mystory_board sb
+                JOIN
+            users u ON sb.user_id = u.user_id
+                JOIN
+            book_information bi ON sb.book_id = bi.book_id
+
+    </select>
+
+
+    <select id = "getStoryById" resultType="story">
+        select
+            sb.story_board_id,
+            sb.mystory_name,
+            sb.mystory_content,
+            sb.mystory_date,
+            sb.read_date,
+            sb.love_count,
+            u.user_id,
+            u.user_nickname,
+            bi.book_id,
+            bi.book_name,
+            bi.book_author,
+            bi.book_publisher,
+            bi.book_isbn
+        from
+            mystory_board sb
+                JOIN
+            users u ON sb.user_id = u.user_id
+                JOIN
+            book_information bi ON sb.book_id = bi.book_id
+        where story_board_id = #{story_board_id}
+    </select>
+
+
+
+    <insert id = "createStory">
+        INSERT INTO mystory_board (mystory_type_id, mystory_name, mystory_content, user_id, book_id)
+        VALUES (#{mystory_type_id}, #{mystory_name}, #{mystory_content}, #{user_id}, #{book_id});
+    </insert>
+
+    <delete id = "deleteStory">
+        DELETE FROM mystory_board WHERE story_board_id = #{story_board_id};
+    </delete>
+
+    <update id="updateStory">
+        UPDATE mystory_board
+        SET mystory_name = #{mystory_name}, mystory_content = #{mystory_content},  user_id = #{user_id}, book_id = #{book_id}
+        WHERE story_board_id = #{story_board_id};
+    </update>
+
+
+    <select id="getBookId" resultType="Long">
+        select book_id
+        from book_information
+        where book_isbn = #{book_isbn}
+    </select>
+
+    <insert id="saveBookInfo" parameterType="story" keyProperty="book_id" useGeneratedKeys="true">
+        insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
+        values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
+    </insert>
+
+
+</mapper>

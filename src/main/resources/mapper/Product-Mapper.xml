@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.Products_shop.mapper.ProductMapper">
+
+    <insert id="register" parameterType="product" useGeneratedKeys="true" keyProperty="product_id">
+        INSERT INTO products (product_name, product_price, product_script, product_category, product_stock, product_image_check)
+        VALUES (#{product_name}, #{product_price}, #{product_script}, #{product_category}, #{product_stock}, #{product_image_check})
+    </insert>
+
+    <insert id="saveFile" parameterType="productSaveFile">
+        INSERT INTO product_image (originalImageName, storedImageName, product_id)
+        VALUES (#{originalImageName}, #{storedImageName}, #{product_id})
+    </insert>
+
+
+    <select id="findAllProducts" resultType="productList" parameterType="productFilter">
+        SELECT
+        p.product_id,
+        p.product_name,
+        p.product_price,
+        p.product_script,
+        p.product_stock,
+        p.product_category,
+        p.product_image_check,
+        p.created_at,
+        p.updated_at,
+        i.image_id,
+        i.originalImageName,
+        i.storedImageName
+        FROM
+        products p
+        LEFT JOIN
+        product_image i ON p.product_id = i.product_id
+        <where>
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+            <if test="productCategory != null and productCategory != ''">
+                AND p.product_category = #{productCategory}
+            </if>
+        </where>
+        ORDER BY p.product_id
+    </select>
+
+
+    <select id="listCnt" parameterType="productFilter" resultType="int">
+        SELECT COUNT(*) FROM products
+        <where>
+            <if test="productName != null and productName != ''">
+                AND product_name LIKE '%' || #{productName} || '%'
+            </if>
+            <if test="productCategory != null and productCategory != ''">
+                AND product_category = #{productCategory}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="findById" resultType="productList" parameterType="long">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.product_price,
+            p.product_script,
+            p.product_stock,
+            p.product_category,
+            p.product_image_check,
+            p.created_at,
+            p.updated_at,
+            i.image_id,
+            i.originalImageName,
+            i.storedImageName
+        FROM
+            products p
+                LEFT JOIN
+            product_image i ON p.product_id = i.product_id
+        WHERE p.product_id = #{p.product_id}
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM products WHERE product_id = #{product.id}
+    </delete>
+
+
+    <select id="findImagesByProductId" parameterType="long" resultType="productImageFile">
+        SELECT storedImageName FROM product_image WHERE product_id = #{product_id}
+    </select>
+
+    <select id="imageSearch" parameterType="long" resultType="productImageFile">
+        SELECT storedImageName FROM product_image WHERE image_id = #{iamge_id}
+    </select>
+
+    <delete id="deleteByImage" parameterType="long">
+        DELETE FROM product_image WHERE image_id = #{iamge_id};
+    </delete>
+
+    <update id="updateByProduct" parameterType="product">
+        UPDATE products
+        SET product_name = #{product_name},
+            product_price = #{product_price},
+            product_script = #{product_script},
+            product_stock = #{product_stock},
+            product_category = #{product_category},
+            product_image_check = #{product_image_check},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE product_id = #{product_id}
+    </update>
+
+
+</mapper>
