@@ -25,16 +25,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        System.out.println("httpRequest: " + httpRequest);
-
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        System.out.println("httpResponse: " + httpResponse);
 
         // path and method verify
         String requestUri = httpRequest.getRequestURI();
-
-        System.out.println("requestUri: " + requestUri);
 
         if (!requestUri.matches("^(/api)?/logout$")) {
             filterChain.doFilter(request, response);
@@ -42,8 +36,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         String requestMethod = httpRequest.getMethod();
-
-        System.out.println("requestMethod: " + requestMethod);
 
         if (!requestMethod.equals("POST")) {
             filterChain.doFilter(request, response);
@@ -54,7 +46,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
         String refresh = null;
         Cookie[] cookies = httpRequest.getCookies();
 
-        System.out.println("cookies: " + cookies);
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -63,9 +54,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
                 }
             }
         }
-
-        System.out.println("refresh: " + refresh);
-
         // refresh null check
         if (refresh == null) {
             httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -87,7 +75,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        System.out.println("category: " + category);
 
         // DB에 저장되어 있는지 확인
         Boolean isExist = refreshMapper.existsByRefresh(refresh);
@@ -96,7 +83,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        System.out.println("isExist " + isExist);
 
         // 로그아웃 진행
         // Refresh 토큰 DB에서 제거

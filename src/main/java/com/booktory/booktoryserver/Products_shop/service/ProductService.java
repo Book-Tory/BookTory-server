@@ -15,6 +15,7 @@ import com.booktory.booktoryserver.Products_shop.mapper.ProductMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,22 +65,31 @@ public class ProductService {
                 String originalFilename = productFile.getOriginalFilename();
                 String storeFilename = System.currentTimeMillis() + originalFilename;
 
+                // 썸네일 생성 및 업로드
+                ByteArrayOutputStream thumbnailOutputStream = new ByteArrayOutputStream();
+                Thumbnails.of(productFile.getInputStream())
+                        .size(500, 500) // 썸네일 크기 설정
+                        .toOutputStream(thumbnailOutputStream);
+
                 ProductImageFile productImageFile = ProductImageFile.builder()
                         .product_id(productId)
                         .originalImageName(originalFilename)
                         .storedImageName(storeFilename)
                         .build();
 
-                // 파일 메타데이터 설정
+
+                byte[] thumbnailData = thumbnailOutputStream.toByteArray();
+                // 썸네일 파일 메타데이터 설정
+                ByteArrayInputStream thumbnailInputStream = new ByteArrayInputStream(thumbnailData);
                 ObjectMetadata objectMetadata = new ObjectMetadata();
-                objectMetadata.setContentLength(productFile.getSize());
+                objectMetadata.setContentLength(thumbnailData.length);
                 objectMetadata.setContentType(productFile.getContentType());
 
                 // 저장될 위치 + 파일명
                 String key = "profile" + "/" + storeFilename;
 
                 // 클라우드에 파일 저장
-                amazonS3Client.putObject(bucketName, key, productFile.getInputStream(), objectMetadata);
+                amazonS3Client.putObject(bucketName, key, thumbnailInputStream, objectMetadata);
                 amazonS3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
 
                 productMapper.saveFile(productImageFile);

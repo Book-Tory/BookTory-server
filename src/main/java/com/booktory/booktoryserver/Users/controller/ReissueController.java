@@ -21,18 +21,22 @@ public class ReissueController {
 
     private final RefreshMapper refreshMapper;
 
-    @PostMapping("/reissue")
+    @PostMapping("/api/reissue")
     public CustomResponse reissue(HttpServletRequest request, HttpServletResponse response){
 
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
 
+        System.out.println("cookie " + cookies);
+
         for(Cookie cookie : cookies){
             if(cookie.getName().equals("refresh")){
                 refresh = cookie.getValue();
             }
         }
+
+        System.out.println("refresh: " + refresh);
 
         if(refresh == null){
 
@@ -70,7 +74,7 @@ public class ReissueController {
         String role = jwtUtil.getRole(refresh);
 
         //make new JWT
-        String newAccess = jwtUtil.createToken("access", username, role, 600000L);
+        String newAccess = jwtUtil.createToken("access", username, role, 1800000L);
         String newRefresh = jwtUtil.createToken("refresh", username, role, 86400000L);
 
         //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
@@ -90,7 +94,8 @@ public class ReissueController {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);
-        //cookie.setPath("/");
+        cookie.setPath("/");
+        cookie.setDomain("52.78.9.158");
         cookie.setHttpOnly(true);
 
         return cookie;
