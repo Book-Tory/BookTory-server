@@ -18,7 +18,8 @@
             bi.book_name,
             bi.book_author,
             bi.book_publisher,
-            bi.book_isbn
+            bi.book_isbn,
+            bi.book_image
         from
             mystory_board sb
                 JOIN

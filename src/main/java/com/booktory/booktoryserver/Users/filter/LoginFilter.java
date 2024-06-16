@@ -65,7 +65,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String role = auth.getAuthority();
 
         //토큰 생성
-        String access = jwtUtil.createToken("access", username, role, 300000L);
+        String access = jwtUtil.createToken("access", username, role, 18000000L);
         String refresh = jwtUtil.createToken("refresh", username, role, 86400000L);
 
         addRefreshEntity(username, refresh, 86400000L);
@@ -83,7 +83,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);  // https 통신 일때
         cookie.setPath("/");
-        cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
+//        cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
         cookie.setHttpOnly(true);
 
         return cookie;

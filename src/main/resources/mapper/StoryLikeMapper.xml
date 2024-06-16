@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booktory.booktoryserver.BookStory.mapper.StoryLikeMapper">
+
+    <select id = "isAlreadyLiked" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM `like`
+        WHERE user_id = #{user_id} AND story_board_id = #{story_board_id}
+    </select>
+
+    <insert id="likeStory" parameterType="map">
+        INSERT INTO `like` (user_id, story_board_id) VALUES (#{user_id}, #{story_board_id})
+    </insert>
+
+    <update id="incrementLoveCount">
+        UPDATE mystory_board
+        SET love_count = love_count + 1
+        WHERE story_board_id = #{story_board_id}
+    </update>
+
+
+
+</mapper>
