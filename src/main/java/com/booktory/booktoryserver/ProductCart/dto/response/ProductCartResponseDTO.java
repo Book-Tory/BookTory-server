@@ -18,6 +18,8 @@ public class ProductCartResponseDTO {
     private String product_name;
     private String product_price;
     private String product_script;
+    private int product_stock;
+    private String image_url;
 
     public static ProductCartResponseDTO toProductCartResponseD(ProductCartList cart) {
         return ProductCartResponseDTO.builder()
@@ -26,6 +28,8 @@ public class ProductCartResponseDTO {
                 .product_name(cart.getProduct_name())
                 .product_price(cart.getProduct_price())
                 .product_script(cart.getProduct_script())
+                .product_stock(cart.getProduct_stock_count())
+                .image_url(cart.getImage_url())
                 .build();
     }
 }
