@@ -11,4 +11,8 @@ public interface StoryLikeMapper {
     void likeStory(Long story_board_id, Long user_id);
 
     void incrementLoveCount(Long story_board_id);
+
+    void unlikeStory(Long story_board_id, Long user_id);
+
+    void decrementLoveCount(Long story_board_id);
 }

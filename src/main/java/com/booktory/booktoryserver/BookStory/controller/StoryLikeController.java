@@ -37,4 +37,21 @@ public class StoryLikeController {
         }
     }
 
+
+    @DeleteMapping("/{story_board_id}/like")
+    public CustomResponse unlikeStory(@PathVariable Long story_board_id, @AuthenticationPrincipal UserDetails userDetails){
+        String useremail = userDetails.getUsername();
+        Optional<UserEntity> userEntity = userMapper.findByEmail(useremail);
+        Long user_id = userEntity.get().getUser_id();
+
+        boolean result = (storyLikeService.unlikeStory(story_board_id, user_id));
+        if(result){
+            return CustomResponse.ok("좋아요 취소 성공", true);
+        }else{
+            return CustomResponse.failure("좋아요를 취소 할 수 없습니다. 좋아요를 누르지 않은 게시물입니다.");
+        }
+    }
+
+
+
 }

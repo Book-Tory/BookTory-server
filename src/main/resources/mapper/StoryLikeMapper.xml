@@ -19,6 +19,15 @@
         WHERE story_board_id = #{story_board_id}
     </update>
 
+    <delete id="unlikeStory">
+        DELETE FROM `like`
+        WHERE user_id = #{user_id} AND story_board_id = #{story_board_id}
+    </delete>
 
+    <update id="decrementLoveCount">
+        UPDATE mystory_board
+        SET love_count = love_count - 1
+        WHERE story_board_id = #{story_board_id}
+    </update>
 
 </mapper>
