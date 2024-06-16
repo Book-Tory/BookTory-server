@@ -30,4 +30,10 @@
         WHERE story_board_id = #{story_board_id}
     </update>
 
+    <select id = "getLoveCount" resultType="int">
+        SELECT love_count
+        FROM mystory_board
+        WHERE story_board_id = #{stroy_board_id}
+    </select>
+
 </mapper>

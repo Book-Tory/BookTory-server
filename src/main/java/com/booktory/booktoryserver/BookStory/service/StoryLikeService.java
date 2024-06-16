@@ -35,7 +35,9 @@ public class StoryLikeService {
         //좋아요를 취소
         else{
             storyLikeMapper.unlikeStory(story_board_id, user_id);
-            storyLikeMapper.decrementLoveCount(story_board_id);
+            if(storyLikeMapper.getLoveCount(story_board_id) > 0) {
+                storyLikeMapper.decrementLoveCount(story_board_id);
+            }
             return true;
         }
 
