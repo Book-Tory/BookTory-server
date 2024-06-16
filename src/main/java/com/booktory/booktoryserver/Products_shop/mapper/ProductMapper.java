@@ -21,6 +21,8 @@ public interface ProductMapper {
 
     List<ProductsList> findById(Long productId);
 
+    Product findByProductId(Long productId);
+
     int deleteById(Long productId);
 
     int updateByProduct(Product product);
