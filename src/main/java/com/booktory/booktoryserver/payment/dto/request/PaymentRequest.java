@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.payment.dto.request;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.List;
 @ToString
 public class PaymentRequest {
 
-    private String merchantUid;
-    private Long amount;
+    private String merchant_uid;
+    private BigDecimal amount;
     private List<OrderItem> items;
 }
