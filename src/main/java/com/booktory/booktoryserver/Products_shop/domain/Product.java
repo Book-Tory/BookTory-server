@@ -30,7 +30,7 @@ public class Product {
                 .product_price(productDTO.getProduct_price())
                 .product_script(productDTO.getProduct_script())
                 .product_stock(ProductStock.IN_STOCK) // 기본값 설정
-                .product_category("T-SHIRT") // 기본값 설정
+                .product_category(productDTO.getProduct_category()) // 기본값 설정
                 .product_image_check(productDTO.getProductImageCheck())
                 .build();
     }
