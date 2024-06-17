@@ -45,12 +45,11 @@ public class ChatController {
     public CustomResponse getChatRoomList (@AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
 
-        List<ChatListEntity> chatList = chatService.getChatRoomList(username);
-
         Optional<UserEntity> userEntity = userMapper.findByEmail(username);
 
         Long userId = userEntity.get().getUser_id();
 
+        List<ChatListEntity> chatList = chatService.getChatRoomList(username);
         ChatRoomResponseDTO response = new ChatRoomResponseDTO(userId, chatList);
 
         if (!chatList.isEmpty()) {
