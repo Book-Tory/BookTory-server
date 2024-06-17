@@ -59,4 +59,8 @@ public class ProductCartService {
 
         return productCartMapper.deleteCart(cartId);
     }
+
+    public int findCartCount(Long userId) {
+        return productCartMapper.findCartCount(userId);
+    }
 }

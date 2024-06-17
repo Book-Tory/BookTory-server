@@ -17,4 +17,6 @@ public interface ProductCartMapper {
     int deleteCart(Long cartId);
 
     int deleteByOrderCart(Long product_id);
+
+    int findCartCount(Long userId);
 }
