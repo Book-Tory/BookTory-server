@@ -31,6 +31,7 @@ public class StoryEntity {
     private String book_author;
     private String book_publisher;
     private String book_isbn;
+    private String book_image;
 
 
     //Entity를 DTO로 변환하는 정적 메서드

@@ -148,9 +148,12 @@ public class StoryService {
         return storyMapper.getAllStory();
     }
 
-    public void createStory(StoryDTO storyDTO) {
+    //독후감 등록하기
+    public String createStory(StoryDTO storyDTO, String useremail) throws IOException{
         StoryEntity storyEntity = StoryDTO.toEntity(storyDTO);
         storyMapper.createStory(storyEntity);
+
+        return "독후감이 성공적으로 등록되었습니다.";
     }
 
     public void deleteStory(Long id){
