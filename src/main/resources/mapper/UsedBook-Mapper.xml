@@ -4,42 +4,40 @@
 <mapper namespace="com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper">
     <select id="getList" resultType="usedBook">
         SELECT
-            ub.used_book_id,
-            ub.title,
-            ub.discount,
-            ub.description,
-            ub.created_at,
-            u.user_id,
-            u.user_nickname,
-            bc.book_condition_id,
-            bc.condition,
-            bi.book_id,
-            bi.book_name,
-            bi.book_author,
-            bi.book_price,
-            bi.book_publisher,
-            bi.book_publication_date,
-            bi.book_isbn,
-            ubi.used_book_image_id,
-            ubi.original_image_name,
-            ubi.stored_image_name
+        ub.used_book_id,
+        ub.title,
+        ub.discount,
+        ub.description,
+        ub.created_at,
+        u.user_id,
+        u.user_nickname,
+        bc.book_condition_id,
+        bc.condition,
+        bi.book_id,
+        bi.book_name,
+        bi.book_author,
+        bi.book_price,
+        bi.book_publisher,
+        bi.book_publication_date,
+        bi.book_isbn,
+        ubi.used_book_image_id,
+        ubi.original_image_name,
+        ubi.stored_image_name
         FROM
-            used_book ub
-                JOIN
-            users u ON ub.user_id = u.user_id
-                JOIN
-            book_condition bc ON ub.book_condition_id = bc.book_condition_id
-                JOIN
-            book_information bi ON ub.book_id = bi.book_id
-                LEFT JOIN
-            used_book_image ubi ON ub.used_book_id = ubi.used_book_id
+        used_book ub
+        JOIN users u ON ub.user_id = u.user_id
+        JOIN book_condition bc ON ub.book_condition_id = bc.book_condition_id
+        JOIN book_information bi ON ub.book_id = bi.book_id
+        LEFT JOIN used_book_image ubi ON ub.used_book_id = ubi.used_book_id
         <where>
             <if test="searchKey != null and searchKey != ''">
                 ub.title LIKE CONCAT('%', #{searchKey}, '%')
             </if>
         </where>
-        order by ub.used_book_id
-
+        GROUP BY ub.used_book_id
+        ORDER BY ub.used_book_id DESC
+        LIMIT #{pageRequest.size}
+        OFFSET #{pageRequest.skip}
     </select>
 
     <select id="getPostById" resultType="usedBook">
@@ -128,4 +126,22 @@
     <select id="findIdByEmail" resultType="Long">
         select user_id from users where user_email = #{username}
     </select>
+    
+<!--    중고서적 글 갯수-->
+    <select id="countList" resultType="int">
+        SELECT
+        COUNT(DISTINCT ub.used_book_id)
+        FROM
+        used_book ub
+        JOIN users u ON ub.user_id = u.user_id
+        JOIN book_condition bc ON ub.book_condition_id = bc.book_condition_id
+        JOIN book_information bi ON ub.book_id = bi.book_id
+        LEFT JOIN used_book_image ubi ON ub.used_book_id = ubi.used_book_id
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                AND ub.title LIKE CONCAT('%', #{searchKey}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

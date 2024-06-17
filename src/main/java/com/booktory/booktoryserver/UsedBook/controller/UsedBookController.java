@@ -1,19 +1,22 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
-import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.ResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
+import com.booktory.booktoryserver.UsedBook.page.PageRequest;
+import com.booktory.booktoryserver.UsedBook.page.PageResponse;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookService;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -53,13 +56,18 @@ public class UsedBookController {
             return CustomResponse.failure("조회 실패");
         }
     }
+
     // 중고 서적 글 리스트 조회
     @GetMapping("/list")
-    public CustomResponse getList(@RequestParam(value = "searchKey", required = false) String searchKey) {
-        List<UsedBookPostDTO> list = usedBookService.getList(searchKey);
+    public CustomResponse getList(@Valid PageRequest pageRequest, BindingResult bindingResult, @RequestParam(value = "searchKey", required = false) String searchKey) {
+        if (bindingResult.hasErrors()) {
+            pageRequest = PageRequest.builder().build();
+        }
 
-        if (!list.isEmpty()) {
-            return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);
+        PageResponse<UsedBookPostDTO> pageResponse = usedBookService.getList(searchKey, pageRequest);
+
+        if (!pageResponse.getList().isEmpty()) {
+            return CustomResponse.ok("중고 서적 글 리스트 조회 성공", pageResponse);
         } else {
             return CustomResponse.failure("중고 서적 글 리스트 조회 실패");
         }
