@@ -15,4 +15,6 @@ public interface ProductCartMapper {
     List<ProductCartList> selectCartProductsByUserId(Long userId);
 
     int deleteCart(Long cartId);
+
+    int deleteByOrderCart(Long product_id);
 }

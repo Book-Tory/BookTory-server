@@ -112,5 +112,7 @@
         WHERE product_id = #{product_id}
     </update>
 
-
+    <select id="findByProductName" resultType="product" parameterType="String">
+        SELECT * FROM products WHERE product_name = #{productName}
+    </select>
 </mapper>

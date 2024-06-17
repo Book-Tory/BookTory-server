@@ -32,4 +32,6 @@ public interface ProductMapper {
     ProductImageFile imageSearch(Long imageId);
 
     int deleteByImage(Long image_id);
+
+    Product findByProductName(String productName);
 }
