@@ -9,8 +9,11 @@ import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -42,20 +45,27 @@ public class StoryController {
 
     //독후감(스토리) 등록(작성)
     @PostMapping
-    public void createStory(@RequestBody StoryDTO storyDTO){
-        System.out.println("storyDTO = " + storyDTO);
-        storyService.createStory(storyDTO);
+    public CustomResponse createStory(@RequestBody StoryDTO storyDTO, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        String useremail = userDetails.getUsername();
+
+        String result = storyService.createStory(storyDTO, useremail);
+
+        if(result != null){
+            return CustomResponse.ok(result, null);
+        }else{
+            return CustomResponse.failure("독후감 등록에 실패하였습니다");
+        }
     }
 
     //독후감(스토리) 게시물 id를 통한 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{story_board_id}")
     public void deleteStory(@PathVariable Long id){
         storyService.deleteStory(id);
     }
 
 
     //독후감(스토리) 게시물 id를 통한 업데이트
-    @PutMapping("/{id}")
+    @PutMapping("/{story_board_id}")
     public void updateStory(@PathVariable Long id,@RequestBody StoryDTO storyDTO){
         System.out.println("book_id = " + id);
         storyService.updateStory(id, storyDTO);

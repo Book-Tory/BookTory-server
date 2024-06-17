@@ -4,17 +4,17 @@
 <configuration>
     <typeAliases>
         <typeAlias alias="image" type="com.booktory.booktoryserver.Image_S3.domain.ImageEntity" />
-      
+
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
         <typeAlias alias="usedBookImage" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookImage" />
-      
+
         <typeAlias alias="chat" type="com.booktory.booktoryserver.Chat.domain.ChatEntity" />
         <typeAlias alias="chatMessage" type="com.booktory.booktoryserver.Chat.domain.ChatMessageEntity" />
         <typeAlias alias="chatList" type="com.booktory.booktoryserver.Chat.domain.ChatListEntity" />
         <typeAlias alias="chatHistory" type="com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity" />
-      
+
         <typeAlias alias="wish" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishEntity" />
-      
+
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
         <typeAlias alias="saveFile" type="com.booktory.booktoryserver.Image_S3.domain.ImageFileEntity" />
@@ -28,6 +28,7 @@
 
         <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
         <typeAlias alias="storyComment" type="com.booktory.booktoryserver.BookStory.domain.CommentEntity"/>
+        <typeAlias alias="like" type="com.booktory.booktoryserver.BookStory.domain.Like.LikeEntity"/>
 
         <typeAlias alias="userdata" type="com.booktory.booktoryserver.ProductReview.domain.UserData"/>
         <typeAlias alias="productReview" type="com.booktory.booktoryserver.ProductReview.domain.ProductReview"/>

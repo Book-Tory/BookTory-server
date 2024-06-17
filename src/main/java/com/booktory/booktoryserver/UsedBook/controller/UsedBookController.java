@@ -3,8 +3,11 @@ package com.booktory.booktoryserver.UsedBook.controller;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
+import com.booktory.booktoryserver.UsedBook.dto.response.ResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookService;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/used-books")
@@ -23,6 +27,8 @@ import java.util.List;
 
 public class UsedBookController {
     private final UsedBookService usedBookService;
+
+    private final UserMapper userMapper;
 
     // 책 전체 조회
     @GetMapping("/books")
@@ -47,11 +53,10 @@ public class UsedBookController {
             return CustomResponse.failure("조회 실패");
         }
     }
-
     // 중고 서적 글 리스트 조회
     @GetMapping("/list")
-    public CustomResponse getList () {
-        List<UsedBookPostDTO> list = usedBookService.getList();
+    public CustomResponse getList(@RequestParam(value = "searchKey", required = false) String searchKey) {
+        List<UsedBookPostDTO> list = usedBookService.getList(searchKey);
 
         if (!list.isEmpty()) {
             return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);
@@ -62,11 +67,18 @@ public class UsedBookController {
 
     // 중고 서적 글 상세보기
     @GetMapping("/{used_book_id}")
-    public CustomResponse getPostById (@PathVariable ("used_book_id") Long used_book_id) {
+    public CustomResponse getPostById (@PathVariable ("used_book_id") Long used_book_id, @AuthenticationPrincipal UserDetails user) {
         UsedBookPostDTO usedBookPost = usedBookService.getPostById(used_book_id);
 
+        String userEmail = user.getUsername();
+
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+
+        Long userId = userEntity.get().getUser_id();
+
         if (usedBookPost != null) {
-            return CustomResponse.ok("조회 성공", usedBookPost);
+            ResponseDTO response = new ResponseDTO(usedBookPost, userId);
+            return CustomResponse.ok("조회 성공", response);
         } else {
             return CustomResponse.failure("조회 실패");
         }
@@ -122,3 +134,4 @@ public class UsedBookController {
     }
 
 }
+

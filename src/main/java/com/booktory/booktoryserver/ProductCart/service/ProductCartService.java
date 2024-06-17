@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.ProductCart.service;
 
+import com.booktory.booktoryserver.ProductCart.dto.request.CartRequestDTO;
 import com.booktory.booktoryserver.ProductCart.dto.response.ProductCartResponseDTO;
 import com.booktory.booktoryserver.ProductCart.mapper.ProductCartMapper;
 import com.booktory.booktoryserver.ProductCart.model.ProductCart;
@@ -24,7 +25,7 @@ public class ProductCartService {
 
     private final UserMapper userMapper;
 
-    public int cartSave(String username, Long productId) {
+    public int cartSave(String username, Long productId, CartRequestDTO cartRequestDTO) {
         UserEntity user = userMapper.findByEmail(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -36,6 +37,8 @@ public class ProductCartService {
         ProductCart productCart = ProductCart.builder()
                 .productId(productId)
                 .userId(user.getUser_id())
+                .productStockCount(cartRequestDTO.getProductStockCount())
+                .imageUrl(cartRequestDTO.getImageUrl())
                 .build();
 
         return productCartMapper.cartSave(productCart); // 수정된 부분
@@ -47,6 +50,7 @@ public class ProductCartService {
 
 
         List<ProductCartList> productCarts = productCartMapper.selectCartProductsByUserId(user.getUser_id());
+
 
         return productCarts.stream().map(ProductCartResponseDTO::toProductCartResponseD).collect(Collectors.toList());
     }

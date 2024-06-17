@@ -18,4 +18,8 @@ public class ProductCartList {
     private String product_price;
 
     private String product_script;
+
+    private int product_stock_count;
+
+    private String image_url;
 }
