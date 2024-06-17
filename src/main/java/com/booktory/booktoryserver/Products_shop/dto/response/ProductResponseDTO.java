@@ -13,6 +13,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class ProductResponseDTO {
 
     private Long product_id; // 상품 아이디
@@ -24,6 +25,7 @@ public class ProductResponseDTO {
     private int product_image_check; // 파일 첨부 0, 파일 첨부 1
     private LocalDateTime created_at; // 상품 등록일
     private LocalDateTime updated_at; // 상품 수정일
+    private int total; //
     private List<Map<Long, String>> product_image_url;
 
 

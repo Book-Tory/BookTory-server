@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.booktory.booktoryserver.Chat.mapper.ChatMapper">
-    <insert id="createChatRoom" parameterType="chat">
+    <insert id="createChatRoom" parameterType="chat" useGeneratedKeys="true" keyProperty="chat_id">
         insert into chat (seller_id, buyer_id, used_book_id, room_id) values (#{seller_id}, #{buyer_id}, #{used_book_id}, #{room_id})
     </insert>
 
@@ -23,7 +23,7 @@
                 FROM chat_message cm
                 WHERE cm.chat_id = c.chat_id
                 ORDER BY cm.message_created_at DESC
-                          LIMIT 1
+                                                                         LIMIT 1
             ) AS last_message_content,
             (
                 SELECT cm.message_created_at
@@ -50,21 +50,27 @@
             sender.user_email AS sender_email,
             ub.title,
             ub.discount,
-            cm.content AS message_content,
-            cm.message_created_at AS message_created_at
+            (SELECT ubi.stored_image_name
+             FROM used_book_image ubi
+             WHERE ubi.used_book_id = ub.used_book_id
+             ORDER BY ubi.used_book_image_id ASC
+                LIMIT 1) AS stored_image_name, -- 첫 번째 이미지를 선택하는 서브쿼리
+        cm.content AS message_content,
+        cm.message_created_at AS message_created_at
         FROM chat c
-                 JOIN chat_message cm ON c.chat_id = cm.chat_id
-                 JOIN used_book ub ON c.used_book_id = ub.used_book_id
-                 LEFT JOIN users buyer ON c.buyer_id = buyer.user_id
-                 LEFT JOIN users seller ON c.seller_id = seller.user_id
-                 LEFT JOIN users sender ON cm.sender_id = sender.user_id
+            JOIN chat_message cm ON c.chat_id = cm.chat_id
+            JOIN used_book ub ON c.used_book_id = ub.used_book_id
+            LEFT JOIN users buyer ON c.buyer_id = buyer.user_id
+            LEFT JOIN users seller ON c.seller_id = seller.user_id
+            LEFT JOIN users sender ON cm.sender_id = sender.user_id
         WHERE c.chat_id = #{chat_id}
           AND (c.seller_id = #{user_id} OR c.buyer_id = #{user_id});
     </select>
 
+
     <insert id="saveMessage" parameterType="chatMessage">
         insert into chat_message
-        (content, chat_id, sender_id)
+            (content, chat_id, sender_id)
         values (#{content}, #{chat_id}, #{sender_id});
     </insert>
 

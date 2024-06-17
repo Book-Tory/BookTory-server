@@ -15,10 +15,11 @@ public class ChatHistoryEntity {
     private Long sender_id;
     private String sender_nickname;
     private String sender_email;
-//    private String stored_image_name;
+    private String stored_image_name;
 //    private String used_book_image_url; 로 변환
     private String title; // 글 제목
     private int discount; // 중고 서적 가격
     private String message_content; // 메세지 내용
     private Date message_created_at; // 메세지 보낸 날짜
+    private String room_id;
 }

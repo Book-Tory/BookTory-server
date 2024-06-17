@@ -121,9 +121,9 @@ public class UsedBookService {
     }
 
     // 데이터베이스에 있는 중고서적 목록
-    public List<UsedBookPostDTO> getList() {
+    public List<UsedBookPostDTO> getList(String searchKey) {
         // 중고서적 list 가져오기
-        List<UsedBookPostEntity> usedBookPostList = usedBookMapper.getList();
+        List<UsedBookPostEntity> usedBookPostList = usedBookMapper.getList(searchKey);
 
         Map<Long, UsedBookPostEntity> usedBookMap = new HashMap<>();
 

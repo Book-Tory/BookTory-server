@@ -33,7 +33,13 @@
             book_information bi ON ub.book_id = bi.book_id
                 LEFT JOIN
             used_book_image ubi ON ub.used_book_id = ubi.used_book_id
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                ub.title LIKE CONCAT('%', #{searchKey}, '%')
+            </if>
+        </where>
         order by ub.used_book_id
+
     </select>
 
     <select id="getPostById" resultType="usedBook">
