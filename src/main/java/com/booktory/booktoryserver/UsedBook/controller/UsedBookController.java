@@ -53,11 +53,10 @@ public class UsedBookController {
             return CustomResponse.failure("조회 실패");
         }
     }
-
     // 중고 서적 글 리스트 조회
     @GetMapping("/list")
-    public CustomResponse getList () {
-        List<UsedBookPostDTO> list = usedBookService.getList();
+    public CustomResponse getList(@RequestParam(value = "searchKey", required = false) String searchKey) {
+        List<UsedBookPostDTO> list = usedBookService.getList(searchKey);
 
         if (!list.isEmpty()) {
             return CustomResponse.ok("중고 서적 글 리스트 조회 성공", list);

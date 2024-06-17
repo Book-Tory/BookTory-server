@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UsedBookMapper {
-    List<UsedBookPostEntity> getList();
+    List<UsedBookPostEntity> getList(String searchKey);
 
     List<UsedBookPostEntity> getPostById(Long used_book_id);
 
