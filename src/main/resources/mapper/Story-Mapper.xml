@@ -83,5 +83,15 @@
         values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
     </insert>
 
+    <select id = "findIdByEmail" resultType="Long">
+        select user_id from users where user_email = #{useremail}
+    </select>
+
+    <insert id="createBookInfo" parameterType="book" keyProperty="book_id" useGeneratedKeys="true">
+        insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
+        values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
+    </insert>
+    
+
 
 </mapper>

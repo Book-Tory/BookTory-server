@@ -23,4 +23,7 @@ public interface StoryMapper {
 
     void saveBookInfo(BookEntity bookInfo);
 
+    Long findIdByEmail(String useremail);
+
+    void createBookInfo(BookEntity bookInfo);
 }

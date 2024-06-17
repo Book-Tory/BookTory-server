@@ -44,11 +44,11 @@ public class StoryController {
 
 
     //독후감(스토리) 등록(작성)
-    @PostMapping
-    public CustomResponse createStory(@RequestBody StoryDTO storyDTO, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+    @PostMapping("/{d_isbn}")
+    public CustomResponse createStory(@PathVariable ("d_isbn") Long d_isbn, @RequestBody StoryDTO storyDTO, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         String useremail = userDetails.getUsername();
 
-        String result = storyService.createStory(storyDTO, useremail);
+        String result = storyService.createStory(d_isbn, storyDTO, useremail);
 
         if(result != null){
             return CustomResponse.ok(result, null);

@@ -30,7 +30,7 @@ public class StoryEntity {
     private String book_name;
     private String book_author;
     private String book_publisher;
-    private String book_isbn;
+    private Long book_isbn;
     private String book_image;
 
 
