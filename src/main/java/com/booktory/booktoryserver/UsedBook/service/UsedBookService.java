@@ -13,8 +13,11 @@ import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
 import com.booktory.booktoryserver.UsedBook.mapper.UsedBookMapper;
 
+import com.booktory.booktoryserver.UsedBook.page.PageRequest;
+import com.booktory.booktoryserver.UsedBook.page.PageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,20 +124,18 @@ public class UsedBookService {
     }
 
     // 데이터베이스에 있는 중고서적 목록
-    public List<UsedBookPostDTO> getList(String searchKey) {
-        // 중고서적 list 가져오기
-        List<UsedBookPostEntity> usedBookPostList = usedBookMapper.getList(searchKey);
+    public PageResponse<UsedBookPostDTO> getList(String searchKey, PageRequest pageRequest) {
+        int total = usedBookMapper.countList(searchKey);
+        List<UsedBookPostEntity> usedBookPostList = usedBookMapper.getList(searchKey, pageRequest);
 
         Map<Long, UsedBookPostEntity> usedBookMap = new HashMap<>();
 
         for (UsedBookPostEntity usedBookPost : usedBookPostList) {
-
             if (!usedBookMap.containsKey(usedBookPost.getUsed_book_id())) {
                 usedBookPost.setImageUrls(new ArrayList<>());
                 usedBookMap.put(usedBookPost.getUsed_book_id(), usedBookPost);
             }
 
-            // 이미지가 있으면
             if (usedBookPost.getStored_image_name() != null) {
                 String url = amazonS3.getUrl(bucketName, "profile/" + usedBookPost.getStored_image_name()).toString();
 
@@ -145,9 +146,16 @@ public class UsedBookService {
             }
         }
 
-        return usedBookMap.values().stream().map(usedBook -> {
+        List<UsedBookPostDTO> usedBookPostDTOs = usedBookMap.values().stream().map(usedBook -> {
             return UsedBookPostDTO.toDTO(usedBook, usedBook.getImageUrls());
         }).collect(Collectors.toList());
+
+        return PageResponse.<UsedBookPostDTO>withAll()
+                .list(usedBookPostDTOs)
+                .total(total)
+                .size(pageRequest.getSize())
+                .pageNo(pageRequest.getPageNo())
+                .build();
     }
 
     // 특정 중고서적 글 가져오기
