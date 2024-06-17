@@ -90,7 +90,8 @@ public class StoryController {
         }
     }
 
-    //isbn값에 따른 책 상세 조회
+    //isbn값에 따른 책 상세 조회 => isbn 값으로 책 정보 조회
+    //모달창에서 하나의 책 선택
     @GetMapping("/book/{d_isbn}")
     public CustomResponse getBookByIsbn(@PathVariable ("d_isbn") Long d_isbn) throws JsonProcessingException {
         BookDTO bookInfo = storyService.getBookByIsbn(d_isbn);
