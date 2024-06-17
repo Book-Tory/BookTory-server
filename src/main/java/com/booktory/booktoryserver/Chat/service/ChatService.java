@@ -62,7 +62,18 @@ public class ChatService {
     public List<ChatListEntity> getChatRoomList(String username) {
         Long user_id = chatMapper.findIdByEmail(username);
 
-        return chatMapper.getChatRoomList(user_id);
+        List<ChatListEntity> chatList = chatMapper.getChatRoomList(user_id);
+
+        String url = "";
+
+        for(ChatListEntity chatListEntity : chatList) {
+            if (chatListEntity.getStored_image_name() != null) {
+                url = amazonS3.getUrl(bucketName, "profile/" + chatListEntity.getStored_image_name()).toString();
+                chatListEntity.setStored_image_name(url);
+            }
+        }
+
+        return chatList;
     }
 
     public ChatHistoryDTO getChatHistory(Long chat_id, String username) {
