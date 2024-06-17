@@ -84,6 +84,10 @@
     </delete>
 
 
+    <select id="findByProductId" resultType="product" parameterType="long">
+        SELECT * FROM products WHERE product_id = #{product.id};
+    </select>
+
     <select id="findImagesByProductId" parameterType="long" resultType="productImageFile">
         SELECT storedImageName FROM product_image WHERE product_id = #{product_id}
     </select>
@@ -108,5 +112,7 @@
         WHERE product_id = #{product_id}
     </update>
 
-
+    <select id="findByProductName" resultType="product" parameterType="String">
+        SELECT * FROM products WHERE product_name = #{productName}
+    </select>
 </mapper>

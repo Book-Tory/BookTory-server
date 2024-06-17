@@ -30,4 +30,11 @@
         DELETE FROM product_cart WHERE cart_id = #{cartId}
     </delete>
 
+    <delete id="deleteByOrderCart" parameterType="long">
+        DELETE FROM product_cart WHERE product_id = #{product_id}
+    </delete>
+
+    <select id="findCartCount">
+        SELECT COUNT(*) FROM product_cart WHERE user_id = #{user_id}
+    </select>
 </mapper>

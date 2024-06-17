@@ -35,3 +35,8 @@ mybatis:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+
+pay:
+  rest-api-key: 6154717800758684
+  rest-api-secret-key: 8MvUjAnMoc9GFf1eeehC57UBaWOrsBnecINfwJdWwbSEnvAPVcxkS9DI0JrlSg0PJG8ShC8EBziBAq0q
