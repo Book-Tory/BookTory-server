@@ -5,19 +5,23 @@ import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
 import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatMessageDTO;
+import com.booktory.booktoryserver.Chat.dto.response.ChatRoomResponseDTO;
 import com.booktory.booktoryserver.Chat.service.ChatService;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -25,6 +29,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatController {
     private final ChatService chatService;
+    private final UserMapper userMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     // 채팅방 생성
     @PostMapping("/room")
@@ -41,8 +47,14 @@ public class ChatController {
 
         List<ChatListEntity> chatList = chatService.getChatRoomList(username);
 
+        Optional<UserEntity> userEntity = userMapper.findByEmail(username);
+
+        Long userId = userEntity.get().getUser_id();
+
+        ChatRoomResponseDTO response = new ChatRoomResponseDTO(userId, chatList);
+
         if (!chatList.isEmpty()) {
-            return CustomResponse.ok("채팅방 리스트 조회 성공", chatList);
+            return CustomResponse.ok("채팅방 리스트 조회 성공", response);
         } else {
             return CustomResponse.failure("채팅방 리스트를 조회 실패하였습니다.");
         }
@@ -62,16 +74,14 @@ public class ChatController {
         }
     }
 
-    //
-    @MessageMapping("/{roomId}")
-    @SendTo("/queue/chat/{roomId}")
-    public CustomResponse chat(@DestinationVariable ("roomId") String roomId, ChatMessageDTO chatMessage) {
+    @MessageMapping("/{chatId}")
+    public void send(@DestinationVariable String chatId, @RequestBody ChatMessageDTO chatMessage) {
         int result = chatService.saveMessage(chatMessage);
 
         if (result > 0) {
-            return CustomResponse.ok("채팅이 왔다!", chatMessage);
+            messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);
         } else {
-            return CustomResponse.failure("채팅 오류");
+            messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);
         }
     }
 }
