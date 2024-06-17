@@ -26,7 +26,7 @@ public class UserEntity {
 
     private String user_mobile; // 사용자 휴대전화 번호
 
-    private Gender user_gender; // 사용자 성별 (MALE, FEMALE, OTHER)
+    private String user_gender; // 사용자 성별 (MALE, FEMALE, OTHER)
 
     private LocalDateTime user_birth; // 사용자 생년월일
 
