@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessageDTO {
-//    private Long chat_message_id; // 메세지 id (PK)
+    private Long chat_message_id; // 메세지 id (PK)
     private String message_content; // 메세지 내용
     private Date message_created_at; // 메세지 보낸 시간
 //    private Date message_read_date; // 메세지 읽은 시간
