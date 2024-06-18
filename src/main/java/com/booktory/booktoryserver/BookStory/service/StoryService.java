@@ -179,18 +179,20 @@ public class StoryService {
         storyMapper.deleteStory(story_board_id);
     }
 
-    public void updateStory(Long id, StoryDTO storyDTO) {
-        log.info("id : " + id);
+    public void updateStory(Long story_board_id, StoryDTO storyDTO) {
+        log.info("storyboardid : " + story_board_id);
         log.info("storyDTO : " + storyDTO);
-        StoryEntity storyEntity = StoryDTO.toEntity(storyDTO);
-        //+ toEntity가 static으로 선언되었으므로 클래스명을 사용하여 호출하는 것이 맞다.
-        //StoryDTO클래스의 toEntity 메서드를 사용하여 Entity객체를 선언
-        //매개변수로 받은 DTO를 DB에 저장하기 위해 Entity객체로 변환
 
-        storyEntity.setStory_board_id(id);
 
-        storyMapper.updateStory(storyEntity);
+        //기존 데이터를 DB에서 가져옵니다.
+        List<StoryEntity> storyEntities = storyMapper.getStoryById(story_board_id);
 
+        StoryEntity fetchStory = storyEntities.get(0);
+        //DTO의 updateEntity메서드를 사용하여 기존 엔티티를 업데이트
+        storyDTO.updateEntity(fetchStory);
+        
+        //업데이트된 엔티티를 DB에 저장
+        storyMapper.updateStory(fetchStory);
     }
 
     public StoryDTO getStoryById(Long story_board_id) {

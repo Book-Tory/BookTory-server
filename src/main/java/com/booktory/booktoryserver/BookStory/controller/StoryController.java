@@ -100,9 +100,9 @@ public class StoryController {
     @PutMapping("/{story_board_id}")
     @Operation(summary = "독후감 수정", description = "ID로 독후감을 수정합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 수정 성공", content = @Content(schema = @Schema(implementation = String.class)))
-    public CustomResponse updateStory(@PathVariable("story_board_id") @Parameter(description = "수정할 독후감 ID") Long id,
+    public CustomResponse updateStory(@PathVariable("story_board_id") @Parameter(description = "수정할 독후감 ID") Long story_board_id,
                                       @RequestBody @Parameter(description = "독후감 수정 정보") StoryDTO storyDTO) {
-        storyService.updateStory(id, storyDTO);
+        storyService.updateStory(story_board_id, storyDTO);
         return CustomResponse.ok("독후감 수정 성공", null);
     }
 

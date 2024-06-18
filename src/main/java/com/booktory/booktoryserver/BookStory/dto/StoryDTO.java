@@ -33,7 +33,7 @@ public class StoryDTO {
     private Long userId;
     private Long bookId;
 
-    
+
     //DTO를 Entity로 변환하는 메서드
     public static StoryEntity toEntity(StoryDTO storyDTO) {
         return StoryEntity.builder()
@@ -46,6 +46,23 @@ public class StoryDTO {
                 .book_id(storyDTO.getBookId())
                 .build();
     }
+
+
+    public void updateEntity(StoryEntity storyEntity) {
+        storyEntity.setMystory_type_id(this.mystoryTypeId);
+        storyEntity.setMystory_name(this.mystoryName);
+        storyEntity.setMystory_content(this.mystoryContent);
+//        storyEntity.setLove_count(this.loveCount);
+//        storyEntity.setUser_id(this.userId);
+//        storyEntity.setBook_id(this.bookId);
+//        storyEntity.setBook_name(this.bookName);
+//        storyEntity.setBook_author(this.bookAuthor);
+//        storyEntity.setBook_publisher(this.bookPublisher);
+//        storyEntity.setBook_isbn(this.bookIsbn);
+//        storyEntity.setBook_image(this.bookImage);
+    }
+
+
 
     //update를 위한 DTO와 id 둘 다를 매개변수로 받는 객체가 따로 필요하다
     //그러나 이미 DTO객체가 있으므로 id만 따로 받아주는 객체를 만들었다.

@@ -4,6 +4,7 @@ import com.booktory.booktoryserver.BookStory.domain.BookEntity;
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface StoryMapper {
     List<StoryEntity> getAllStory();
 
     List<StoryEntity> getStoryById(Long story_board_id);
+
+    void updateStroy(StoryEntity storyEntity);
 
     void createStory(StoryEntity storyEntity);
 
