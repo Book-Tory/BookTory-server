@@ -25,7 +25,6 @@
         <typeAlias alias="user" type="com.booktory.booktoryserver.Users.model.UserEntity" />
         <typeAlias alias="productFilter" type="com.booktory.booktoryserver.Products_shop.dto.request.ProductFilterDTO" />
 
-
         <typeAlias alias="story" type="com.booktory.booktoryserver.BookStory.domain.StoryEntity"/>
         <typeAlias alias="storyComment" type="com.booktory.booktoryserver.BookStory.domain.CommentEntity"/>
         <typeAlias alias="like" type="com.booktory.booktoryserver.BookStory.domain.Like.LikeEntity"/>
@@ -41,6 +40,7 @@
 
         <typeAlias alias="refreshToken" type="com.booktory.booktoryserver.Users.model.RefreshEntity"/>
 
+        <typeAlias alias="alarm" type="com.booktory.booktoryserver.Alram.domain.AlarmEntity" />
     </typeAliases>
 
     <typeHandlers>
