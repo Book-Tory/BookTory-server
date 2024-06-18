@@ -15,7 +15,7 @@ public interface StoryMapper {
 
     void createStory(StoryEntity storyEntity);
 
-    void deleteStory(@Param("story_board_id") long id);
+    void deleteStory(@Param("story_board_id") long story_board_id);
 
     void updateStory(StoryEntity storyEntity);
 

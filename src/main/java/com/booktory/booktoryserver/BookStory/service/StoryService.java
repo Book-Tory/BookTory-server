@@ -175,8 +175,8 @@ public class StoryService {
         return "독후감이 성공적으로 등록되었습니다.";
     }
 
-    public void deleteStory(Long id){
-        storyMapper.deleteStory(id);
+    public void deleteStory(Long story_board_id){
+        storyMapper.deleteStory(story_board_id);
     }
 
     public void updateStory(Long id, StoryDTO storyDTO) {
