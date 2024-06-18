@@ -21,6 +21,7 @@ public class OrderInfoEntity {
     private String addr;
     private String phone;
     private String message;
+    private String order_date;
 
     public static OrderInfoEntity toOrderInfoEntity(OrderInfoRequestDto requestDto){
         return OrderInfoEntity.builder()
