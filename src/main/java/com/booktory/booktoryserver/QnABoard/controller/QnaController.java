@@ -75,16 +75,28 @@ public class QnaController {
         }
     }
 
-    @PostMapping("/detail")
-    public CustomResponse getQna(@RequestBody QnaDetailRequestDTO qnaRequestDTO) {
+    @PostMapping("/detail/{qnaId}")
+    public CustomResponse searchQna(@RequestBody QnaDetailRequestDTO qnaRequestDTO, @PathVariable Long qnaId) {
+
+        qnaRequestDTO.setQnaId(qnaId);
 
         QnaResponseDTO qnaResponseDTO = qnaService.findByQnaId(qnaRequestDTO.getQnaId(), qnaRequestDTO.getQnaPassword());
 
         return CustomResponse.ok("문의 게시글 조회 성공", qnaResponseDTO);
     }
 
+    @GetMapping("/detail/{qnaId}")
+    public CustomResponse getQna(@PathVariable Long qnaId) {
+
+        QnaResponseDTO qnaResponseDTO = qnaService.findByContent(qnaId);
+
+        return CustomResponse.ok("게시글 상세 조회 성공", qnaResponseDTO);
+    }
+
     @DeleteMapping("/{qnaId}")
     public CustomResponse deleteQnaBoard(@PathVariable Long qnaId) {
+
+        System.out.println("qnaId: " + qnaId);
         int result = qnaService.deleteQnaBoard(qnaId);
 
         if(result > 0) {

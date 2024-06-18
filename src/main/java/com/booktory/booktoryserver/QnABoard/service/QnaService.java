@@ -62,4 +62,9 @@ public class QnaService {
         return result;
     }
 
+    public QnaResponseDTO findByContent(Long qnaId) {
+        QnaBoard qnaBoard = qnaBoardMapper.findByContent(qnaId);
+
+        return QnaResponseDTO.toQnaResponse(qnaBoard);
+    }
 }
