@@ -26,7 +26,7 @@
             users u ON sb.user_id = u.user_id
                 JOIN
             book_information bi ON sb.book_id = bi.book_id
-
+        order by sb.story_board_id desc
     </select>
 
 
