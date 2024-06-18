@@ -12,9 +12,11 @@ import com.booktory.booktoryserver.Chat.service.ChatService;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -29,32 +31,28 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
+@Tag(name = "Chat API", description = "채팅 관련 API")
 public class ChatController {
     private final ChatService chatService;
     private final UserMapper userMapper;
     private final SimpMessagingTemplate messagingTemplate;
     private final AlarmService alarmService;
 
-    // 채팅방 생성
+    @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
     @PostMapping("/room")
     public CustomResponse createChatRoom(@AuthenticationPrincipal UserDetails user, @RequestBody ChatDTO chat) {
-        chat.setBuyer_email(user.getUsername()); // 현재 로그인한 내 이메일은 구매자 이메일로
-
+        chat.setBuyer_email(user.getUsername());
         return chatService.createChatRoom(chat);
     }
 
-    // 내 채팅방 리스트 불러오기
+    @Operation(summary = "내 채팅방 리스트 불러오기", description = "현재 사용자의 채팅방 리스트를 불러옵니다.")
     @GetMapping("/rooms")
-    public CustomResponse getChatRoomList (@AuthenticationPrincipal UserDetails user) {
+    public CustomResponse getChatRoomList(@AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-
         Optional<UserEntity> userEntity = userMapper.findByEmail(username);
-
         Long userId = userEntity.get().getUser_id();
-
         List<ChatListEntity> chatList = chatService.getChatRoomList(username);
         ChatRoomResponseDTO response = new ChatRoomResponseDTO(userId, chatList);
-
         if (!chatList.isEmpty()) {
             return CustomResponse.ok("채팅방 리스트 조회 성공", response);
         } else {
@@ -62,13 +60,11 @@ public class ChatController {
         }
     }
 
-    // 특정 채팅방 내용 불러오기
+    @Operation(summary = "특정 채팅방 내용 불러오기", description = "특정 채팅방의 내용을 불러옵니다.")
     @GetMapping("/room/{chat_id}")
-    public CustomResponse getChatHistory (@PathVariable ("chat_id") Long chat_id, @AuthenticationPrincipal UserDetails user) {
+    public CustomResponse getChatHistory(@Parameter(description = "채팅방 ID", required = true) @PathVariable("chat_id") Long chat_id, @AuthenticationPrincipal UserDetails user) {
         String username = user.getUsername();
-
         ChatHistoryDTO chatHistory = chatService.getChatHistory(chat_id, username);
-
         if (chatHistory != null) {
             return CustomResponse.ok("채팅 내역 조회 성공", chatHistory);
         } else {
@@ -76,6 +72,7 @@ public class ChatController {
         }
     }
 
+    @Operation(summary = "채팅 메시지 전송", description = "특정 채팅방에 메시지를 전송합니다.")
     @MessageMapping("/{chatId}")
     public void send(@DestinationVariable Long chatId, @RequestBody ChatMessageDTO chatMessage) {
         Long chat_message_id = chatService.saveMessage(chatMessage); // 메세지 보낼 때 생성되는 chat_message_id

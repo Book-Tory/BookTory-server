@@ -75,8 +75,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
-                                "/api/used-books/list", "/api/product_shop/detail/**", "/api/qna/**", "ws/**","/api/stories/mystories").permitAll()
+                        .requestMatchers("/login", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
+                                "/api/used-books/list", "/api/product_shop/detail/**", "/api/qna/**", "ws/**","/api/stories/mystories",
+                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/test").hasRole("USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
