@@ -45,6 +45,11 @@ public class StoryEntity {
                 .loveCount(storyEntity.getLove_count())
                 .userId(storyEntity.getUser_id())
                 .bookId(storyEntity.getBook_id())
+                .bookName(storyEntity.getBook_name())
+                .bookAuthor(storyEntity.getBook_author())
+                .bookPublisher(storyEntity.getBook_publisher())
+                .bookIsbn(storyEntity.getBook_isbn())
+                .bookImage(storyEntity.getBook_image())
                 .build();
     }
 

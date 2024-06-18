@@ -11,7 +11,7 @@ import java.util.List;
 public interface StoryMapper {
     List<StoryEntity> getAllStory();
 
-    StoryEntity getStoryById(Long story_board_id);
+    List<StoryEntity> getStoryById(Long story_board_id);
 
     void createStory(StoryEntity storyEntity);
 

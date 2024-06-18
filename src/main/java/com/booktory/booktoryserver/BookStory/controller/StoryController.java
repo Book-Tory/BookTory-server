@@ -5,6 +5,8 @@ import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
 import com.booktory.booktoryserver.BookStory.service.StoryService;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/stories")
@@ -22,6 +25,7 @@ import java.util.List;
 @Slf4j
 public class StoryController {
     private final StoryService storyService;
+    private final UserMapper userMapper;
 
     //독후감(스토리) 전체 조회
     @GetMapping("/mystories")
@@ -38,8 +42,26 @@ public class StoryController {
 
     //독후감 상세보기
     @GetMapping("/{story_board_id}")
-    public StoryEntity getStoryById (@PathVariable("story_board_id") Long story_board_id){
-        return storyService.getStoryById(story_board_id);
+    public CustomResponse getStoryById (@PathVariable ("story_board_id") Long story_board_id, @AuthenticationPrincipal UserDetails useremail){
+        StoryDTO myStory = storyService.getStoryById(story_board_id);
+
+        String userEmail = useremail.getUsername();
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+        Long userId = userEntity.get().getUser_id();
+
+        myStory.setUserId(userId);
+
+        System.out.println("myStory1 = " + myStory);
+
+        if(myStory != null){
+            //StoryDTO의 인자가 없어도 되는가??
+
+            System.out.println("response2 = " + myStory);
+            return CustomResponse.ok("독후감 선택 성공", myStory);
+        }else{
+            return CustomResponse.failure("독후감 선택 실패");
+        }
+        //return storyService.getStoryById(story_board_id);
     }
 
 

@@ -193,9 +193,16 @@ public class StoryService {
 
     }
 
-    public StoryEntity getStoryById(Long story_board_id) {
+    public StoryDTO getStoryById(Long story_board_id) {
+        List<StoryEntity> myStory = storyMapper.getStoryById(story_board_id);
 
-        return storyMapper.getStoryById(story_board_id);
+        if(myStory == null || myStory.isEmpty()){
+            return null;
+        }
+
+        StoryEntity storyEntity = myStory.get(0);
+
+        return StoryEntity.toDTO(storyEntity);
     }
 
 
