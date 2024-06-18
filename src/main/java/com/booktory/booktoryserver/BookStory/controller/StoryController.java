@@ -81,8 +81,8 @@ public class StoryController {
 
     //독후감(스토리) 게시물 id를 통한 삭제
     @DeleteMapping("/{story_board_id}")
-    public void deleteStory(@PathVariable Long id){
-        storyService.deleteStory(id);
+    public void deleteStory(@PathVariable Long story_board_id){
+        storyService.deleteStory(story_board_id);
     }
 
 
