@@ -31,4 +31,9 @@
         DELETE FROM qna_board WHERE qna_id = #{qnaId}
     </delete>
 
+
+    <select id="findByContent" resultType="qnaBoard">
+        SELECT * FROM qna_board WHERE qna_id = #{qnaId}
+    </select>
+
 </mapper>
