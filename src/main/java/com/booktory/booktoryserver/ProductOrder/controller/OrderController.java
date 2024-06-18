@@ -1,13 +1,13 @@
 package com.booktory.booktoryserver.ProductOrder.controller;
 
 import com.booktory.booktoryserver.ProductOrder.dto.request.OrderInfoRequestDto;
+import com.booktory.booktoryserver.ProductOrder.dto.response.OrderResponseDTO;
 import com.booktory.booktoryserver.ProductOrder.service.OrderService;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/order")
@@ -26,5 +26,11 @@ public class OrderController {
         } else {
             return CustomResponse.failure("주문 실패");
         }
+    }
+
+    @GetMapping("")
+    public CustomResponse getOrderInfo(){
+        List<OrderResponseDTO> ordersList = orderService.findOrderInfo();
+        return CustomResponse.ok("주문 조회 성공", ordersList);
     }
 }
