@@ -149,15 +149,34 @@ public class StoryService {
     }
 
     //독후감 등록하기
-    public String createStory(StoryDTO storyDTO, String useremail) throws IOException{
+    @Transactional
+    public String createStory(Long d_isbn, StoryDTO storyDTO, String useremail) throws IOException{
+        //책이 DB에 있는지 확인
+        Long bookId = storyMapper.getBookId(d_isbn);
+
+        //사용자 ID 가져오기
+        Long userId = storyMapper.findIdByEmail(useremail);
+        storyDTO.setUserId(userId);
+
+        //책 정보가 없다면 DB에 책 정보 저장
+        if(bookId == null){
+            //ISBN을 통해 책 정보 가져오기
+            BookDTO book = getBookByIsbn(d_isbn);
+            BookEntity bookInfo = BookDTO.toEntity(book);
+
+            storyMapper.createBookInfo(bookInfo);
+            bookId = bookInfo.getBook_id();
+        }
+
         StoryEntity storyEntity = StoryDTO.toEntity(storyDTO);
+        storyEntity.setBook_id(bookId);
         storyMapper.createStory(storyEntity);
 
         return "독후감이 성공적으로 등록되었습니다.";
     }
 
-    public void deleteStory(Long id){
-        storyMapper.deleteStory(id);
+    public void deleteStory(Long story_board_id){
+        storyMapper.deleteStory(story_board_id);
     }
 
     public void updateStory(Long id, StoryDTO storyDTO) {
@@ -174,9 +193,16 @@ public class StoryService {
 
     }
 
-    public StoryEntity getStoryById(Long story_board_id) {
+    public StoryDTO getStoryById(Long story_board_id) {
+        List<StoryEntity> myStory = storyMapper.getStoryById(story_board_id);
 
-        return storyMapper.getStoryById(story_board_id);
+        if(myStory == null || myStory.isEmpty()){
+            return null;
+        }
+
+        StoryEntity storyEntity = myStory.get(0);
+
+        return StoryEntity.toDTO(storyEntity);
     }
 
 

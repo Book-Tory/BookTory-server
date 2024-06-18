@@ -5,9 +5,9 @@
 
     <select id="getAllCommentsByStoryId" resultType="storyComment">
         SELECT
-            sc.commint_id,
+            sc.comment_id,
             sc.comment_content,
-            sc.createDate,
+            sc.createdDate,
             sc.modifiedDate,
             sc.story_board_id,
             u.user_img As author_profile_image,

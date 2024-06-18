@@ -26,7 +26,7 @@
             users u ON sb.user_id = u.user_id
                 JOIN
             book_information bi ON sb.book_id = bi.book_id
-
+        order by sb.story_board_id desc
     </select>
 
 
@@ -44,14 +44,15 @@
             bi.book_name,
             bi.book_author,
             bi.book_publisher,
-            bi.book_isbn
+            bi.book_isbn,
+            bi.book_image
         from
             mystory_board sb
                 JOIN
             users u ON sb.user_id = u.user_id
                 JOIN
             book_information bi ON sb.book_id = bi.book_id
-        where story_board_id = #{story_board_id}
+        where sb.story_board_id = #{story_board_id}
     </select>
 
 
@@ -82,6 +83,16 @@
         insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
         values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
     </insert>
+
+    <select id = "findIdByEmail" resultType="Long">
+        select user_id from users where user_email = #{useremail}
+    </select>
+
+    <insert id="createBookInfo" parameterType="book" keyProperty="book_id" useGeneratedKeys="true">
+        insert into book_information (book_image, book_name, book_author, book_price, book_publisher, book_publication_date, book_isbn)
+        values (#{book_image}, #{book_name}, #{book_author}, #{book_price}, #{book_publisher}, #{book_publication_date}, #{book_isbn})
+    </insert>
+    
 
 
 </mapper>
