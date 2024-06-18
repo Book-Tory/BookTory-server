@@ -1,6 +1,8 @@
 package com.booktory.booktoryserver.Users.service;
 
+import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
+import com.booktory.booktoryserver.Users.dto.response.UserResponseDTO;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,8 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final ChatMapper chatMapper;
 
 
     public int register(UserRegisterDTO userRegisterDTO) {
@@ -48,5 +54,18 @@ public class UserService implements UserDetailsService {
         }
 
         return null;
+    }
+
+
+
+    public List<UserResponseDTO> findByAllUser(){
+        List<UserEntity> users = userMapper.findAllUsers();
+
+        return users.stream().map(UserResponseDTO::toUserResponseDTO).collect(Collectors.toList());
+    }
+
+    public int deleteUserById(Long userId) {
+        chatMapper.deleteBySellerId(userId);
+        return userMapper.deleteUserById(userId);
     }
 }
