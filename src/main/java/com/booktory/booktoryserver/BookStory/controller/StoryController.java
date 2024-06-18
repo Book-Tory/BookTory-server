@@ -4,6 +4,8 @@ import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
 import com.booktory.booktoryserver.BookStory.service.StoryService;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.booktory.booktoryserver.common.CustomResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/stories")
@@ -28,6 +31,7 @@ import java.util.List;
 @Tag(name = "Stories", description = "독후감(스토리) 관련 API")
 public class StoryController {
     private final StoryService storyService;
+    private final UserMapper userMapper;
 
     @GetMapping("/mystories")
     @Operation(summary = "독후감 전체 조회", description = "모든 독후감을 조회합니다.")
@@ -42,21 +46,41 @@ public class StoryController {
         }
     }
 
+      
     @GetMapping("/{story_board_id}")
     @Operation(summary = "독후감 상세보기", description = "ID로 독후감을 상세 조회합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 상세 조회 성공", content = @Content(schema = @Schema(implementation = StoryEntity.class)))
-    public StoryEntity getStoryById(@PathVariable("story_board_id") @Parameter(description = "조회할 독후감 ID") Long story_board_id) {
-        return storyService.getStoryById(story_board_id);
+    public CustomResponse getStoryById (@PathVariable ("story_board_id") Long story_board_id, @AuthenticationPrincipal UserDetails useremail){
+        StoryDTO myStory = storyService.getStoryById(story_board_id);
+
+        String userEmail = useremail.getUsername();
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+        Long userId = userEntity.get().getUser_id();
+
+        myStory.setUserId(userId);
+
+        System.out.println("myStory1 = " + myStory);
+
+        if(myStory != null){
+            //StoryDTO의 인자가 없어도 되는가??
+
+            System.out.println("response2 = " + myStory);
+            return CustomResponse.ok("독후감 선택 성공", myStory);
+        }else{
+            return CustomResponse.failure("독후감 선택 실패");
+        }
+        //return storyService.getStoryById(story_board_id);
     }
 
+
+    //독후감(스토리) 등록(작성)
     @PostMapping
     @Operation(summary = "독후감 등록", description = "새로운 독후감을 등록합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 등록 성공", content = @Content(schema = @Schema(implementation = String.class)))
-    public CustomResponse createStory(@RequestBody @Parameter(description = "독후감 정보") StoryDTO storyDTO,
-                                      @AuthenticationPrincipal @Parameter(hidden = true) UserDetails userDetails) throws IOException {
+    public CustomResponse createStory(@PathVariable ("d_isbn") Long d_isbn, @RequestBody StoryDTO storyDTO, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         String useremail = userDetails.getUsername();
 
-        String result = storyService.createStory(storyDTO, useremail);
+        String result = storyService.createStory(d_isbn, storyDTO, useremail);
 
         if (result != null) {
             return CustomResponse.ok(result, null);
@@ -64,13 +88,13 @@ public class StoryController {
             return CustomResponse.failure("독후감 등록에 실패하였습니다");
         }
     }
-
+  
+  
     @DeleteMapping("/{story_board_id}")
     @Operation(summary = "독후감 삭제", description = "ID로 독후감을 삭제합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 삭제 성공", content = @Content(schema = @Schema(implementation = String.class)))
-    public CustomResponse deleteStory(@PathVariable("story_board_id") @Parameter(description = "삭제할 독후감 ID") Long id) {
-        storyService.deleteStory(id);
-        return CustomResponse.ok("독후감 삭제 성공", null);
+    public void deleteStory(@PathVariable Long story_board_id){
+        storyService.deleteStory(story_board_id);
     }
 
     @PutMapping("/{story_board_id}")
@@ -98,6 +122,9 @@ public class StoryController {
         }
     }
 
+
+    //isbn값에 따른 책 상세 조회 => isbn 값으로 책 정보 조회
+    //모달창에서 하나의 책 선택
     @GetMapping("/book/{d_isbn}")
     @Operation(summary = "책 상세 조회", description = "ISBN으로 책을 상세 조회합니다.")
     @ApiResponse(responseCode = "200", description = "책 상세 조회 성공", content = @Content(schema = @Schema(implementation = BookDTO.class)))

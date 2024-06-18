@@ -5,6 +5,7 @@ import lombok.*;
 import org.joda.time.DateTime;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -17,8 +18,8 @@ public class CommentEntity {
     private String comment_content;
 
 
-    private LocalDateTime createDate;
-    private LocalDateTime modifiedDate;
+    private Date createdDate;
+    private Date modifiedDate;
 
 
     private Long comment_author_user_id; //작성자

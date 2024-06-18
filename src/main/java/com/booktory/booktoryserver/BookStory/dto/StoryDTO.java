@@ -4,6 +4,7 @@ import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -18,6 +19,16 @@ public class StoryDTO {
     private String mystoryContent;
     private LocalDateTime mystoryDate;
     private LocalDateTime readDate;
+
+    //
+    private String bookName;
+    private String bookAuthor;
+    private String bookPublisher;
+    private Date bookPudbdate;
+    private String bookImage;
+    private int bookPrice;
+    private Long bookIsbn;
+
     private int loveCount;
     private Long userId;
     private Long bookId;

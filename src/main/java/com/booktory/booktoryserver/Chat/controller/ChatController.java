@@ -1,5 +1,7 @@
 package com.booktory.booktoryserver.Chat.controller;
 
+import com.booktory.booktoryserver.Alram.domain.AlarmEntity;
+import com.booktory.booktoryserver.Alram.service.AlarmService;
 import com.booktory.booktoryserver.Chat.domain.ChatEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
 import com.booktory.booktoryserver.Chat.dto.ChatDTO;
@@ -34,6 +36,7 @@ public class ChatController {
     private final ChatService chatService;
     private final UserMapper userMapper;
     private final SimpMessagingTemplate messagingTemplate;
+    private final AlarmService alarmService;
 
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
     @PostMapping("/room")
@@ -71,10 +74,19 @@ public class ChatController {
 
     @Operation(summary = "채팅 메시지 전송", description = "특정 채팅방에 메시지를 전송합니다.")
     @MessageMapping("/{chatId}")
-    public void send(@Parameter(description = "채팅방 ID", required = true) @DestinationVariable String chatId, @RequestBody ChatMessageDTO chatMessage) {
-        int result = chatService.saveMessage(chatMessage);
-        if (result > 0) {
-            messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);
+    public void send(@DestinationVariable Long chatId, @RequestBody ChatMessageDTO chatMessage) {
+        Long chat_message_id = chatService.saveMessage(chatMessage); // 메세지 보낼 때 생성되는 chat_message_id
+
+        Long senderId = chatMessage.getSender_id();
+        Long receiverId = chatService.getReceiverId(chatId, senderId); // 메세지 받은 사람의 id
+
+        chatMessage.setChat_message_id(chat_message_id);
+        
+        if (chat_message_id > 0) {
+            AlarmEntity alarmEntity = AlarmEntity.toAlarmEntity(chatMessage, receiverId);
+
+            alarmService.saveAlarm(alarmEntity); // 알람 테이블에 저장
+            messagingTemplate.convertAndSend("/queue/chat/" + chatId , chatMessage);
         } else {
             messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);
         }
