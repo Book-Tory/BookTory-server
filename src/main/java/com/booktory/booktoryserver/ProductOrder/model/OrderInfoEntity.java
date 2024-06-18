@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 public class OrderInfoEntity {
 
-    private Long order_id;
+    private Long id;
     private String merchant_uid;
     private String user_name;
     private String product_name;

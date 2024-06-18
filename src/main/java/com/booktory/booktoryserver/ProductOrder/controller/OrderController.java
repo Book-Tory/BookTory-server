@@ -29,9 +29,16 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/{order_id}")
+    public CustomResponse getOrderById(@PathVariable("order_id") Long orderId) {
+        OrderResponseDTO order = orderService.findById(orderId);
+        return CustomResponse.ok("주문 상세 정보", order);
+    }
+
     @GetMapping("")
     public CustomResponse getOrderInfo(){
         List<OrderResponseDTO> ordersList = orderService.findOrderInfo();
+        System.out.println("orderList: " + ordersList);
         return CustomResponse.ok("주문 조회 성공", ordersList);
     }
 

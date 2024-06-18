@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class OrderResponseDTO {
 
     private Long order_id;
@@ -25,7 +26,7 @@ public class OrderResponseDTO {
 
     public static OrderResponseDTO toOrderResponseDTO(OrderInfoEntity orderResponse){
         return OrderResponseDTO.builder()
-               .order_id(orderResponse.getOrder_id())
+               .order_id(orderResponse.getId())
                .merchant_uid(orderResponse.getMerchant_uid())
                .user_name(orderResponse.getUser_name())
                .product_name(orderResponse.getProduct_name())

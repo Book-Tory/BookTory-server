@@ -48,6 +48,8 @@ public class OrderService {
 
         List<OrderInfoEntity> orderInfo = orderMapper.findOrderInfo();
 
+        System.out.println("orderInfo: " + orderInfo);
+
         return orderInfo.stream().map(OrderResponseDTO::toOrderResponseDTO).collect(Collectors.toList());
     }
 
@@ -66,5 +68,15 @@ public class OrderService {
 
     public List<OrderInfoEntity> getThisYearOrders() {
         return orderMapper.findThisYearOrders();
+    }
+
+    public OrderResponseDTO findById(Long orderId) {
+        OrderInfoEntity orderInfoEntity = orderMapper.findById(orderId);
+
+        if (orderInfoEntity == null) {
+            return null;
+        }
+
+        return OrderResponseDTO.toOrderResponseDTO(orderInfoEntity);
     }
 }

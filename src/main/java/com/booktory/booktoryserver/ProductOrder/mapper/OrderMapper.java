@@ -28,4 +28,7 @@ public interface OrderMapper {
 
     @Select("SELECT * FROM product_orders WHERE YEAR(order_date) = YEAR(CURDATE())")
     List<OrderInfoEntity> findThisYearOrders();
+
+    @Select("SELECT * FROM product_orders WHERE id = #{orderId}")
+    OrderInfoEntity findById(Long orderId);
 }
