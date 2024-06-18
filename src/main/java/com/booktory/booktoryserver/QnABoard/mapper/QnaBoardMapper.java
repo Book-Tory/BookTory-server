@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.QnABoard.mapper;
 
 import com.booktory.booktoryserver.QnABoard.domain.QnaBoard;
+import com.booktory.booktoryserver.QnABoard.dto.response.QnaResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface QnaBoardMapper {
     int softDeleteQnaBoard(Long qnaId);
 
     void moveToDeleteTable(Long qnaId);
+
+    QnaBoard findByContent(Long qnaId);
 }

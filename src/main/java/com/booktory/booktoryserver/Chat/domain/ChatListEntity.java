@@ -17,4 +17,5 @@ public class ChatListEntity {
     private String chat_partner_img; // 상대방 프로필 사진
     private String last_message_content; // 마지막에 온 채팅 내용
     private Date last_message_time; // 마지막에 온 채팅 시간
+    private String stored_image_name; // 상품의 첫 번째 사진 가져올 거
 }

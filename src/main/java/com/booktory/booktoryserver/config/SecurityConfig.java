@@ -75,7 +75,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/api/users/auth/register", "/api/reissue").permitAll()
+                        .requestMatchers("/login", "/", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
+                                "/api/used-books/list", "/api/product_shop/detail/**", "/api/qna/**", "ws/**","/api/stories/mystories").permitAll()
                         .requestMatchers("/test").hasRole("USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
@@ -87,7 +88,7 @@ public class SecurityConfig {
                 .httpBasic((httpBasic) -> httpBasic.disable());
         http
                 .addFilterBefore(new CorsFilter(corsConfigurationSource()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshMapper), LogoutFilter.class);
 

@@ -21,6 +21,8 @@ public class ProductRegisterDTO {
 
     private String product_script; // 상품 설명
 
+    private String product_category; // 상품 카테고리 ( 북마크, 필기구, 굿즈 )
+
     private List<MultipartFile> product_image; // 상품 이미지
 
     private int productImageCheck; // 파일 첨부 0, 파일 첨부 1

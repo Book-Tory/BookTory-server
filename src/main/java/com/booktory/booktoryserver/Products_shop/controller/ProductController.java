@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product_shop")
+@RequestMapping("/api/product_shop")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
@@ -33,11 +33,20 @@ public class ProductController {
     }
 
 
-    @PostMapping("/list")
-    public CustomResponse productsAll(@RequestBody ProductFilterDTO productFilterDTO, @PageableDefault(size = 10)Pageable pageable){
+    @GetMapping("/list")
+    public CustomResponse productsAll(
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String productCategory,
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam String sort,
+            Pageable pageable) {
+
+        ProductFilterDTO productFilterDTO = new ProductFilterDTO();
+        productFilterDTO.setProductName(productName);
+        productFilterDTO.setProductCategory(productCategory);
 
         Page<ProductResponseDTO> productResponseDTOList = productService.findAllProducts(productFilterDTO, pageable);
-
         return CustomResponse.ok("전체 상품 정보", productResponseDTOList);
     }
 

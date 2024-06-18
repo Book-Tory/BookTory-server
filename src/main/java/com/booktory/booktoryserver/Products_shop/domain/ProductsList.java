@@ -28,4 +28,8 @@ public class ProductsList {
     private Long image_id;
     private List<Map<Long, String>> imageUrls; // 이미지 url
 
+    public void setImageUrls(List<Map<Long, String>> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
 }

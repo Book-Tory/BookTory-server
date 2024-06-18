@@ -12,4 +12,12 @@
         SELECT * FROM users WHERE user_email = #{user_email}
     </select>
 
+    <select id="findAllUsers" resultType="user">
+        SELECT u.user_id, u.user_email, u.user_nickname, u.user_address, u.user_role,u.created_at FROM users u
+    </select>
+
+    <delete id="deleteUserById">
+        DELETE FROM users
+    </delete>
+
 </mapper>

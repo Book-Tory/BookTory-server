@@ -19,6 +19,6 @@ public class BookEntity {
     private String book_author;
     private int book_price;
     private String book_publisher;
-    private DateTime book_publication_date;
+    private Date book_publication_date;
     private Long book_isbn;
 }

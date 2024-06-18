@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.Chat.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.booktory.booktoryserver.Chat.domain.ChatEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
@@ -11,6 +12,7 @@ import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
 import com.booktory.booktoryserver.common.CustomResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -22,6 +24,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ChatService {
     private final ChatMapper chatMapper;
+
+    private final AmazonS3 amazonS3;
+
+    @Value("${spring.s3.bucket}")
+    private String bucketName;
+
     public CustomResponse createChatRoom(ChatDTO chat) {
         String sellerEmail = chatMapper.findEmailById(chat.getSeller_id());
 
@@ -36,22 +44,36 @@ public class ChatService {
         if (existChatRoom == null) {
             chat.setRoom_id(roomId);
             ChatEntity chatEntity = ChatEntity.toEntity(chat);
-            int result = chatMapper.createChatRoom(chatEntity); // 채팅방 생성
+            int result = chatMapper.createChatRoom(chatEntity);
+
+            Long chat_id = chatEntity.getChat_id();
+            chatEntity.setChat_id(chat_id);// 채팅방 생성
 
             if (result > 0) {
-                return CustomResponse.ok("채팅방이 생성되었습니다.", null);
+                return CustomResponse.ok("채팅방이 생성되었습니다.", chatEntity);
             } else {
                 return CustomResponse.failure("채팅방 생성에 실패하였습니다.");
             }
         } else {
-            return CustomResponse.ok("이미 존재하는 채팅방이 있음", null);
+            return CustomResponse.failure("이미 존재하는 채팅방이 있음");
         }
     }
 
     public List<ChatListEntity> getChatRoomList(String username) {
         Long user_id = chatMapper.findIdByEmail(username);
 
-        return chatMapper.getChatRoomList(user_id);
+        List<ChatListEntity> chatList = chatMapper.getChatRoomList(user_id);
+
+        String url = "";
+
+        for(ChatListEntity chatListEntity : chatList) {
+            if (chatListEntity.getStored_image_name() != null) {
+                url = amazonS3.getUrl(bucketName, "profile/" + chatListEntity.getStored_image_name()).toString();
+                chatListEntity.setStored_image_name(url);
+            }
+        }
+
+        return chatList;
     }
 
     public ChatHistoryDTO getChatHistory(Long chat_id, String username) {
@@ -65,6 +87,14 @@ public class ChatService {
 
         ChatHistoryEntity firstHistoryEntity = chatHistory.get(0);
 
+        String url = "";
+
+        for (ChatHistoryEntity chatHistoryEntity : chatHistory) {
+            if (chatHistoryEntity.getStored_image_name() != null) {
+                url = amazonS3.getUrl(bucketName, "profile/" + chatHistoryEntity.getStored_image_name()).toString();
+            }
+        }
+
         List<ChatMessageDTO> messages = chatHistory.stream()
                 .map(entity -> ChatMessageDTO.builder()
                         .sender_id(entity.getSender_id())
@@ -75,7 +105,7 @@ public class ChatService {
                         .build())
                 .collect(Collectors.toList());
 
-        return ChatHistoryDTO.toDTO(firstHistoryEntity, messages);
+        return ChatHistoryDTO.toDTO(firstHistoryEntity, messages, url);
     }
 
     public int saveMessage(ChatMessageDTO chatMessage) {

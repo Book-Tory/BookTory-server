@@ -4,6 +4,7 @@ import com.booktory.booktoryserver.Chat.domain.ChatEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
 import com.booktory.booktoryserver.Chat.domain.ChatMessageEntity;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface ChatMapper {
     String findEmailById(Long sellerId);
 
     Long findIdByEmail(String buyerEmail);
+
+    @Delete("DELETE FROM chat WHERE seller_id = #{sellerId}")
+    void deleteBySellerId(Long sellerId);
 }
