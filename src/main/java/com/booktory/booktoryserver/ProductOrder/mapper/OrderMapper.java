@@ -16,4 +16,16 @@ public interface OrderMapper {
 
     @Select("SELECT  * FROM product_orders")
     List<OrderInfoEntity> findOrderInfo();
+
+    @Select("SELECT * FROM product_orders WHERE DATE(order_date) = CURDATE()")
+    List<OrderInfoEntity> findTodayOrders();
+
+    @Select("SELECT * FROM product_orders WHERE WEEK(order_date) = WEEK(CURDATE()) AND YEAR(order_date) = YEAR(CURDATE())")
+    List<OrderInfoEntity> findThisWeekOrders();
+
+    @Select("SELECT * FROM product_orders WHERE MONTH(order_date) = MONTH(CURDATE()) AND YEAR(order_date) = YEAR(CURDATE())")
+    List<OrderInfoEntity> findThisMonthOrders();
+
+    @Select("SELECT * FROM product_orders WHERE YEAR(order_date) = YEAR(CURDATE())")
+    List<OrderInfoEntity> findThisYearOrders();
 }

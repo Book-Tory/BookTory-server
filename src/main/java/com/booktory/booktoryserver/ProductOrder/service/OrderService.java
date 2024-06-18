@@ -50,4 +50,21 @@ public class OrderService {
 
         return orderInfo.stream().map(OrderResponseDTO::toOrderResponseDTO).collect(Collectors.toList());
     }
+
+
+    public List<OrderInfoEntity> getTodayOrders() {
+        return orderMapper.findTodayOrders();
+    }
+
+    public List<OrderInfoEntity> getThisWeekOrders() {
+        return orderMapper.findThisWeekOrders();
+    }
+
+    public List<OrderInfoEntity> getThisMonthOrders() {
+        return orderMapper.findThisMonthOrders();
+    }
+
+    public List<OrderInfoEntity> getThisYearOrders() {
+        return orderMapper.findThisYearOrders();
+    }
 }
