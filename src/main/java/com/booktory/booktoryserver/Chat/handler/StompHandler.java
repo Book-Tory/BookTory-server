@@ -23,11 +23,9 @@ public class StompHandler implements ChannelInterceptor {
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String authorizationHeader = accessor.getFirstNativeHeader("Authorization");
-            System.out.println("Authorization header: " + authorizationHeader);
 
             if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
                 String jwtToken = authorizationHeader.substring(7);
-                System.out.println("JWT token: " + jwtToken);
 
                 if (jwtUtil.isExpired(jwtToken)) {
                     throw new IllegalStateException("Expired JWT token");
@@ -35,8 +33,8 @@ public class StompHandler implements ChannelInterceptor {
                 if (!"access".equals(jwtUtil.getCategory(jwtToken))) {
                     throw new IllegalStateException("Invalid JWT token category");
                 }
-
-                System.out.println("여기까지 왔니??");
+            } else {
+                System.out.println("Authorization header is missing or invalid.");
             }
         }
         return message;
