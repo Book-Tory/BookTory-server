@@ -32,6 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     // 인증
+    // configureClientInboundChannel : 클라이언트에서 서버로 들어오는 요청을 전달하는 채널
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompHandler);
