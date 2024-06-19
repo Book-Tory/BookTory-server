@@ -74,7 +74,7 @@ public class StoryController {
 
 
     //독후감(스토리) 등록(작성)
-    @PostMapping
+    @PostMapping("/{d_isbn}")
     @Operation(summary = "독후감 등록", description = "새로운 독후감을 등록합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 등록 성공", content = @Content(schema = @Schema(implementation = String.class)))
     public CustomResponse createStory(@PathVariable ("d_isbn") Long d_isbn, @RequestBody StoryDTO storyDTO, @AuthenticationPrincipal UserDetails userDetails) throws IOException {
