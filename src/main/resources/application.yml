@@ -40,3 +40,16 @@ jasypt:
 pay:
   rest-api-key: 6154717800758684
   rest-api-secret-key: 8MvUjAnMoc9GFf1eeehC57UBaWOrsBnecINfwJdWwbSEnvAPVcxkS9DI0JrlSg0PJG8ShC8EBziBAq0q
+
+springdoc:
+  packages-to-scan: com.booktory.booktoryserver
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+server:
+  forward-headers-strategy: FRAMEWORK

@@ -4,6 +4,7 @@ import com.booktory.booktoryserver.BookStory.domain.CommentEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 public class CommentViewDTO {
     private Long commentId;
     private String commentContent;
-    private LocalDateTime createDate;
-    private LocalDateTime modifiedDate;
+    private Date createdDate;
+    private Date modifiedDate;
     private Long userId;
     private Long boardId;
 
@@ -28,7 +29,7 @@ public class CommentViewDTO {
         return CommentViewDTO.builder()
                 .commentId(commentEntity.getComment_id())
                 .commentContent(commentEntity.getComment_content())
-                .createDate(commentEntity.getCreateDate())
+                .createdDate(commentEntity.getCreatedDate())
                 .modifiedDate(commentEntity.getModifiedDate())
                 .userId(commentEntity.getComment_author_user_id())
                 .boardId(commentEntity.getStory_board_id())

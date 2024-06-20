@@ -11,11 +11,11 @@ import java.util.List;
 public interface StoryMapper {
     List<StoryEntity> getAllStory();
 
-    StoryEntity getStoryById(Long story_board_id);
+    List<StoryEntity> getStoryById(Long story_board_id);
 
     void createStory(StoryEntity storyEntity);
 
-    void deleteStory(@Param("story_board_id") long id);
+    void deleteStory(@Param("story_board_id") long story_board_id);
 
     void updateStory(StoryEntity storyEntity);
 
@@ -23,4 +23,7 @@ public interface StoryMapper {
 
     void saveBookInfo(BookEntity bookInfo);
 
+    Long findIdByEmail(String useremail);
+
+    void createBookInfo(BookEntity bookInfo);
 }

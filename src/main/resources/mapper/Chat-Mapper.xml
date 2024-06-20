@@ -75,8 +75,7 @@
           AND (c.seller_id = #{user_id} OR c.buyer_id = #{user_id});
     </select>
 
-
-    <insert id="saveMessage" parameterType="chatMessage">
+    <insert id="saveMessage" parameterType="chatMessage" keyProperty="chat_message_id" useGeneratedKeys="true">
         insert into chat_message
             (content, chat_id, sender_id)
         values (#{content}, #{chat_id}, #{sender_id});
@@ -93,4 +92,19 @@
     <select id="findIdByEmail" resultType="Long">
         select user_id from users where user_email = #{buyerEmail}
     </select>
+
+    <select id="getReceiverId" resultType="Long">
+        SELECT CASE
+                   WHEN seller_id = #{senderId} THEN buyer_id
+                   ELSE seller_id
+                   END
+        FROM chat
+        WHERE chat_id = #{chatId}
+    </select>
+    
+    <select id="findById" parameterType="Long">
+        SELECT content FROM chat_message WHERE chat_message_id = #{entityId}
+    </select>
+
+
 </mapper>

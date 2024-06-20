@@ -108,8 +108,13 @@ public class ChatService {
         return ChatHistoryDTO.toDTO(firstHistoryEntity, messages, url);
     }
 
-    public int saveMessage(ChatMessageDTO chatMessage) {
-        return chatMapper.saveMessage(ChatMessageEntity.toEntity(chatMessage));
+    public Long saveMessage(ChatMessageDTO chatMessage) {
+        ChatMessageEntity chatMessageEntity = ChatMessageEntity.toEntity(chatMessage);
+        chatMapper.saveMessage(chatMessageEntity);
+
+        Long chat_message_id = chatMessageEntity.getChat_message_id();
+
+        return chat_message_id;
     }
 
     public ChatEntity isExistChatRoom(String room_id) {
@@ -124,5 +129,9 @@ public class ChatService {
 
         log.info("roomId {} " + roomId);
         return roomId;
+    }
+
+    public Long getReceiverId(Long chatId, Long senderId) {
+        return chatMapper.getReceiverId(chatId, senderId);
     }
 }
