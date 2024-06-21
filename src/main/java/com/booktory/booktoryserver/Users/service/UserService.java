@@ -6,6 +6,7 @@ import com.booktory.booktoryserver.Users.dto.response.UserResponseDTO;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONUtil;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,13 +50,15 @@ public class UserService implements UserDetailsService {
 
         UserEntity userData = userMapper.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다."));
 
+        System.out.println("username " + username);
+        System.out.println("userData " + userData);
+
         if(userData != null) {
             return new CustomUserDetails(userData);
         }
 
         return null;
     }
-
 
 
     public List<UserResponseDTO> findByAllUser(){
