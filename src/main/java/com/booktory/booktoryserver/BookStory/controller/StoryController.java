@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.BookStory.controller;
 import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
+import com.booktory.booktoryserver.BookStory.dto.response.ResponseDTO;
 import com.booktory.booktoryserver.BookStory.service.StoryService;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
@@ -46,30 +47,34 @@ public class StoryController {
         }
     }
 
-      
+
     @GetMapping("/{story_board_id}")
     @Operation(summary = "독후감 상세보기", description = "ID로 독후감을 상세 조회합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 상세 조회 성공", content = @Content(schema = @Schema(implementation = StoryEntity.class)))
     public CustomResponse getStoryById (@PathVariable ("story_board_id") Long story_board_id, @AuthenticationPrincipal UserDetails useremail){
+
+        //로그인 한 ID로 독후감을 조회
         StoryDTO myStory = storyService.getStoryById(story_board_id);
 
-        String userEmail = useremail.getUsername();
-        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
-        Long userId = userEntity.get().getUser_id();
+        //이미 저장된 사용자 ID 초기화 이전 로그인한 사람의 사용자ID 초기화
+        Long currentUserId = null;
 
-        myStory.setUserId(userId);
-
-        System.out.println("myStory1 = " + myStory);
+        //인증된 사용자의 이메일을 가져와서 사용자 ID를 조회
+        //인증된 사용자라면 현재의 이메일을 설정
+        if(useremail != null){
+            String userEmail = useremail.getUsername();
+            Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+            if(userEntity.isPresent()){
+                currentUserId = userEntity.get().getUser_id();
+            }
+        }
 
         if(myStory != null){
-            //StoryDTO의 인자가 없어도 되는가??
-
-            System.out.println("response2 = " + myStory);
+            ResponseDTO response = new ResponseDTO(myStory, currentUserId);
             return CustomResponse.ok("독후감 선택 성공", myStory);
         }else{
             return CustomResponse.failure("독후감 선택 실패");
         }
-        //return storyService.getStoryById(story_board_id);
     }
 
 

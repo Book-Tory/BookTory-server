@@ -175,10 +175,13 @@ public class StoryService {
         return "독후감이 성공적으로 등록되었습니다.";
     }
 
+    //독후감 삭제하기
     public void deleteStory(Long story_board_id){
         storyMapper.deleteStory(story_board_id);
     }
 
+
+    //독후감 수정하기
     public void updateStory(Long story_board_id, StoryDTO storyDTO) {
         log.info("storyboardid : " + story_board_id);
         log.info("storyDTO : " + storyDTO);
@@ -194,6 +197,7 @@ public class StoryService {
         //업데이트된 엔티티를 DB에 저장
         storyMapper.updateStory(fetchStory);
     }
+
 
     public StoryDTO getStoryById(Long story_board_id) {
         List<StoryEntity> myStory = storyMapper.getStoryById(story_board_id);
