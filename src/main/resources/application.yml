@@ -20,6 +20,8 @@ spring:
   jwt:
     secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
 
+  websocket:
+    endpoint: /ws
 
 mybatis:
   config-location: classpath:mybatis-config.xml

@@ -45,7 +45,6 @@
         WHERE c.seller_id = #{user_id} OR c.buyer_id = #{user_id};
     </select>
 
-
     <select id="getChatHistory" resultType="chatHistory">
         SELECT
             c.chat_id,
@@ -106,5 +105,34 @@
         SELECT content FROM chat_message WHERE chat_message_id = #{entityId}
     </select>
 
-
+    <select id="getChatRoomInfo" parameterType="map">
+        SELECT
+            c.chat_id,
+            u.user_nickname AS chat_partner_nickname,
+            u.user_img AS chat_partner_img,
+            (
+                SELECT ubi.stored_image_name
+                FROM used_book_image ubi
+                WHERE ubi.used_book_id = c.used_book_id
+                ORDER BY ubi.used_book_image_id ASC
+                               LIMIT 1
+            ) AS stored_image_name,
+            ub.title,
+            ub.discount
+        FROM
+            chat c
+            JOIN
+            users u
+        ON
+            u.user_id = CASE
+            WHEN c.seller_id = #{user_id} THEN c.buyer_id
+            ELSE c.seller_id
+        END
+        JOIN
+            used_book ub
+        ON
+            c.used_book_id = ub.used_book_id
+        WHERE
+            c.chat_id = #{chatId}
+    </select>
 </mapper>

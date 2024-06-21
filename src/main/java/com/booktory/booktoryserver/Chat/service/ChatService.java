@@ -1,10 +1,7 @@
 package com.booktory.booktoryserver.Chat.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.booktory.booktoryserver.Chat.domain.ChatEntity;
-import com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity;
-import com.booktory.booktoryserver.Chat.domain.ChatListEntity;
-import com.booktory.booktoryserver.Chat.domain.ChatMessageEntity;
+import com.booktory.booktoryserver.Chat.domain.*;
 import com.booktory.booktoryserver.Chat.dto.ChatDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatHistoryDTO;
 import com.booktory.booktoryserver.Chat.dto.ChatMessageDTO;
@@ -81,13 +78,22 @@ public class ChatService {
 
         List<ChatHistoryEntity> chatHistory = chatMapper.getChatHistory(chat_id, user_id);
 
+        String url = "";
+
         if (chatHistory.isEmpty()) {
-            return null;
+            ChatRoomEntity chatRoomInfo = chatMapper.getChatRoomInfo(chat_id, user_id);
+
+            if (chatRoomInfo.getStored_image_name() != null) {
+                url = amazonS3.getUrl(bucketName, "profile/" + chatRoomInfo.getStored_image_name()).toString();
+                chatRoomInfo.setStored_image_name(url);
+            }
+
+            return ChatHistoryDTO.toHistoryEmptyDTO(chatRoomInfo);
         }
 
         ChatHistoryEntity firstHistoryEntity = chatHistory.get(0);
 
-        String url = "";
+
 
         for (ChatHistoryEntity chatHistoryEntity : chatHistory) {
             if (chatHistoryEntity.getStored_image_name() != null) {
@@ -105,7 +111,7 @@ public class ChatService {
                         .build())
                 .collect(Collectors.toList());
 
-        return ChatHistoryDTO.toDTO(firstHistoryEntity, messages, url);
+        return ChatHistoryDTO.toHistoryDTO(firstHistoryEntity, messages, url);
     }
 
     public Long saveMessage(ChatMessageDTO chatMessage) {
