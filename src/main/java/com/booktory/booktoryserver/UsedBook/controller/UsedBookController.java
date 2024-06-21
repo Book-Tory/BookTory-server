@@ -84,24 +84,26 @@ public class UsedBookController {
         }
     }
 
-    @GetMapping("/{used_book_id}")
+    @GetMapping("/detail/{used_book_id}")
     @Operation(summary = "중고 서적 글 상세보기", description = "중고 서적 글을 ID로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = ResponseDTO.class)))
     public CustomResponse getPostById(@PathVariable("used_book_id") @Parameter(description = "조회할 중고 서적 글의 ID") Long used_book_id,
                                       @AuthenticationPrincipal @Parameter(hidden = true) UserDetails user) {
         UsedBookPostDTO usedBookPost = usedBookService.getPostById(used_book_id);
 
-        String userEmail = user.getUsername();
-
-        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
-
-        Long userId = userEntity.get().getUser_id();
-
-        if (usedBookPost != null) {
-            ResponseDTO response = new ResponseDTO(usedBookPost, userId);
+        if (user == null) {
+            ResponseDTO response = new ResponseDTO(usedBookPost, null);
             return CustomResponse.ok("조회 성공", response);
         } else {
-            return CustomResponse.failure("조회 실패");
+            String userEmail = user.getUsername();
+
+            Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+
+            Long userId = userEntity.get().getUser_id();
+
+            ResponseDTO response = new ResponseDTO(usedBookPost, userId);
+            return CustomResponse.ok("조회 성공", response);
+
         }
     }
 
