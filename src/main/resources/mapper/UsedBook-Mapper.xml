@@ -146,4 +146,9 @@
         </where>
     </select>
 
+    <update id="updateStatus" parameterType="map">
+        update used_book set status = #{status}
+        where used_book_id = #{used_book_id}
+    </update>
+
 </mapper>

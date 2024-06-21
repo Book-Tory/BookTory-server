@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
+import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookStatusDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.ResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
@@ -134,6 +135,22 @@ public class UsedBookController {
             return CustomResponse.failure("수정에 실패하였습니다.");
         }
     }
+
+    @PutMapping("/status/{used_book_id}")
+    @Operation(summary = "중고 서적 상태 수정", description = "중고 서적의 상태를 수정합니다.")
+    @ApiResponse(responseCode = "200", description = "상태 수정 성공", content = @Content(schema = @Schema(implementation = String.class)))
+    public CustomResponse updateStatus(@PathVariable("used_book_id") @Parameter(description = "수정할 중고 서적 글의 ID") Long used_book_id,
+                                       @RequestParam("status") @Parameter(description = "수정할 중고 서적 상태") Long status) throws IOException {
+        System.out.println("들어옴 ? status = " + status);
+        int result = usedBookService.updateStatus(used_book_id, status);
+
+        if (result > 0) {
+            return CustomResponse.ok("상태가 수정되었습니다.", status);
+        } else {
+            return CustomResponse.failure("상태 수정에 실패하였습니다.");
+        }
+    }
+
 
     @PostMapping("/{d_isbn}")
     @Operation(summary = "중고 서적 글 등록", description = "중고 서적 글을 ISBN으로 등록합니다.")
