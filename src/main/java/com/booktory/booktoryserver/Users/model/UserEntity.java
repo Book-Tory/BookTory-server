@@ -3,16 +3,16 @@ package com.booktory.booktoryserver.Users.model;
 import com.booktory.booktoryserver.Users.constant.Gender;
 import com.booktory.booktoryserver.Users.constant.Role;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.booktory.booktoryserver.Users.dto.response.OAuth2Response;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 public class UserEntity {
 
@@ -23,6 +23,8 @@ public class UserEntity {
     private String user_password; // 사용자 비밀번호
 
     private String user_nickname; // 사용자 닉네임
+
+    private String user_name; // 사용자 이름
 
     private String user_mobile; // 사용자 휴대전화 번호
 
@@ -47,6 +49,18 @@ public class UserEntity {
                 .user_gender(userRegisterDTO.getUser_gender())
                 .user_birth(userRegisterDTO.getUser_birth())
                 .user_address(userRegisterDTO.getUser_address())
+                .user_role(Role.USER)
+                .build();
+    }
+
+
+    public static UserEntity createOAuth2User(String userName, OAuth2Response oAuth2Response, String defaultPassword, String defaultMobile) {
+        return UserEntity.builder()
+                .user_name(userName)
+                .user_password(defaultPassword)
+                .user_mobile(defaultMobile)
+                .user_email(oAuth2Response.getEmail())
+                .user_nickname(oAuth2Response.getName())
                 .user_role(Role.USER)
                 .build();
     }
