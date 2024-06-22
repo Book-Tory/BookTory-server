@@ -82,7 +82,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
+                        .requestMatchers("/login**", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
                                 "/api/used-books/list", "/api/product_shop/detail/**", "/api/qna/**","/api/stories/mystories",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/test").hasRole("USER")
