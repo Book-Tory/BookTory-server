@@ -140,4 +140,12 @@ public class ChatService {
     public Long getReceiverId(Long chatId, Long senderId) {
         return chatMapper.getReceiverId(chatId, senderId);
     }
+
+    public int leaveChatRoom(Long chatId, Long userId) {
+        return chatMapper.leaveChatRoom(chatId, userId);
+    }
+
+    public boolean isMemberOfChatRoom(Long chatId, Long userId) {
+        return chatMapper.isMemberOfChatRoom(chatId, userId);
+    }
 }

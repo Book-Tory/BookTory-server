@@ -135,4 +135,17 @@
         WHERE
             c.chat_id = #{chatId}
     </select>
+
+    <select id="isMemberOfChatRoom" parameterType="map" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM chat
+        WHERE chat_id = #{chatId}
+          AND (seller_id = #{userId} OR buyer_id = #{userId})
+    </select>
+
+    <delete id="leaveChatRoom" parameterType="map">
+        DELETE FROM chat
+        WHERE chat_id = #{chatId}
+          AND (seller_id = #{userId} OR buyer_id = #{userId})
+    </delete>
 </mapper>
