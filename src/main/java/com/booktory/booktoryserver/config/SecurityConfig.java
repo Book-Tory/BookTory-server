@@ -4,7 +4,9 @@ import com.booktory.booktoryserver.Users.filter.CustomLogoutFilter;
 import com.booktory.booktoryserver.Users.filter.JWTFilter;
 import com.booktory.booktoryserver.Users.filter.JWTUtil;
 import com.booktory.booktoryserver.Users.filter.LoginFilter;
+import com.booktory.booktoryserver.Users.handler.CustomSuccessHandler;
 import com.booktory.booktoryserver.Users.mapper.RefreshMapper;
+import com.booktory.booktoryserver.Users.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +42,10 @@ public class SecurityConfig {
 
     private final RefreshMapper refreshMapper;
 
+    private final CustomSuccessHandler customSuccessHandler;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -70,6 +76,7 @@ public class SecurityConfig {
 //                    }
 //                }));
 
+
         http
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -87,6 +94,13 @@ public class SecurityConfig {
 
         http
                 .httpBasic((httpBasic) -> httpBasic.disable());
+
+        //oauth2
+        http
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler));
         http
                 .addFilterBefore(new CorsFilter(corsConfigurationSource()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
