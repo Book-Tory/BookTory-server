@@ -37,7 +37,7 @@ public class UsedBookPostEntity {
     private String condition;
 
     // 상품 상태
-    private int status; // 1: 판매중, 2: 판매중, 3: 판매완료
+    private Long status; // 1: 판매중, 2: 판매중, 3: 판매완료
 
     // 책 정보
     private Long book_id;

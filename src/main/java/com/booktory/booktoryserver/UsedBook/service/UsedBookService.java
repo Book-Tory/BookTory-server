@@ -7,7 +7,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookImage;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
+import com.booktory.booktoryserver.UsedBook.domain.UsedBookStatusEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
+import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookStatusDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookResponseDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.UsedBookPostDTO;
@@ -352,5 +354,10 @@ public class UsedBookService {
         amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
 
         return usedBookMapper.deleteImageByImageId(used_book_image_id);
+    }
+
+    public int updateStatus(Long used_book_id, Long status) {
+//        UsedBookStatusEntity usedBookStatusEntity = UsedBookStatusEntity.toStatusEntity(used_book_id, status);
+        return usedBookMapper.updateStatus(used_book_id, status);
     }
 }
