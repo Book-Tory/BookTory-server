@@ -7,6 +7,7 @@ import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONUtil;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,16 +49,16 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserEntity userData = userMapper.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다."));
+        System.out.println("username111 " + username);
 
-        System.out.println("username " + username);
-        System.out.println("userData " + userData);
+        Optional<UserEntity> userData = userMapper.findByEmail(username);
 
-        if(userData != null) {
-            return new CustomUserDetails(userData);
+        if (userData.isPresent()) {
+            UserEntity user = userData.get();
+            return new CustomUserDetails(user);
+        } else {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + username);
         }
-
-        return null;
     }
 
 

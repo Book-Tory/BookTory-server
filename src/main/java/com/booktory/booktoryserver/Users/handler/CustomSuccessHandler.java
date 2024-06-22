@@ -44,15 +44,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String access = jwtUtil.createToken("access", username, role, 1800000L);
-        String refresh = jwtUtil.createToken("refresh", username, role, 86400000L);
+        String accessToken = jwtUtil.createToken("access", username, role, 1800000L); // 30분 유효한 access token 생성
+        String refresh = jwtUtil.createToken("refresh", username, role, 86400000L); // 24시간 유효한 refresh token 생성
 
         addRefreshEntity(username, refresh, 86400000L);
 
-        response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
-//        response.sendRedirect("http://localhost:5173/");
+
+        String redirectUrl = "http://localhost:5173/login?accessToken=" + accessToken;
+        response.sendRedirect(redirectUrl);
     }
 
     private Cookie createCookie(String key, String value) {
