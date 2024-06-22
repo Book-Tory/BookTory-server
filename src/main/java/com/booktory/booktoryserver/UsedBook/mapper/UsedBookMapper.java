@@ -3,6 +3,7 @@ package com.booktory.booktoryserver.UsedBook.mapper;
 import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookImage;
 import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
+import com.booktory.booktoryserver.UsedBook.domain.UsedBookStatusEntity;
 import com.booktory.booktoryserver.UsedBook.page.PageRequest;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -37,4 +38,6 @@ public interface UsedBookMapper {
     Long findIdByEmail(String username);
 
     int countList(String searchKey);
+
+    int updateStatus(Long used_book_id, Long status);
 }
