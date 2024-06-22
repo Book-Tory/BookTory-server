@@ -30,4 +30,8 @@ public interface ChatMapper {
     String findById(Long entityId);
 
     ChatRoomEntity getChatRoomInfo(Long chatId, Long user_id);
+
+    int leaveChatRoom(Long chatId, Long userId);
+
+    boolean isMemberOfChatRoom(Long chatId, Long userId);
 }
