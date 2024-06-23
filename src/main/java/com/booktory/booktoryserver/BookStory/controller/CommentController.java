@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.BookStory.controller;
 
-import com.booktory.booktoryserver.BookStory.domain.CommentEntity;
+import com.booktory.booktoryserver.Alram.domain.AlarmEntity;
+import com.booktory.booktoryserver.Alram.service.AlarmService;
 import com.booktory.booktoryserver.BookStory.dto.request.CommentCreateDTO;
 import com.booktory.booktoryserver.BookStory.dto.response.CommentViewDTO;
 import com.booktory.booktoryserver.BookStory.service.CommentService;
@@ -19,8 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/stories")
@@ -30,7 +30,7 @@ import java.util.Optional;
 public class CommentController {
     private final CommentService commentService;
     private final UserMapper userMapper;
-
+    private final AlarmService alarmService;
 
     @GetMapping("/{story_board_id}/comments")
     @Operation(summary = "댓글 조회", description = "독후감 게시물에 달린 모든 댓글을 조회합니다.")
@@ -54,7 +54,6 @@ public class CommentController {
         String userEmail = useremail.getUsername();
         Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
 
-
         Long userId = userEntity.get().getUser_id();
 
         log.info(String.valueOf(userId));
@@ -63,12 +62,17 @@ public class CommentController {
         commentCreateDTO.setBoardId(story_board_id);//현재 게시물로 댓글의 게시물id 설정
         commentCreateDTO.setUserId(userId); //현재 로그인한 아이디로 댓글 작성자의 userId 설정
 
-        long commentId = commentService.createComment(commentCreateDTO);
-        System.out.println("result = " + commentId);
+        long commentId = commentService.createComment(commentCreateDTO); // 댓글 Id
 
         CommentViewDTO commentViewDTO = commentService.getCommentsBycommentId(commentId);
 
-        System.out.println("commentEntity = " + commentViewDTO);
+        Long receiverId = commentService.getReceiverId(commentId); // 알림 받는 사람 Id
+        commentViewDTO.setUserId(userId);
+
+        AlarmEntity commentAlarmEntity = AlarmEntity.toCommentAlarmEntity(commentViewDTO, receiverId);
+
+        alarmService.saveAlarm(commentAlarmEntity);
+        alarmService.sendAlarm(commentAlarmEntity);
         
         if (commentId >0) {
             return CustomResponse.ok("댓글 등록 성공", commentViewDTO);
@@ -105,5 +109,21 @@ public class CommentController {
         } else {
             return CustomResponse.failure("댓글 수정 실패");
         }
+    }
+
+    @GetMapping("/user")
+    public CustomResponse userImg(@AuthenticationPrincipal UserDetails user) {
+        String userEmail = user.getUsername();
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+
+        Map<String, String> map = new HashMap<>();
+
+        String userImg = userEntity.get().getUser_img();
+        String userNickname = userEntity.get().getUser_nickname();
+
+        map.put("userImg", userImg);
+        map.put("userNickname", userNickname);
+
+        return CustomResponse.ok("유저 정보", map);
     }
 }

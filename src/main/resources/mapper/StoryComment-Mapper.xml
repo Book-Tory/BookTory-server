@@ -54,5 +54,11 @@
         WHERE comment_id = #{comment_id}
     </update>
 
-
+    <select id="getReceiverId" resultType="Long">
+        SELECT u.user_id
+        FROM mystory_comment c
+                 INNER JOIN mystory_board s ON c.story_board_id = s.story_board_id
+                 INNER JOIN users u ON s.user_id = u.user_id
+        WHERE c.comment_id = #{commentId}
+    </select>
 </mapper>
