@@ -15,4 +15,6 @@ public interface CommentMapper {
     int updateComment(CommentEntity commentEntity);
 
     CommentEntity getCommentsBycommentId(long commentId);
+
+    Long getReceiverId(long commentId);
 }
