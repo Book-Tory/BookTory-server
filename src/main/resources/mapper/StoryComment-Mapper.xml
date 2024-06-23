@@ -22,7 +22,7 @@
     </select>
 
     <insert id="createComment" parameterType="storyComment">
-        INSERT INTO mystory_comment (comment_content, createDate, modifiedDate, story_board_id, comment_author_user_id)
+        INSERT INTO mystory_comment (comment_content, createdDate, modifiedDate, story_board_id, comment_author_user_id)
         VALUES (#{comment_content}, NOW(), NOW(), #{story_board_id}, #{comment_author_user_id})
     </insert>
 

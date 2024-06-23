@@ -22,8 +22,9 @@ public class OrderInfoEntity {
     private String phone;
     private String message;
     private String order_date;
+    private Long user_id;
 
-    public static OrderInfoEntity toOrderInfoEntity(OrderInfoRequestDto requestDto){
+    public static OrderInfoEntity toOrderInfoEntity(OrderInfoRequestDto requestDto, Long user_id){
         return OrderInfoEntity.builder()
                .merchant_uid(requestDto.getMerchant_uid())
                .user_name(requestDto.getUser_name())
@@ -35,6 +36,7 @@ public class OrderInfoEntity {
                .addr(requestDto.getAddr())
                .phone(requestDto.getPhone())
                .message(requestDto.getMessage())
+                .user_id(user_id)
                .build();
     }
 }
