@@ -13,4 +13,29 @@
     <delete id="removeWish">
         delete from used_book_wish where user_id = #{user_id} and used_book_id = #{used_book_id}
     </delete>
+
+    <select id="getWishList" resultType="wishList">
+        SELECT
+            w.used_book_wish_id,
+            w.wish_date,
+            w.user_id,
+            b.used_book_id,
+            b.title,
+            b.discount,
+            i.stored_image_name,
+            u.user_id as seller_id,
+            u.user_nickname as seller_nickname
+        FROM
+            used_book_wish w
+                JOIN
+            used_book b ON w.used_book_id = b.used_book_id
+                JOIN
+            users u ON b.user_id = u.user_id
+                LEFT JOIN
+            (SELECT used_book_id, stored_image_name
+             FROM used_book_image
+             GROUP BY used_book_id) i ON b.used_book_id = i.used_book_id
+        WHERE
+            w.user_id = #{userId}
+    </select>
 </mapper>

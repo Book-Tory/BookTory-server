@@ -16,6 +16,7 @@
         <typeAlias alias="chatHistory" type="com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity" />
 
         <typeAlias alias="wish" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishEntity" />
+        <typeAlias alias="wishList" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishListEntity" />
 
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
