@@ -7,6 +7,12 @@
         VALUES (#{source_user_id}, #{destination_user_id}, #{entity_id}, #{entity_type_id}, #{is_read})
     </insert>
 
+    <select id="getChatIdByMessageId" resultType="Long" parameterType="Long">
+        SELECT chat_id
+        FROM chat_message
+        WHERE chat_message_id = #{entityId}
+    </select>
+
     <select id="getAlarmsByUserId" resultType="alarm">
         SELECT * FROM alarm WHERE destination_user_id = #{userId} ORDER BY create_date DESC
     </select>

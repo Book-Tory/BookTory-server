@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +20,7 @@ public class AlarmEntity {
     private Long entity_type_id;
     private Boolean is_read;
     private Date create_date;
+    private Long chat_id;
 
     public static AlarmEntity toAlarmEntity(ChatMessageDTO chatMessage, Long receiverId) {
         return AlarmEntity.builder()
