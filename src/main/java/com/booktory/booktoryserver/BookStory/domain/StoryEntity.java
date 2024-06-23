@@ -43,6 +43,8 @@ public class StoryEntity {
                 .mystoryTypeId(storyEntity.getMystory_type_id())
                 .mystoryName(storyEntity.getMystory_name())
                 .mystoryContent(storyEntity.getMystory_content())
+                .mystoryDate(storyEntity.getMystory_date())
+                .readDate(storyEntity.getRead_date())
                 .loveCount(storyEntity.getLove_count())
                 .userId(storyEntity.getUser_id())
                 .bookId(storyEntity.getBook_id())

@@ -68,6 +68,8 @@ public class StoryController {
             Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
             if(userEntity.isPresent()){
                 currentUserId = userEntity.get().getUser_id();
+//                currentUserNickname = userEntity.get().getUser_nickname();
+//                currentUserImg  = userEntity.get().get
             }
         }
 
