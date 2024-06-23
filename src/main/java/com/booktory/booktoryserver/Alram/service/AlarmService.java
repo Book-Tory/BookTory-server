@@ -6,6 +6,7 @@ import com.booktory.booktoryserver.Alram.mapper.AlarmMapper;
 import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class AlarmService {
     private final AlarmMapper alarmMapper;
     private final ChatMapper chatMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public void saveAlarm(AlarmEntity alarmEntity) {
         alarmMapper.saveAlarm(alarmEntity);
@@ -46,5 +48,9 @@ public class AlarmService {
             message = "좋아요를 받았습니다.";
         }
         return AlarmDTO.toDTO(alarmEntity, message, user_nickname, content);
+    }
+
+    public void sendAlarm(AlarmEntity alarmEntity) {
+        messagingTemplate.convertAndSend("/queue/alarm/" + alarmEntity.getDestination_user_id(), toAlarmDTO(alarmEntity));
     }
 }

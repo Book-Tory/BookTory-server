@@ -29,6 +29,7 @@ public class AlarmEntity {
                 .entity_id(chatMessage.getChat_message_id())
                 .entity_type_id(1L)
                 .is_read(false)
+                .create_date(new Date())
                 .build();
     }
 }
