@@ -2,6 +2,7 @@ package com.booktory.booktoryserver.Users.model;
 
 import com.booktory.booktoryserver.Users.constant.Gender;
 import com.booktory.booktoryserver.Users.constant.Role;
+import com.booktory.booktoryserver.Users.dto.request.ProfileDTO;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.Users.dto.response.OAuth2Response;
 import lombok.*;
@@ -34,6 +35,10 @@ public class UserEntity {
 
     private String user_address; // 사용자 주소
 
+    private String user_info;
+
+    private String user_img;
+
     private Role user_role; // 사용자 역할 (USER, ADMIN, MODERATOR)
 
     private LocalDateTime create_at; // 계정 생성 시간
@@ -44,6 +49,7 @@ public class UserEntity {
         return UserEntity.builder()
                 .user_email(userRegisterDTO.getUser_email())
                 .user_password(userRegisterDTO.getUser_password())
+                .user_name(userRegisterDTO.getUser_name())
                 .user_nickname(userRegisterDTO.getUser_nickname())
                 .user_mobile(userRegisterDTO.getUser_mobile())
                 .user_gender(userRegisterDTO.getUser_gender())
@@ -63,5 +69,16 @@ public class UserEntity {
                 .user_nickname(oAuth2Response.getName())
                 .user_role(Role.USER)
                 .build();
+    }
+
+    public static UserEntity updateById(ProfileDTO profileDTO, Long user_id) {
+        return UserEntity.builder()
+                .user_id(user_id)
+                .user_name(profileDTO.getUser_name())
+                .user_nickname(profileDTO.getUser_nickname())
+                .user_address(profileDTO.getUser_address())
+                .user_info(profileDTO.getUser_info())
+                .build();
+
     }
 }

@@ -25,9 +25,9 @@ public class OrderService {
     private final ProductMapper productMapper;
 
     @Transactional
-    public int saveOrderInfo(OrderInfoRequestDto orderInfo) {
+    public int saveOrderInfo(OrderInfoRequestDto orderInfo, Long user_id) {
 
-        OrderInfoEntity orderInfoEntity = OrderInfoEntity.toOrderInfoEntity(orderInfo);
+        OrderInfoEntity orderInfoEntity = OrderInfoEntity.toOrderInfoEntity(orderInfo, user_id);
         try {
             String[] orderProduct = orderInfoEntity.getProduct_name().split(",");
             orderMapper.saveOrderInfo(orderInfoEntity);
@@ -78,5 +78,12 @@ public class OrderService {
         }
 
         return OrderResponseDTO.toOrderResponseDTO(orderInfoEntity);
+    }
+
+    public List<OrderResponseDTO> findOrderList(Long user_id) {
+
+        List<OrderInfoEntity> orderInfo = orderMapper.findOrderList(user_id);
+
+        return orderInfo.stream().map(OrderResponseDTO::toOrderResponseDTO).toList();
     }
 }

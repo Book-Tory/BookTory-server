@@ -4,14 +4,20 @@ import com.booktory.booktoryserver.ProductOrder.dto.request.OrderInfoRequestDto;
 import com.booktory.booktoryserver.ProductOrder.dto.response.OrderResponseDTO;
 import com.booktory.booktoryserver.ProductOrder.model.OrderInfoEntity;
 import com.booktory.booktoryserver.ProductOrder.service.OrderService;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
+import com.booktory.booktoryserver.Users.service.CustomUserDetails;
 import com.booktory.booktoryserver.common.CustomResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/order")
@@ -21,10 +27,19 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    private final UserMapper userMapper;
+
     @Operation(summary = "주문 정보 저장", description = "주문 정보를 저장합니다.")
     @PostMapping("/orderInfo")
-    public CustomResponse saveOrderInfo(@RequestBody @Parameter(description = "주문 정보") OrderInfoRequestDto orderInfo){
-        int result = orderService.saveOrderInfo(orderInfo);
+    public CustomResponse saveOrderInfo(@RequestBody @Parameter(description = "주문 정보") OrderInfoRequestDto orderInfo, @AuthenticationPrincipal CustomUserDetails userDetails){
+
+        String email = userDetails.getUsername();
+
+        Optional<UserEntity> existUser = userMapper.findByEmail(email);
+
+        Long user_id = existUser.get().getUser_id();
+
+        int result = orderService.saveOrderInfo(orderInfo, user_id);
         if(result > 0){
             return CustomResponse.ok("주문 완료", orderInfo.getMerchant_uid());
         } else {
@@ -73,6 +88,22 @@ public class OrderController {
     public CustomResponse<List<OrderInfoEntity>> getThisYearSales() {
         List<OrderInfoEntity> sales = orderService.getThisYearOrders();
         return CustomResponse.ok("This Year's Sales", sales);
+    }
+
+
+    @GetMapping("/list")
+    public CustomResponse<List<OrderResponseDTO>> getOrderList(@AuthenticationPrincipal UserDetails userDetails) {
+
+        String email = userDetails.getUsername();
+
+        Optional<UserEntity> existUser = userMapper.findByEmail(email);
+
+        Long user_id = existUser.get().getUser_id();
+
+        System.out.println(user_id);
+
+        List<OrderResponseDTO> orderList = orderService.findOrderList(user_id);
+        return CustomResponse.ok("주문 조회 성공", orderList);
     }
 
 }
