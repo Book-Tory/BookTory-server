@@ -53,8 +53,10 @@ public class StoryController {
     @ApiResponse(responseCode = "200", description = "독후감 상세 조회 성공", content = @Content(schema = @Schema(implementation = StoryEntity.class)))
     public CustomResponse getStoryById (@PathVariable ("story_board_id") Long story_board_id, @AuthenticationPrincipal UserDetails useremail){
 
-        //로그인 한 ID로 독후감을 조회
+        //상세보기한 독후감을 독후감ID로 조회
         StoryDTO myStory = storyService.getStoryById(story_board_id);
+        //클릭한 해당 게시물id를 통해서 Entity로 정보를 가져와 myStory에 저장
+        //StoryDTO에서 받은 정보를 모두 담는가 확인 필요
 
         //이미 저장된 사용자 ID 초기화 이전 로그인한 사람의 사용자ID 초기화
         Long currentUserId = null;

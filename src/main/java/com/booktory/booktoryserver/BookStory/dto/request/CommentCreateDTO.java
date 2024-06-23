@@ -16,7 +16,7 @@ public class CommentCreateDTO {
     private String commentContent;
     //private LocalDateTime createDate;
     //private LocalDateTime modifiedDate;
-    private Long userId;
+    private Long userId; //작성자 ID
     private Long boardId;
 
     //DTO객체를 Entity객체로 변환, 클라이언트에서 전송된 데이터를 데이터 베이스에 저장

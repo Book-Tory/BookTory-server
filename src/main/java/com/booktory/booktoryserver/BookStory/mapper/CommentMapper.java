@@ -9,7 +9,10 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
     List<CommentEntity> getAllCommentsByStoryId(Long story_board_id);
+
     int createComment(CommentEntity commentEntity);
     int deleteComment(Long comment_id);
     int updateComment(CommentEntity commentEntity);
+
+    CommentEntity getCommentsBycommentId(long commentId);
 }

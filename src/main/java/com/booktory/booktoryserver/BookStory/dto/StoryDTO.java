@@ -33,6 +33,8 @@ public class StoryDTO {
     private Long userId;
     private Long bookId;
 
+    private String userNickname;
+    private String userImg;
 
     //DTO를 Entity로 변환하는 메서드
     public static StoryEntity toEntity(StoryDTO storyDTO) {
