@@ -9,6 +9,7 @@ import com.booktory.booktoryserver.Users.mapper.RefreshMapper;
 import com.booktory.booktoryserver.Users.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +36,20 @@ import java.util.Collections;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    // OAuth2 클라이언트 설정 값 가져오기
+    @Value("${NAVER_OAUTH_CLIENT_ID}")
+    private String naverClientId;
+
+    @Value("${NAVER_OAUTH_CLIENT_SECRET}")
+    private String naverClientSecret;
+
+    @Value("${GOOGLE_OAUTH_CLIENT_ID}")
+    private String googleClientId;
+
+    @Value("${GOOGLE_OAUTH_CLIENT_SECRET}")
+    private String googleClientSecret;
+
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
