@@ -151,4 +151,7 @@
         where used_book_id = #{used_book_id}
     </update>
 
+    <select id="myPageUsedBookList" resultType="myPageUsedBook">
+        select * from used_book where user_id = #{userId}
+    </select>
 </mapper>

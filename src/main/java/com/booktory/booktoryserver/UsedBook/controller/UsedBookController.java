@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
+import com.booktory.booktoryserver.UsedBook.domain.MyPageUsedBookEntity;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookStatusDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
@@ -179,6 +180,26 @@ public class UsedBookController {
             return CustomResponse.ok("선택한 이미지가 삭제되었습니다.", null);
         } else {
             return CustomResponse.failure("이미지 삭제에 실패하였습니다.");
+        }
+    }
+
+    @GetMapping("/mypage/list")
+    @Operation(summary = "마이페이지 내 중고 서적 글 리스트 조회", description = "마이페이지 내 중고 서적 글 리스트를 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = PageResponse.class)))
+    public CustomResponse myPageUsedBookList(@AuthenticationPrincipal UserDetails user) {
+        String userEmail = user.getUsername();
+
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+
+        Long userId = userEntity.get().getUser_id();
+
+        List<MyPageUsedBookEntity> myPageUsedBook = usedBookService.myPageUsedBookList(userId);
+
+        System.out.println("myPageUsedBook = " + myPageUsedBook);
+        if (!myPageUsedBook.isEmpty()) {
+            return CustomResponse.ok("중고 서적 글 리스트 조회 성공", myPageUsedBook);
+        } else {
+            return CustomResponse.failure("중고 서적 글 리스트 조회 실패");
         }
     }
 }

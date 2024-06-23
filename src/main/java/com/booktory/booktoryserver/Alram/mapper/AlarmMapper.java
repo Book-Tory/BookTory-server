@@ -12,4 +12,6 @@ public interface AlarmMapper {
     List<AlarmEntity> getAlarmsByUserId(Long userId);
 
     String findUserNicknameById(Long sourceUserId);
+
+    Long getChatIdByMessageId(Long entityId);
 }

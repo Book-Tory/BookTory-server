@@ -21,6 +21,7 @@ public class AlarmDTO {
     private String message;
     private String content;
     private String user_nickname;
+    private Long chat_id;
 
 
     public static AlarmDTO toDTO(AlarmEntity alarmEntity, String message, String user_nickname, String content) {
@@ -34,6 +35,7 @@ public class AlarmDTO {
                 .content(content)
                 .message(message)
                 .user_nickname(user_nickname)
+                .chat_id(alarmEntity.getChat_id())
                 .build();
     }
 }

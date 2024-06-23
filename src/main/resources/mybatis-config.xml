@@ -8,6 +8,7 @@
         <typeAlias alias="usedBook" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity" />
         <typeAlias alias="usedBookImage" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookImage" />
         <typeAlias alias="usedBookStatus" type="com.booktory.booktoryserver.UsedBook.domain.UsedBookStatusEntity" />
+        <typeAlias alias="myPageUsedBook" type="com.booktory.booktoryserver.UsedBook.domain.MyPageUsedBookEntity" />
 
         <typeAlias alias="chat" type="com.booktory.booktoryserver.Chat.domain.ChatEntity" />
         <typeAlias alias="chatMessage" type="com.booktory.booktoryserver.Chat.domain.ChatMessageEntity" />
@@ -15,6 +16,7 @@
         <typeAlias alias="chatHistory" type="com.booktory.booktoryserver.Chat.domain.ChatHistoryEntity" />
 
         <typeAlias alias="wish" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishEntity" />
+        <typeAlias alias="wishList" type="com.booktory.booktoryserver.UsedBook.domain.wish.WishListEntity" />
 
         <typeAlias alias="book" type="com.booktory.booktoryserver.UsedBook.domain.BookEntity" />
         <typeAlias alias="product" type="com.booktory.booktoryserver.Products_shop.domain.Product" />
