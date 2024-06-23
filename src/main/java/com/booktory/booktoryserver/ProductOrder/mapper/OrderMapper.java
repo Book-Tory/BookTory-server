@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
 
-    @Insert("INSERT INTO product_orders (merchant_uid, user_name, product_name, product_price, quantity, recipient, post, addr, phone, message) " +
-            "VALUES (#{merchant_uid}, #{user_name}, #{product_name}, #{product_price}, #{quantity}, #{recipient}, #{post}, #{addr}, #{phone}, #{message})")
+    @Insert("INSERT INTO product_orders (merchant_uid, user_name, product_name, product_price, quantity, recipient, post, addr, phone, message, user_id) " +
+            "VALUES (#{merchant_uid}, #{user_name}, #{product_name}, #{product_price}, #{quantity}, #{recipient}, #{post}, #{addr}, #{phone}, #{message}, ${user_id})")
     int saveOrderInfo(OrderInfoEntity orderInfo);
 
     @Select("SELECT  * FROM product_orders")
@@ -31,4 +31,7 @@ public interface OrderMapper {
 
     @Select("SELECT * FROM product_orders WHERE id = #{orderId}")
     OrderInfoEntity findById(Long orderId);
+
+    @Select("SELECT * FROM product_orders WHERE user_id = #{user_id}")
+    List<OrderInfoEntity> findOrderList(Long user_id);
 }

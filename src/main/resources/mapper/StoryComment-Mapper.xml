@@ -21,10 +21,28 @@
             sc.story_board_id = #{story_board_id}
     </select>
 
-    <insert id="createComment" parameterType="storyComment">
-        INSERT INTO mystory_comment (comment_content, createDate, modifiedDate, story_board_id, comment_author_user_id)
+
+    <insert id="createComment" parameterType="storyComment" useGeneratedKeys="true" keyProperty="comment_id">
+        INSERT INTO mystory_comment (comment_content, createdDate, modifiedDate, story_board_id, comment_author_user_id)
         VALUES (#{comment_content}, NOW(), NOW(), #{story_board_id}, #{comment_author_user_id})
     </insert>
+
+    <select id = "getCommentsBycommentId" resultType="storyComment">
+        select
+            sc.comment_id,
+            sc.comment_content,
+            sc.createdDate,
+            sc.modifiedDate,
+            sc.story_board_id,
+            u.user_img As author_profile_image,
+            u.user_nickname AS author_nickname
+        FROM
+            mystory_comment sc
+                JOIN
+            users u ON sc.comment_author_user_id = u.user_id
+        where
+            sc.comment_id = #{comment_id}
+    </select>
 
     <delete id="deleteComment" parameterType="long">
         DELETE FROM mystory_comment WHERE comment_id = #{comment_id}

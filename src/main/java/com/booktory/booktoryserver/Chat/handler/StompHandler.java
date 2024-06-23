@@ -36,8 +36,12 @@ public class StompHandler implements ChannelInterceptor {
             } else {
                 System.out.println("Authorization header is missing or invalid.");
             }
+        } else if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
+            // 구독 경로를 출력합니다.
+            String destination = accessor.getDestination();
+            System.out.println("Subscribed to: " + destination);
         }
+
         return message;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.booktory.booktoryserver.Users.service;
 
 import com.booktory.booktoryserver.Chat.mapper.ChatMapper;
+import com.booktory.booktoryserver.Users.dto.request.ProfileDTO;
 import com.booktory.booktoryserver.Users.dto.request.UserRegisterDTO;
 import com.booktory.booktoryserver.Users.dto.response.UserResponseDTO;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
@@ -71,5 +72,12 @@ public class UserService implements UserDetailsService {
     public int deleteUserById(Long userId) {
         chatMapper.deleteBySellerId(userId);
         return userMapper.deleteUserById(userId);
+    }
+
+    public int updateById(ProfileDTO profileDTO, Long user_id) {
+
+        UserEntity userUpdate = UserEntity.updateById(profileDTO, user_id);
+
+        return userMapper.updateUserById(userUpdate);
     }
 }

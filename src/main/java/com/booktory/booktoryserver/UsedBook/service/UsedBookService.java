@@ -4,10 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.booktory.booktoryserver.UsedBook.domain.BookEntity;
-import com.booktory.booktoryserver.UsedBook.domain.UsedBookImage;
-import com.booktory.booktoryserver.UsedBook.domain.UsedBookPostEntity;
-import com.booktory.booktoryserver.UsedBook.domain.UsedBookStatusEntity;
+import com.booktory.booktoryserver.UsedBook.domain.*;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookInfoDTO;
 import com.booktory.booktoryserver.UsedBook.dto.request.UsedBookStatusDTO;
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
@@ -359,5 +356,9 @@ public class UsedBookService {
     public int updateStatus(Long used_book_id, Long status) {
 //        UsedBookStatusEntity usedBookStatusEntity = UsedBookStatusEntity.toStatusEntity(used_book_id, status);
         return usedBookMapper.updateStatus(used_book_id, status);
+    }
+
+    public List<MyPageUsedBookEntity> myPageUsedBookList(Long userId) {
+        return usedBookMapper.myPageUsedBookList(userId);
     }
 }

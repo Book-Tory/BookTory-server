@@ -98,15 +98,15 @@ public class ChatController {
     public void send(@DestinationVariable Long chatId, @RequestBody ChatMessageDTO chatMessage) {
         Long chat_message_id = chatService.saveMessage(chatMessage); // 메세지 보낼 때 생성되는 chat_message_id
 
-        Long senderId = chatMessage.getSender_id();
+        Long senderId = chatMessage.getSender_id(); // 보낸 사람 id
         Long receiverId = chatService.getReceiverId(chatId, senderId); // 메세지 받은 사람의 id
 
         chatMessage.setChat_message_id(chat_message_id);
         
         if (chat_message_id > 0) {
             AlarmEntity alarmEntity = AlarmEntity.toAlarmEntity(chatMessage, receiverId);
-
             alarmService.saveAlarm(alarmEntity); // 알람 테이블에 저장
+            alarmService.sendAlarm(alarmEntity);
             messagingTemplate.convertAndSend("/queue/chat/" + chatId , chatMessage);
         } else {
             messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);

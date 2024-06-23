@@ -1,5 +1,6 @@
 package com.booktory.booktoryserver.UsedBook.controller;
 
+import com.booktory.booktoryserver.UsedBook.domain.wish.WishListEntity;
 import com.booktory.booktoryserver.UsedBook.dto.response.WishResponseDTO;
 import com.booktory.booktoryserver.UsedBook.service.UsedBookWishService;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
@@ -14,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +39,24 @@ public class UsedBookWishController {
             return CustomResponse.ok("찜 되어있음", response);
         } else {
             return CustomResponse.ok("찜 안 되어있음", response);
+        }
+    }
+
+    @Operation(summary = "찜 목록 조회", description = "마이페이지 찜 목록 조회합니다.")
+    @GetMapping("/list")
+    public CustomResponse getWishList(@AuthenticationPrincipal UserDetails user) {
+        String userEmail = user.getUsername();
+
+        Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+
+        Long userId = userEntity.get().getUser_id();
+
+        List<WishListEntity> wishList = usedBookWishService.getWishList(userId);
+
+        if (!wishList.isEmpty()) {
+            return CustomResponse.ok("찜 목록 조회 성공", wishList);
+        } else {
+            return CustomResponse.failure("찜 목록 조회 실패");
         }
     }
 

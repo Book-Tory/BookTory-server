@@ -18,4 +18,6 @@ public interface UserMapper {
 
     UserEntity findByUserName(String user_name);
 
+    int updateUserById(UserEntity user);
+
 }
