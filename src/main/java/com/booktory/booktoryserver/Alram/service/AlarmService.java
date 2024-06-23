@@ -36,7 +36,6 @@ public class AlarmService {
         String content ="";
         if (alarmEntity.getEntity_type_id() == 1) {
             Long chatId =  alarmMapper.getChatIdByMessageId(alarmEntity.getEntity_id());
-            System.out.println("chatId = " + chatId);
             alarmEntity.setChat_id(chatId);
             content = chatMapper.findById(alarmEntity.getEntity_id());
             message = "채팅이 도착했습니다.";
