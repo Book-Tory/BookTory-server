@@ -36,6 +36,8 @@ public class StoryDTO {
     private String userNickname;
     private String userImg;
 
+    private boolean isLiked;
+
     //DTO를 Entity로 변환하는 메서드
     public static StoryEntity toEntity(StoryDTO storyDTO) {
         return StoryEntity.builder()

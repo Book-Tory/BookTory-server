@@ -6,6 +6,7 @@ import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.NaverSearchBookResponseDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
+import com.booktory.booktoryserver.BookStory.mapper.StoryLikeMapper;
 import com.booktory.booktoryserver.BookStory.mapper.StoryMapper;
 import com.booktory.booktoryserver.Users.mapper.UserMapper;
 import com.booktory.booktoryserver.Users.model.UserEntity;
@@ -35,6 +36,9 @@ public class StoryService {
 
     private final UserMapper userMapper;
     //책 검색 API사용
+
+
+    private final StoryLikeMapper storyLikeMapper;
 
 
     @Value("XKLrNAbeorAmb3vVPPPP")
@@ -294,6 +298,31 @@ public class StoryService {
     }
 
 
+//    public List<StoryDTO> getAllStoryWithLikeStatus(Long currentUserId) {
+//        List<StoryEntity> storyEntities = storyMapper.getAllStory();
+//        List<StoryDTO> storyDTOS = new ArrayList<>();
+//
+//        for (StoryEntity story : storyEntities) {
+//            StoryDTO storyDTO = StoryEntity.toDTO(story);
+//            boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(),  userId);
+//            storyDTO.setLiked(isLiked);
+//            storyDTOs.add(storyDTO);
+//        }
+//        return storyDTOs;
+//    }
 
+    public List<StoryDTO> getAllStory(Long userId) {
+        List<StoryEntity> storyEntities = storyMapper.getAllStory();
+        List<StoryDTO> storyDTOs = new ArrayList<>();
+
+        for (StoryEntity story : storyEntities) {
+            StoryDTO storyDTO = StoryEntity.toDTO(story);
+            boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(), userId);
+            storyDTO.setLiked(isLiked);
+            storyDTOs.add(storyDTO);
+        }
+
+        return storyDTOs;
+    }
 
 }
