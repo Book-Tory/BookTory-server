@@ -4,7 +4,9 @@ import com.booktory.booktoryserver.Users.filter.CustomLogoutFilter;
 import com.booktory.booktoryserver.Users.filter.JWTFilter;
 import com.booktory.booktoryserver.Users.filter.JWTUtil;
 import com.booktory.booktoryserver.Users.filter.LoginFilter;
+import com.booktory.booktoryserver.Users.handler.CustomSuccessHandler;
 import com.booktory.booktoryserver.Users.mapper.RefreshMapper;
+import com.booktory.booktoryserver.Users.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +42,10 @@ public class SecurityConfig {
 
     private final RefreshMapper refreshMapper;
 
+    private final CustomSuccessHandler customSuccessHandler;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -70,13 +76,15 @@ public class SecurityConfig {
 //                    }
 //                }));
 
+
         http
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
-                                "/api/used-books/list", "/api/product_shop/detail/**", "/api/qna/**", "ws/**","/api/stories/mystories/",
+
+                        .requestMatchers("/login**", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
+                                "/api/used-books/list",  "/api/used-books/detail/**", "/api/product_shop/detail/**", "/api/qna/**","/api/stories/mystories",
                                 "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/test").hasRole("USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
@@ -87,6 +95,13 @@ public class SecurityConfig {
 
         http
                 .httpBasic((httpBasic) -> httpBasic.disable());
+
+        //oauth2
+        http
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService))
+                        .successHandler(customSuccessHandler));
         http
                 .addFilterBefore(new CorsFilter(corsConfigurationSource()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
@@ -104,7 +119,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://52.78.9.158:5173", "http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("http://52.78.9.158:5173", "http://localhost:5173", "http://54.91.40.23:5173"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "access", "refresh"));

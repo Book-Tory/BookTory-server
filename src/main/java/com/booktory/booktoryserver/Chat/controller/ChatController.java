@@ -72,6 +72,27 @@ public class ChatController {
         }
     }
 
+    @Operation(summary = "채팅방 나가기", description = "특정 채팅방 나가기")
+    @DeleteMapping("/leave/{chat_id}")
+    public CustomResponse leaveChatRoom(@Parameter(description = "채팅방 ID", required = true) @PathVariable("chat_id") Long chat_id, @AuthenticationPrincipal UserDetails user) {
+        String username = user.getUsername();
+
+        Optional<UserEntity> userEntity = userMapper.findByEmail(username);
+
+        Long userId = userEntity.get().getUser_id();
+
+        if (!chatService.isMemberOfChatRoom(chat_id, userId)) {
+            return CustomResponse.failure("채팅방을 나갈 권한이 없습니다.");
+        }
+
+        int result  = chatService.leaveChatRoom(chat_id, userId);
+        if (result > 0) {
+            return CustomResponse.ok("채팅방 나가기 성공", result);
+        } else {
+            return CustomResponse.failure("채팅방 나가기 실패");
+        }
+    }
+
     @Operation(summary = "채팅 메시지 전송", description = "특정 채팅방에 메시지를 전송합니다.")
     @MessageMapping("/{chatId}")
     public void send(@DestinationVariable Long chatId, @RequestBody ChatMessageDTO chatMessage) {
@@ -91,4 +112,6 @@ public class ChatController {
             messagingTemplate.convertAndSend("/queue/chat/" + chatId, chatMessage);
         }
     }
+
+
 }

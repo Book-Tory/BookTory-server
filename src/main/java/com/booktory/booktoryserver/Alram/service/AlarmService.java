@@ -24,10 +24,7 @@ public class AlarmService {
 
     public List<AlarmDTO> getAlarmsByUserId(Long userId) {
         List<AlarmEntity> alarmEntities = alarmMapper.getAlarmsByUserId(userId);
-        
-        for (AlarmEntity alarmEntity : alarmEntities) {
-            System.out.println("alarmEntity = " + alarmEntity); // 내 알람들
-        }
+
         return alarmEntities.stream()
                 .map(this::toAlarmDTO)
                 .collect(Collectors.toList());

@@ -32,6 +32,9 @@ public class UsedBookPostDTO {
     private Long book_condition_id;
     private String condition;
 
+    // 상품 상태
+    private Long status; // 1: 판매중, 2: 판매중, 3: 판매완료
+
     // 책 정보
     private Long book_id;
     private String book_name;
@@ -50,6 +53,7 @@ public class UsedBookPostDTO {
                 .created_at(usedBook.getCreated_at())
                 .image_check(usedBook.getImage_check())
                 .imageUrls(imageUrls)
+                .status(usedBook.getStatus())
                 .user_id(usedBook.getUser_id())
                 .user_nickname(usedBook.getUser_nickname())
                 .book_condition_id(usedBook.getBook_condition_id())

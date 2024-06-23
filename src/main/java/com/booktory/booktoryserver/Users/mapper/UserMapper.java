@@ -16,4 +16,6 @@ public interface UserMapper {
 
     int deleteUserById(Long userId);
 
+    UserEntity findByUserName(String user_name);
+
 }
