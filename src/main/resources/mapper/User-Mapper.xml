@@ -28,4 +28,10 @@
         UPDATE users SET user_name = #{user_name}, user_nickname =#{user_nickname}, user_address =#{user_address}, user_info=#{user_info} WHERE user_id = #{user_id}
 
     </update>
+
+
+    <!-- findById 메서드 추가 -->
+    <select id="findById" resultType="user" parameterType="Long">
+        SELECT * FROM users WHERE user_id = #{userId}
+    </select>
 </mapper>

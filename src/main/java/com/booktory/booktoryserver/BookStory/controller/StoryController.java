@@ -37,9 +37,19 @@ public class StoryController {
     @GetMapping("/mystories")
     @Operation(summary = "독후감 전체 조회", description = "모든 독후감을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 전체 조회 성공", content = @Content(schema = @Schema(implementation = StoryEntity.class)))
-    public CustomResponse getAllStory() {
-        List<StoryEntity> stories = storyService.getAllStory();
+    public CustomResponse getAllStory(@AuthenticationPrincipal UserDetails useremail) {
 
+        Long currentUserId = null;
+        if(useremail != null){
+            String userEmail = useremail.getUsername();
+            Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
+            if(userEntity.isPresent()){
+                currentUserId = userEntity.get().getUser_id();
+            }
+        }
+
+        List<StoryDTO> stories = storyService.getAllStory();
+        System.out.println("stories = " + stories);
         if (!stories.isEmpty()) {
             return CustomResponse.ok("독후감(스토리) 전체 조회 성공", stories);
         } else {
@@ -65,17 +75,23 @@ public class StoryController {
         //인증된 사용자라면 현재의 이메일을 설정
         if(useremail != null){
             String userEmail = useremail.getUsername();
+            log.info("User email: " + userEmail); // 로그 추가
             Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
             if(userEntity.isPresent()){
                 currentUserId = userEntity.get().getUser_id();
+                log.info("Current user ID: " + currentUserId); // 로그 추가
 //                currentUserNickname = userEntity.get().getUser_nickname();
 //                currentUserImg  = userEntity.get().get
+            }else {
+                log.warn("User entity not found for email: " + userEmail); // 로그 추가
             }
+        } else {
+            log.warn("User email is null"); // 로그 추가
         }
 
         if(myStory != null){
             ResponseDTO response = new ResponseDTO(myStory, currentUserId);
-            return CustomResponse.ok("독후감 선택 성공", myStory);
+            return CustomResponse.ok("독후감 선택 성공", response);
         }else{
             return CustomResponse.failure("독후감 선택 실패");
         }
