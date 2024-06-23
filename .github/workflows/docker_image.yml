@@ -66,4 +66,9 @@ jobs:
         sudo docker stop book-tory || true
         sudo docker rm book-tory || true
         sudo docker rmi -f ${{ secrets.DOCKER_USERNAME }}/book-tory:latest || true
-        sudo docker run -d -p 8080:8080 --name book-tory --restart always ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
+        sudo docker run -d -p 8080:8080 --name book-tory --restart always \
+          -e NAVER_OAUTH_CLIENT_ID=${{ secrets.NAVER_OAUTH_CLIENT_ID }} \
+          -e NAVER_OAUTH_CLIENT_SECRET=${{ secrets.NAVER_OAUTH_CLIENT_SECRET }} \
+          -e GOOGLE_OAUTH_CLIENT_ID=${{ secrets.GOOGLE_OAUTH_CLIENT_ID }} \
+          -e GOOGLE_OAUTH_CLIENT_SECRET=${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }} \
+          ${{ secrets.DOCKER_USERNAME }}/book-tory:latest
