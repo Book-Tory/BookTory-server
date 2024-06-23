@@ -40,6 +40,7 @@
             sb.love_count,
             u.user_id,
             u.user_nickname,
+            u.user_img,
             bi.book_id,
             bi.book_name,
             bi.book_author,
@@ -68,8 +69,15 @@
 
     <update id="updateStory">
         UPDATE mystory_board
-        SET mystory_name = #{mystory_name}, mystory_content = #{mystory_content},  user_id = #{user_id}, book_id = #{book_id}
-        WHERE story_board_id = #{story_board_id};
+        SET
+            mystory_type_id = #{mystory_type_id},
+            mystory_name = #{mystory_name},
+            mystory_content = #{mystory_content},
+            love_count = #{love_count},
+            user_id = #{user_id},
+            book_id = #{book_id}
+        WHERE
+            story_board_id = #{story_board_id};
     </update>
 
 

@@ -24,6 +24,7 @@ public class StoryEntity {
     //독후감 등록 사용자
     private Long user_id;
     private String user_nickname;
+    private String user_img;
 
     //책 정보
     private Long book_id;
@@ -42,6 +43,8 @@ public class StoryEntity {
                 .mystoryTypeId(storyEntity.getMystory_type_id())
                 .mystoryName(storyEntity.getMystory_name())
                 .mystoryContent(storyEntity.getMystory_content())
+                .mystoryDate(storyEntity.getMystory_date())
+                .readDate(storyEntity.getRead_date())
                 .loveCount(storyEntity.getLove_count())
                 .userId(storyEntity.getUser_id())
                 .bookId(storyEntity.getBook_id())
@@ -50,6 +53,8 @@ public class StoryEntity {
                 .bookPublisher(storyEntity.getBook_publisher())
                 .bookIsbn(storyEntity.getBook_isbn())
                 .bookImage(storyEntity.getBook_image())
+                .userNickname(storyEntity.getUser_nickname())
+                .userImg(storyEntity.getUser_img())
                 .build();
     }
 

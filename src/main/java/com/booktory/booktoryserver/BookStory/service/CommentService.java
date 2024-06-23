@@ -28,9 +28,14 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public boolean createComment(CommentCreateDTO commentCreateDTO) {
+
+
+    public Long createComment(CommentCreateDTO commentCreateDTO) {
         CommentEntity commentEntity = CommentCreateDTO.toEntity(commentCreateDTO);
-        return commentMapper.createComment(commentEntity) > 0;
+
+        commentMapper.createComment(commentEntity);
+        long commentId = commentEntity.getComment_id();
+        return commentId;
     }
 
     public boolean deleteComment(Long comment_id) {
@@ -41,6 +46,11 @@ public class CommentService {
         CommentEntity commentEntity = CommentCreateDTO.toEntity(commentCreateDTO);
         commentEntity.setComment_id(comment_id);
         return commentMapper.updateComment(commentEntity) > 0;
+    }
+
+    public CommentViewDTO getCommentsBycommentId(long commentId) {
+
+         return CommentViewDTO.fromEntity(commentMapper.getCommentsBycommentId(commentId));
     }
 
 
