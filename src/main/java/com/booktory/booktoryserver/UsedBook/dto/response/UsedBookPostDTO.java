@@ -41,7 +41,7 @@ public class UsedBookPostDTO {
     private String book_author;
     private int book_price;
     private String book_publisher;
-    private Date book_publication_date;
+//    private Date book_publication_date;
     private Long book_isbn;
 
     public static UsedBookPostDTO toDTO(UsedBookPostEntity usedBook, List<Map<Long,String>> imageUrls) {
@@ -63,7 +63,7 @@ public class UsedBookPostDTO {
                 .book_author(usedBook.getBook_author())
                 .book_price(usedBook.getBook_price())
                 .book_publisher(usedBook.getBook_publisher())
-                .book_publication_date(usedBook.getBook_publication_date())
+//                .book_publication_date(usedBook.getBook_publication_date())
                 .book_isbn(usedBook.getBook_isbn())
                 .build();
     }
