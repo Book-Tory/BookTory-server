@@ -20,4 +20,5 @@ public interface UserMapper {
 
     int updateUserById(UserEntity user);
 
+    Optional<UserEntity> findById(Long userId);
 }

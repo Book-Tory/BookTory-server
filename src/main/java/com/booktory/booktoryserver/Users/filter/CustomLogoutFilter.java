@@ -92,7 +92,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         Cookie cookie = new Cookie("refresh", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
-        cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
+        //cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
         cookie.setHttpOnly(true);
         httpResponse.addCookie(cookie);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
