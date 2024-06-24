@@ -44,7 +44,7 @@ public class StoryLikeController {
         }
     }
 
-    @DeleteMapping("/{story_board_id}/unlike")
+    @DeleteMapping("/{story_board_id}/like")
     @Operation(summary = "독후감 좋아요 취소", description = "독후감 게시물에 좋아요를 취소합니다.")
     @ApiResponse(responseCode = "200", description = "좋아요 취소 성공", content = @Content(schema = @Schema(implementation = Boolean.class)))
     public CustomResponse unlikeStory(@PathVariable("story_board_id") @Parameter(description = "좋아요를 취소할 독후감 ID") Long story_board_id,

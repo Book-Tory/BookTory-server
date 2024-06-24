@@ -38,17 +38,17 @@ public class StoryController {
     @Operation(summary = "독후감 전체 조회", description = "모든 독후감을 조회합니다.")
     @ApiResponse(responseCode = "200", description = "독후감 전체 조회 성공", content = @Content(schema = @Schema(implementation = StoryEntity.class)))
     public CustomResponse getAllStory(@AuthenticationPrincipal UserDetails useremail) {
-
         Long currentUserId = null;
-        if(useremail != null){
-            String userEmail = useremail.getUsername();
-            Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
-            if(userEntity.isPresent()){
+        if (useremail != null) {
+            String email = useremail.getUsername();
+            Optional<UserEntity> userEntity = userMapper.findByEmail(email);
+            if (userEntity.isPresent()) {
                 currentUserId = userEntity.get().getUser_id();
             }
         }
 
-        List<StoryDTO> stories = storyService.getAllStory();
+        List<StoryDTO> stories = storyService.getAllStory(currentUserId);
+
         System.out.println("stories = " + stories);
         if (!stories.isEmpty()) {
             return CustomResponse.ok("독후감(스토리) 전체 조회 성공", stories);

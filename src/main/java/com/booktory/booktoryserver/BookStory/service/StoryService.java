@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -311,18 +312,19 @@ public class StoryService {
 //        return storyDTOs;
 //    }
 
-    public List<StoryDTO> getAllStory(Long userId) {
+    public List<StoryDTO> getAllStory(Long currentUserId) {
         List<StoryEntity> storyEntities = storyMapper.getAllStory();
-        List<StoryDTO> storyDTOs = new ArrayList<>();
 
-        for (StoryEntity story : storyEntities) {
-            StoryDTO storyDTO = StoryEntity.toDTO(story);
-            boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(), userId);
-            storyDTO.setLiked(isLiked);
-            storyDTOs.add(storyDTO);
-        }
-
-        return storyDTOs;
+        return storyEntities.stream()
+                .map(story -> {
+                    StoryDTO storyDTO = StoryEntity.toDTO(story);
+                    if (currentUserId != null) {
+                        boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(), currentUserId);
+                        storyDTO.setLiked(isLiked);
+                    }
+                    return storyDTO;
+                })
+                .collect(Collectors.toList());
     }
 
 }
