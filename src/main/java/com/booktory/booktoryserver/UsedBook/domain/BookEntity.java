@@ -2,7 +2,10 @@ package com.booktory.booktoryserver.UsedBook.domain;
 
 
 import com.booktory.booktoryserver.UsedBook.dto.response.BookDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.joda.time.DateTime;
 
 import java.util.Date;
 
@@ -18,7 +21,7 @@ public class BookEntity {
     private String book_author;
     private int book_price;
     private String book_publisher;
-    private Date book_publication_date;
+//    private Date book_publication_date;
     private Long book_isbn;
 
     public static BookEntity toEntity(BookDTO book) {
@@ -28,7 +31,7 @@ public class BookEntity {
                 .book_author(book.getAuthor())
                 .book_price(book.getDiscount())
                 .book_publisher(book.getPublisher())
-                .book_publication_date(book.getPubdate())
+//                .book_publication_date(book.getPubdate())
                 .book_isbn(book.getIsbn())
                 .build();
     }
