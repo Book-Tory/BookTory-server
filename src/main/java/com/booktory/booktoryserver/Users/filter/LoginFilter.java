@@ -90,7 +90,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         cookie.setMaxAge(24*60*60);
         //cookie.setSecure(true);  // https 통신 일때
         cookie.setPath("/");
-        //cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
+        cookie.setDomain("52.78.9.158");  // 52.78.9.158 이거는 토큰발급됨
         cookie.setHttpOnly(true);
 
         return cookie;
