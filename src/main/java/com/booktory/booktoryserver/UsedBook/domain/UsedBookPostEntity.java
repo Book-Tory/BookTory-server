@@ -31,6 +31,7 @@ public class UsedBookPostEntity {
     // 사용자
     private Long user_id;
     private String user_nickname;
+    private String user_img;
 
     // 책 상태
     private Long book_condition_id;

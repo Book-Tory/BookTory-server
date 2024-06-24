@@ -30,11 +30,21 @@ public class UsedBookWishController {
     @Operation(summary = "찜 상태 확인", description = "특정 중고 책의 찜 상태를 확인합니다.")
     @GetMapping("/check")
     public CustomResponse isWished(@RequestParam("used_book_id") @Parameter(description = "중고 책 ID") Long used_book_id, @AuthenticationPrincipal UserDetails user) {
+        if (user == null) {
+            return CustomResponse.ok("사용자가 인증되지 않았습니다.", false);
+        }
+
         String username = user.getUsername();
         boolean isWished = usedBookWishService.isWished(used_book_id, username);
         Optional<UserEntity> userEntity = userMapper.findByEmail(username);
+
+        if (userEntity.isEmpty()) {
+            return CustomResponse.ok("사용자를 찾을 수 없습니다.", false);
+        }
+
         Long userId = userEntity.get().getUser_id();
         WishResponseDTO response = new WishResponseDTO(isWished, userId);
+
         if (isWished) {
             return CustomResponse.ok("찜 되어있음", response);
         } else {
