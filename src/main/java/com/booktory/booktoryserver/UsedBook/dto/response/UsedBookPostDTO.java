@@ -27,6 +27,7 @@ public class UsedBookPostDTO {
     // 사용자
     private Long user_id;
     private String user_nickname;
+    private String user_img;
 
     // 책 상태
     private Long book_condition_id;
@@ -56,6 +57,7 @@ public class UsedBookPostDTO {
                 .status(usedBook.getStatus())
                 .user_id(usedBook.getUser_id())
                 .user_nickname(usedBook.getUser_nickname())
+                .user_img(usedBook.getUser_img())
                 .book_condition_id(usedBook.getBook_condition_id())
                 .condition(usedBook.getCondition())
                 .book_id(usedBook.getBook_id())
