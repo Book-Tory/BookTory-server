@@ -20,7 +20,7 @@ public class BookDTO {
     private String author;
     private int discount;
     private String publisher;
-//    private Date pubdate;
+    private Date pubdate;
     private Long isbn;
     private String description;
 }
