@@ -70,6 +70,8 @@ public class StoryController {
 
         //이미 저장된 사용자 ID 초기화 이전 로그인한 사람의 사용자ID 초기화
         Long currentUserId = null;
+        String currentUserNickname = null;
+        String currentUserImg = null;
 
         //인증된 사용자의 이메일을 가져와서 사용자 ID를 조회
         //인증된 사용자라면 현재의 이메일을 설정
@@ -80,8 +82,8 @@ public class StoryController {
             if(userEntity.isPresent()){
                 currentUserId = userEntity.get().getUser_id();
                 log.info("Current user ID: " + currentUserId); // 로그 추가
-//                currentUserNickname = userEntity.get().getUser_nickname();
-//                currentUserImg  = userEntity.get().get
+                currentUserNickname = userEntity.get().getUser_nickname();
+                currentUserImg  = userEntity.get().getUser_img();
             }else {
                 log.warn("User entity not found for email: " + userEmail); // 로그 추가
             }
@@ -90,7 +92,7 @@ public class StoryController {
         }
 
         if(myStory != null){
-            ResponseDTO response = new ResponseDTO(myStory, currentUserId);
+            ResponseDTO response = new ResponseDTO(myStory, currentUserId, currentUserNickname, currentUserImg);
             return CustomResponse.ok("독후감 선택 성공", response);
         }else{
             return CustomResponse.failure("독후감 선택 실패");
