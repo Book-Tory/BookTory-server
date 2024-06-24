@@ -66,7 +66,13 @@ public class StoryDTO {
 //        storyEntity.setBook_image(this.bookImage);
     }
 
+    public String getUserImg() {
+        return userImg;
+    }
 
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
+    }
 
     //update를 위한 DTO와 id 둘 다를 매개변수로 받는 객체가 따로 필요하다
     //그러나 이미 DTO객체가 있으므로 id만 따로 받아주는 객체를 만들었다.

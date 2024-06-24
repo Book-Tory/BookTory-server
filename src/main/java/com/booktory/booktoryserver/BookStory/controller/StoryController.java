@@ -40,21 +40,35 @@ public class StoryController {
     public CustomResponse getAllStory(@AuthenticationPrincipal UserDetails useremail) {
         Long currentUserId = null;
         if (useremail != null) {
-            String email = useremail.getUsername();
-            Optional<UserEntity> userEntity = userMapper.findByEmail(email);
+            String userEmail = useremail.getUsername();
+            Optional<UserEntity> userEntity = userMapper.findByEmail(userEmail);
             if (userEntity.isPresent()) {
                 currentUserId = userEntity.get().getUser_id();
             }
         }
 
-        List<StoryDTO> stories = storyService.getAllStory(currentUserId);
-
+        List<StoryDTO> stories = storyService.getAllStory();
+//
+//        System.out.println("stories = " + stories);
+//        if (!stories.isEmpty()) {
+//            return CustomResponse.ok("독후감(스토리) 전체 조회 성공", stories);
+//        } else {
+//            return CustomResponse.failure("독후감(스토리) 전체 조회 실패");
+//        }
+        for (StoryDTO story : stories) {
+            // storyDTO에 userImg 필드 추가
+            Optional<UserEntity> userEntity = userMapper.findById(story.getUserId());
+            if (userEntity.isPresent()) {
+                story.setUserImg(userEntity.get().getUser_img());
+            }
+        }
         System.out.println("stories = " + stories);
         if (!stories.isEmpty()) {
             return CustomResponse.ok("독후감(스토리) 전체 조회 성공", stories);
         } else {
             return CustomResponse.failure("독후감(스토리) 전체 조회 실패");
         }
+
     }
 
 
