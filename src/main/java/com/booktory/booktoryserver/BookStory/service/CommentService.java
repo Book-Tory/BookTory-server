@@ -53,6 +53,10 @@ public class CommentService {
          return CommentViewDTO.fromEntity(commentMapper.getCommentsBycommentId(commentId));
     }
 
+    public Long getReceiverId(long commentId) {
+        return commentMapper.getReceiverId(commentId);
+    }
+
 
 //    //댓글 id를 통한 상세조회
 //    public CommentViewDTO getCommentById(Long comment_id) {
