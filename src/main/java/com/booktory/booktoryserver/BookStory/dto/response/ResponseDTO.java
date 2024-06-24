@@ -1,7 +1,14 @@
 package com.booktory.booktoryserver.BookStory.dto.response;
 
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
+import lombok.*;
 
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ResponseDTO {
     private StoryDTO story;
     private Long currentUserId;

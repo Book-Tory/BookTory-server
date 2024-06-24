@@ -6,7 +6,10 @@ import com.booktory.booktoryserver.BookStory.domain.StoryEntity;
 import com.booktory.booktoryserver.BookStory.dto.BookDTO;
 import com.booktory.booktoryserver.BookStory.dto.NaverSearchBookResponseDTO;
 import com.booktory.booktoryserver.BookStory.dto.StoryDTO;
+import com.booktory.booktoryserver.BookStory.mapper.StoryLikeMapper;
 import com.booktory.booktoryserver.BookStory.mapper.StoryMapper;
+import com.booktory.booktoryserver.Users.mapper.UserMapper;
+import com.booktory.booktoryserver.Users.model.UserEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -33,7 +34,11 @@ import java.util.Map;
 public class StoryService {
     private final StoryMapper storyMapper;
 
+    private final UserMapper userMapper;
     //책 검색 API사용
+
+
+    private final StoryLikeMapper storyLikeMapper;
 
 
     @Value("XKLrNAbeorAmb3vVPPPP")
@@ -144,8 +149,33 @@ public class StoryService {
 
 
     //------------------------------------------------------
-    public List<StoryEntity> getAllStory() {
-        return storyMapper.getAllStory();
+    public List<StoryDTO> getAllStory() {
+        //모든 StoryEntity 목록을 가져옴
+        List<StoryEntity> storyEntities = storyMapper.getAllStory();
+
+        //StoryDTO 목록을 초기화
+        List<StoryDTO> storyDTOS = new ArrayList<>();
+
+        //각 StoryEntity에 대해 반복
+        for (StoryEntity story : storyEntities){
+            //storyEntity를 StoryDTO로 변환
+            StoryDTO storyDTO = StoryEntity.toDTO(story);
+
+            // 작성자 정보를 가져옴
+            Optional<UserEntity> userEntity = userMapper.findById(story.getUser_id());
+
+            // 작성자 정보가 존재할 경우 StoryDTO에 설정
+            if (userEntity.isPresent()) {
+                storyDTO.setUserNickname(userEntity.get().getUser_nickname());
+                storyDTO.setUserImg(userEntity.get().getUser_img());
+            }
+
+            // 변환된 StoryDTO를 목록에 추가
+            storyDTOS.add(storyDTO);
+        }
+
+        // 최종적으로 변환된 StoryDTO 목록을 반환
+        return storyDTOS;
     }
 
     //독후감 등록하기
@@ -268,6 +298,31 @@ public class StoryService {
     }
 
 
+//    public List<StoryDTO> getAllStoryWithLikeStatus(Long currentUserId) {
+//        List<StoryEntity> storyEntities = storyMapper.getAllStory();
+//        List<StoryDTO> storyDTOS = new ArrayList<>();
+//
+//        for (StoryEntity story : storyEntities) {
+//            StoryDTO storyDTO = StoryEntity.toDTO(story);
+//            boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(),  userId);
+//            storyDTO.setLiked(isLiked);
+//            storyDTOs.add(storyDTO);
+//        }
+//        return storyDTOs;
+//    }
 
+    public List<StoryDTO> getAllStory(Long userId) {
+        List<StoryEntity> storyEntities = storyMapper.getAllStory();
+        List<StoryDTO> storyDTOs = new ArrayList<>();
+
+        for (StoryEntity story : storyEntities) {
+            StoryDTO storyDTO = StoryEntity.toDTO(story);
+            boolean isLiked = storyLikeMapper.isAlreadyLiked(story.getStory_board_id(), userId);
+            storyDTO.setLiked(isLiked);
+            storyDTOs.add(storyDTO);
+        }
+
+        return storyDTOs;
+    }
 
 }
