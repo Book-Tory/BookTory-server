@@ -19,7 +19,6 @@
         bi.book_author,
         bi.book_price,
         bi.book_publisher,
-
         bi.book_isbn,
         ubi.used_book_image_id,
         ubi.original_image_name,
@@ -51,6 +50,7 @@
             ub.status,
             u.user_id,
             u.user_nickname,
+            u.user_img,
             bc.book_condition_id,
             bc.condition,
             bi.book_id,
@@ -91,7 +91,7 @@
     </insert>
 
     <update id="updatePost" parameterType="usedBook">
-        update used_bookㅠ
+        update used_book
         set title = #{title}, discount = #{discount}, description = #{description}, book_id = #{book_id}, book_condition_id = #{book_condition_id}, image_check = #{image_check}
         where used_book_id = #{used_book_id}
     </update>
