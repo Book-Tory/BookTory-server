@@ -100,7 +100,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/login**", "/**", "/api/users/auth/register", "/api/reissue", "/api/product_shop/list",
                                 "/api/used-books/list",  "/api/used-books/detail/**", "/api/product_shop/detail/**", "/api/qna/**","/api/stories/mystories",
-                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                                "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/health").permitAll()
                         .requestMatchers("/test").hasRole("USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
